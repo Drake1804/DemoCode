@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
-import com.drake1804.f1feedler.utils.DateTimeUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

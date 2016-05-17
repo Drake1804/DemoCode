@@ -1,1 +1,0 @@
-CodeRunner uses the /lib directory by default when it looks for any dependencies (.jar files) referenced by your code.
