@@ -1,14 +1,21 @@
 package com.drake1804.f1feedler.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
+import com.drake1804.f1feedler.utils.AppUtils;
+import com.drake1804.f1feedler.view.MainActivity;
+import com.drake1804.f1feedler.view.custom.NewsFeedView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,19 +40,16 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_feed_card, parent, false);
-        return new ViewHolder(v);
+        NewsFeedView newsFeedView = new NewsFeedView(context);
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((MainActivity) context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        newsFeedView.setLayoutParams(new LinearLayoutCompat.LayoutParams(metrics.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT));
+        return new ViewHolder(newsFeedView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Picasso.with(context)
-                .load(newsFeedModels.get(position).getImageUrl())
-                .placeholder(R.drawable.holder)
-                .into(holder.image);
-        holder.title.setText(newsFeedModels.get(position).getTitle());
-        holder.description.setText(newsFeedModels.get(position).getDescription());
-        holder.date.setText(/*DateTimeUtils.stringToDate(*/newsFeedModels.get(position).getCreatingDate()/*).toString()*/);
+        holder.newsFeedView.setData(newsFeedModels.get(position));
     }
 
     @Override
@@ -65,21 +69,11 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.image)
-        CircleImageView image;
+        NewsFeedView newsFeedView;
 
-        @Bind(R.id.title)
-        TextView title;
-
-        @Bind(R.id.description)
-        TextView description;
-
-        @Bind(R.id.date)
-        TextView date;
-
-        public ViewHolder(View itemView) {
+        public ViewHolder(NewsFeedView itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            newsFeedView = itemView;
         }
     }
 

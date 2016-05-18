@@ -63,8 +63,9 @@ public class MainFeedPresenter {
                         newsFeedModel.setDescription(element.getElementsByTag("description").text());
                         newsFeedModel.setLink(element.getElementsByTag("link").text());
                         newsFeedModel.setCreatingDate(element.getElementsByTag("pubDate").text());
-                        newsFeedModel.setImageUrl(element.getElementsByTag("enclosure").get(0).attributes().get("url"));
-
+                        if(element.getElementsByTag("enclosure").size() > 0){
+                            newsFeedModel.setImageUrl(element.getElementsByTag("enclosure").get(0).attributes().get("url"));
+                        }
                         newsFeedModels.add(newsFeedModel);
                     }
                     saveNewsLinks(newsFeedModels);
