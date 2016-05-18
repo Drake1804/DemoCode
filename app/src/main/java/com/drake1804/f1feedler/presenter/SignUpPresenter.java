@@ -2,7 +2,9 @@ package com.drake1804.f1feedler.presenter;
 
 import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
-import com.drake1804.f1feedler.view.view.LoginView;
+import com.drake1804.f1feedler.view.view.SignUpView;
+
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -11,19 +13,19 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Pavel.Shkaran on 5/17/2016.
+ * Created by Pavel.Shkaran on 5/18/2016.
  */
-public class LoginPresenter {
+public class SignUpPresenter {
 
-    private LoginView view;
+    private SignUpView view;
 
-    public LoginPresenter(LoginView view) {
+    public SignUpPresenter(SignUpView view) {
         this.view = view;
     }
 
-    public void signIn(String login, String password){
+    public void signUp(String login, String password){
         cleanSession();
-        RestClient.getInstance().signIn(login, password)
+        RestClient.getInstance().signUp(login, password)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SessionModel>() {
@@ -40,7 +42,7 @@ public class LoginPresenter {
 
                     @Override
                     public void onNext(final SessionModel sessionModel) {
-                        Realm realm = Realm.getDefaultInstance();
+                        final Realm realm = Realm.getDefaultInstance();
                         realm.executeTransactionAsync(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -50,6 +52,7 @@ public class LoginPresenter {
                             @Override
                             public void onSuccess() {
                                 view.onResult(true);
+                                realm.close();
                             }
                         });
                     }

@@ -80,21 +80,13 @@ public class MainFeedPresenter {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                for (int i = 0; i < list.size(); i++) {
-                    try {
-                        NewsFeedModel newsFeedModel = realm.createObject(NewsFeedModel.class);
-                        newsFeedModel.setLink(list.get(i).getLink());
-                        newsFeedModel.setTitle(list.get(i).getTitle());
-                        newsFeedModel.setDescription(list.get(i).getDescription());
-                        newsFeedModel.setImageUrl(list.get(i).getImageUrl());
-                        newsFeedModel.setCreatingDate(list.get(i).getCreatingDate());
-                    } catch (Exception e){}
-                }
+                realm.copyToRealmOrUpdate(list);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
                 view.setData(realm.where(NewsFeedModel.class).findAll());
+                realm.close();
             }
         });
     }

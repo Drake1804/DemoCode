@@ -3,12 +3,7 @@ package com.drake1804.f1feedler.model.rest;
 import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.utils.Tweakables;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -77,12 +72,20 @@ public class RestClient {
     /*********************************************************************************************/
 
 
-    public Observable<SessionModel> getToken(String username, String password){
+    public Observable<SessionModel> signIn(String username, String password){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", username);
         jsonObject.addProperty("password", password);
 
-        return restAPI.getToken(jsonObject);
+        return restAPI.signIn(jsonObject);
+    }
+
+    public Observable<SessionModel> signUp(String username, String password){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", username);
+        jsonObject.addProperty("password", password);
+
+        return restAPI.signUp(jsonObject);
     }
 
 }

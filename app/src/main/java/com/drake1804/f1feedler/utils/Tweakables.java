@@ -7,6 +7,6 @@ public class Tweakables {
 
     public static final String BASE_FEED_URL = "http://www.f1news.ru/export/news.xml";
 
-    public static final String BASE_API_URL = "https://finants-project-id.appspot.com/api/";
+    public static final String BASE_API_URL = "http://api.finants.xyz/v1/";
 
 }

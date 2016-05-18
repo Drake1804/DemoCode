@@ -3,28 +3,27 @@ package com.drake1804.f1feedler.view;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
-import com.drake1804.f1feedler.presenter.LoginPresenter;
-import com.drake1804.f1feedler.view.view.LoginView;
+import com.drake1804.f1feedler.presenter.SignUpPresenter;
+import com.drake1804.f1feedler.view.view.SignUpView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * A signIn screen that offers signIn via email/password.
- */
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class RegistrationActivity extends AppCompatActivity implements SignUpView {
 
-    /*@Bind(R.id.toolbar)
-    Toolbar toolbar;*/
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     @Bind(R.id.email)
     TextInputEditText login;
@@ -33,49 +32,32 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     TextInputEditText password;
 
     private ProgressDialog progress;
-    private LoginPresenter presenter;
+    private SignUpPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_registration);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /*setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
-
-        presenter = new LoginPresenter(this);
+        presenter = new SignUpPresenter(this);
         initDialog();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch(id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         hideDialog();
+
     }
 
-    @OnClick(R.id.email_sign_in_button)
-    public void onSignIn(){
+    @OnClick(R.id.sign_up_button)
+    public void onSignUp(){
         if(isFieldsValid()){
-            presenter.signIn(login.getText().toString(), password.getText().toString());
+            presenter.signUp(login.getText().toString(), password.getText().toString());
         }
-    }
-
-    @OnClick(R.id.register_button)
-    public void onRegisterButton(){
-        startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
     }
 
     private void initDialog(){
@@ -99,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         return true;
     }
 
+
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -117,9 +100,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public void onResult(boolean result) {
         if(result){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
             finish();
         }
     }
 }
-

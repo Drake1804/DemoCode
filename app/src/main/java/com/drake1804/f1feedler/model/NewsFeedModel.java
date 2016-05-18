@@ -3,12 +3,14 @@ package com.drake1804.f1feedler.model;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
 public class NewsFeedModel extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("link")
     private String link;
 

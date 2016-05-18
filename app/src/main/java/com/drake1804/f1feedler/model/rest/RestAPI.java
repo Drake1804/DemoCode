@@ -12,8 +12,10 @@ import rx.Observable;
  */
 public interface RestAPI {
 
-    @POST("user_auth")
-    Observable<SessionModel> getToken(@Body JsonObject json);
+    @POST("signin")
+    Observable<SessionModel> signIn(@Body JsonObject json);
 
+    @POST("signup")
+    Observable<SessionModel> signUp(@Body JsonObject json);
 
 }

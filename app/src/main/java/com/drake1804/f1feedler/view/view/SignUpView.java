@@ -1,9 +1,9 @@
 package com.drake1804.f1feedler.view.view;
 
 /**
- * Created by Pavel.Shkaran on 5/17/2016.
+ * Created by Pavel.Shkaran on 5/18/2016.
  */
-public interface LoginView {
+public interface SignUpView {
 
     void showMessage(String message);
 
@@ -12,5 +12,6 @@ public interface LoginView {
     void hideDialog();
 
     void onResult(boolean result);
+
 
 }

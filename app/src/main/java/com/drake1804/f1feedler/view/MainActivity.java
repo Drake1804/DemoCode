@@ -27,6 +27,7 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -77,26 +78,12 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
             }
         });
 
-        RestClient.getInstance().getToken("testu", "testp")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<SessionModel>() {
-                    @Override
-                    public void onCompleted() {
+        Realm realm = Realm.getDefaultInstance();
+        List<SessionModel> sessionModels =  realm.where(SessionModel.class)
+                .findAll();
 
-                    }
+        showMessage(sessionModels.size()+"");
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-
-                    }
-
-                    @Override
-                    public void onNext(SessionModel sessionModel) {
-
-                    }
-                });
     }
 
     @Override
@@ -122,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if(id == R.id.menu_signIn) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
