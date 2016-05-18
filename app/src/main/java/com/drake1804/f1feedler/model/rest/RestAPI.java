@@ -1,5 +1,9 @@
 package com.drake1804.f1feedler.model.rest;
 
+import com.drake1804.f1feedler.model.SessionModel;
+import com.google.gson.JsonObject;
+
+import retrofit2.http.Body;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -8,8 +12,8 @@ import rx.Observable;
  */
 public interface RestAPI {
 
-//    @POST("user_auth")
-//    Observable<>
+    @POST("user_auth")
+    Observable<SessionModel> getToken(@Body JsonObject json);
 
 
 }

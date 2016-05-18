@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.model.NewsFeedModel;
+import com.drake1804.f1feedler.model.SessionModel;
+import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.view.view.MainFeedView;
@@ -25,6 +27,9 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MainFeedView {
 
@@ -71,6 +76,27 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 presenter.getNewsFeed();
             }
         });
+
+        RestClient.getInstance().getToken("testu", "testp")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<SessionModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+
+                    }
+
+                    @Override
+                    public void onNext(SessionModel sessionModel) {
+
+                    }
+                });
     }
 
     @Override
