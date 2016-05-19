@@ -6,12 +6,14 @@ import java.util.List;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
 public class NewsModel extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("url")
     private String url;
 

@@ -74,12 +74,11 @@ public class DetailsPresenter {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                try {
-                    NewsModel newsModel = realm.createObject(NewsModel.class);
-                    newsModel.setUrl(url);
-                    newsModel.setImageUrl(imageUrl);
-                    newsModel.setText(text);
-                } catch (Exception e){}
+                NewsModel newsModel = new NewsModel();
+                newsModel.setUrl(url);
+                newsModel.setImageUrl(imageUrl);
+                newsModel.setText(text);
+                realm.copyToRealmOrUpdate(newsModel);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -91,6 +90,14 @@ public class DetailsPresenter {
             }
         });
 
+    }
+
+    private void loadForOfflineMode(String url){
+        Realm realm = Realm.getDefaultInstance();
+        NewsModel newsModel = realm.where(NewsModel.class).equalTo("url", url).findFirst();
+        if(newsModel == null){
+            parsePage(url);
+        }
     }
 
 }

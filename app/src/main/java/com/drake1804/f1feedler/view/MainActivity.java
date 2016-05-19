@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.SessionModel;
-import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.view.view.MainFeedView;
@@ -24,13 +24,9 @@ import com.drake1804.f1feedler.view.view.MainFeedView;
 import java.util.List;
 import java.util.TimerTask;
 
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MainFeedView {
 
@@ -55,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
         setSupportActionBar(toolbar);
 
         adapter = new MainFeedAdapter(this);
-        presenter = new MainFeedPresenter(this);
+        presenter = new MainFeedPresenter(this, this);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mainFeed.setLayoutManager(mLayoutManager);
@@ -106,13 +102,15 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if(id == R.id.menu_signIn) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        switch (id){
+            case R.id.menu_signIn:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                break;
+            case R.id.offline_mode:
+                offlineMode(adapter.getNewsFeedModels());
+                break;
+            case R.id.action_settings:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -148,5 +146,12 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
             }
         });
 
+    }
+
+    private void offlineMode(List<NewsFeedModel> newsFeedModels){
+        for(NewsFeedModel model : newsFeedModels){
+            presenter.loadForOfflineMode(model.getLink());
+            Log.d("TAG", model.getLink());
+        }
     }
 }

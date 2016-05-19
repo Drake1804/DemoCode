@@ -2,6 +2,8 @@ package com.drake1804.f1feedler;
 
 import android.app.Application;
 
+import com.squareup.picasso.Picasso;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -17,5 +19,13 @@ public class App extends Application {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
+
+        Picasso
+                .with(getApplicationContext())
+                .setIndicatorsEnabled(true);
+
+        Picasso
+                .with(getApplicationContext())
+                .setLoggingEnabled(true);
     }
 }

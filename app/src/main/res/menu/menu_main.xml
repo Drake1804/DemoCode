@@ -14,5 +14,10 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/offline_mode"
+        android:orderInCategory="100"
+        android:title="Offline mode"
+        app:showAsAction="never" />
 
 </menu>
