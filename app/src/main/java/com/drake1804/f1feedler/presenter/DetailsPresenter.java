@@ -16,7 +16,7 @@ import io.realm.Realm;
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public class DetailsPresenter {
+public class DetailsPresenter extends Presenter {
 
     private DetailsView view;
     private String url;

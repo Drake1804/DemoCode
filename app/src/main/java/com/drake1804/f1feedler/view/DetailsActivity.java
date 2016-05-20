@@ -1,17 +1,12 @@
 package com.drake1804.f1feedler.view;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.transition.Slide;
-import android.transition.TransitionSet;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,7 +63,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView {
         title.setText(getIntent().getStringExtra("title"));
 
         presenter = new DetailsPresenter(this);
-
         presenter.getPage(getIntent().getStringExtra("link"));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -93,7 +87,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView {
                 }
             }
         });
-
     }
 
     @Override

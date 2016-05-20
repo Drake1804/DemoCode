@@ -13,7 +13,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Pavel.Shkaran on 5/17/2016.
  */
-public class LoginPresenter {
+public class LoginPresenter extends Presenter {
 
     private LoginView view;
 

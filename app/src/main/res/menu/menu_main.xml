@@ -20,4 +20,9 @@
         android:title="Offline mode"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/offline_mode_clear"
+        android:orderInCategory="100"
+        android:title="Offline mode clear cache"
+        app:showAsAction="never" />
 </menu>

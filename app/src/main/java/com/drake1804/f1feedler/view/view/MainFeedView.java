@@ -10,10 +10,7 @@ import java.util.List;
 public interface MainFeedView {
 
     void showMessage(String message);
-
     void setData(List<NewsFeedModel> data);
-
     void showDialog();
-
     void dismissDialog();
 }

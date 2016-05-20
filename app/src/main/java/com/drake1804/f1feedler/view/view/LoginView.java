@@ -6,11 +6,8 @@ package com.drake1804.f1feedler.view.view;
 public interface LoginView {
 
     void showMessage(String message);
-
     void showDialog();
-
     void hideDialog();
-
     void onResult(boolean result);
 
 }

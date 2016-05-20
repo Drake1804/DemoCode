@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Pavel.Shkaran on 5/18/2016.
  */
-public class SignUpPresenter {
+public class SignUpPresenter extends Presenter {
 
     private SignUpView view;
 

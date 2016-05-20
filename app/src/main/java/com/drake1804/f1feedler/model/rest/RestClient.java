@@ -47,8 +47,8 @@ public class RestClient {
 
                                 Request.Builder requestBuilder = original.newBuilder()
                                         .header("Content-Type", "application/json")
-                                        .header("X-FinAnts-Application-Id","YvvP2Ai7rPx3IcrzNZXs40y9DsAXXmZvkENguP1Z")
-                                        .header("X-FinAnts-REST-API-Key", "mgajZdld0VHhWsFnjcy04gphlnctjFTkPeLhuGKE")
+                                        .header("X-FinAnts-Application-Id", Tweakables.APP_ID)
+                                        .header("X-FinAnts-REST-API-Key", Tweakables.REST_KEY)
                                         .method(original.method(), original.body());
 
                                 Request request = requestBuilder.build();

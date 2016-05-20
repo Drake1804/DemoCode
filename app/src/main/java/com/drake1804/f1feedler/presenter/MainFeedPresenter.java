@@ -26,7 +26,7 @@ import io.realm.Realm;
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public class MainFeedPresenter {
+public class MainFeedPresenter extends Presenter {
 
     private MainFeedView view;
     private Context context;
@@ -93,7 +93,7 @@ public class MainFeedPresenter {
                         newsFeedModels.add(newsFeedModel);
                     }
                     saveNewsLinks(newsFeedModels);
-                } catch (Exception e){}
+                } catch (Exception ignored){}
                 view.dismissDialog();
             }
         }.execute();
@@ -137,7 +137,8 @@ public class MainFeedPresenter {
                     Elements head = document.getElementsByAttributeValue("class", "post_head");
                     Elements body = document.getElementsByAttributeValue("class", "post_body");
 
-                    savePage(url, head.get(0).getElementsByAttributeValue("itemprop", "contentUrl").attr("src"), body.get(0).getElementsByAttributeValue("itemprop", "articleBody").html());
+                    savePage(url, head.get(0).getElementsByAttributeValue("itemprop", "contentUrl").attr("src"),
+                            body.get(0).getElementsByAttributeValue("itemprop", "articleBody").html());
                 } catch (Exception e){}
                 view.dismissDialog();
             }

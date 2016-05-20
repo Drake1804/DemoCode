@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
+import com.drake1804.f1feedler.utils.OfflineMode;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 
 import java.util.List;
@@ -79,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 .findAll();
 
         showMessage(sessionModels.size()+"");
-
     }
 
     @Override
@@ -97,19 +98,17 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id){
+        switch (item.getItemId()){
             case R.id.menu_signIn:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.offline_mode:
-                offlineMode(adapter.getNewsFeedModels());
+                OfflineMode.offlineMode(adapter.getNewsFeedModels(), presenter);
                 break;
             case R.id.action_settings:
+                break;
+            case R.id.offline_mode_clear:
+                OfflineMode.clearOfflineCache(this);
                 break;
         }
 
@@ -134,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-
     }
 
     @Override
@@ -145,13 +143,12 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
     }
 
     private void offlineMode(List<NewsFeedModel> newsFeedModels){
         for(NewsFeedModel model : newsFeedModels){
             presenter.loadForOfflineMode(model.getLink());
-            Log.d("TAG", model.getLink());
+            Log.d("OFFLINE_MODE", model.getLink());
         }
     }
 }
