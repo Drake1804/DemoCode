@@ -40,11 +40,11 @@ public class Parser {
                     Document document = null;
                     try {
                         document = Jsoup.connect(url).get();
+                        Timber.d("Loaded: "+url);
+                        subscriber.onNext(document);
                     } catch (IOException e) {
                         iOnData.onError(e.getLocalizedMessage());
                     }
-                    Timber.d("Loaded: "+url);
-                    subscriber.onNext(document);
                 }
             })
                     .subscribeOn(Schedulers.newThread())
