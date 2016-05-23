@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,10 +20,8 @@ import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
-import com.drake1804.f1feedler.utils.Parser;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.TimerTask;
 

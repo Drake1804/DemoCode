@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.utils.DataSourceController;
+import com.drake1804.f1feedler.utils.Parser;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 import com.squareup.picasso.Picasso;
@@ -27,10 +28,11 @@ import io.realm.Realm;
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public class MainFeedPresenter extends Presenter {
+public class MainFeedPresenter extends Presenter implements Parser.IOnData {
 
     private MainFeedView view;
     private Context context;
+    private Parser parser;
     private Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -49,69 +51,14 @@ public class MainFeedPresenter extends Presenter {
     };
 
     public void getNewsFeed(){
-        Realm realm = Realm.getDefaultInstance();
-        view.setData(realm.where(NewsFeedModel.class).findAll());
-        loadNewsFeed();
+        view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
+        parser.parseFeed();
     }
 
     public MainFeedPresenter(MainFeedView view, Context context) {
         this.view = view;
         this.context = context;
-    }
-
-    public void loadNewsFeed(){
-        view.showDialog();
-
-        new AsyncTask<Void, Document, Document>() {
-
-            @Override
-            protected Document doInBackground(Void... params) {
-                Document document = null;
-                try {
-                    document = Jsoup.connect(Tweakables.BASE_FEED_URL).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return document;
-            }
-
-            @Override
-            protected void onPostExecute(Document document) {
-                super.onPostExecute(document);
-                List<NewsFeedModel> newsFeedModels = new ArrayList<>();
-                try {
-                    Elements topLevel = document.getElementsByTag("item");
-
-                    for(Element element : topLevel){
-                        NewsFeedModel newsFeedModel = new NewsFeedModel();
-                        newsFeedModel.setTitle(element.getElementsByTag("title").text());
-                        newsFeedModel.setDescription(element.getElementsByTag("description").text());
-                        newsFeedModel.setLink(element.getElementsByTag("link").text());
-                        newsFeedModel.setCreatingDate(element.getElementsByTag("pubDate").text());
-                        if(element.getElementsByTag("enclosure").size() > 0){
-                            newsFeedModel.setImageUrl(element.getElementsByTag("enclosure").get(0).attributes().get("url"));
-                        }
-                        newsFeedModels.add(newsFeedModel);
-                    }
-                    saveNewsLinks(newsFeedModels);
-                } catch (Exception ignored){}
-                view.dismissDialog();
-            }
-        }.execute();
-    }
-
-    private void saveNewsLinks(final List<NewsFeedModel> list){
-        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(list);
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
-            }
-        });
+        parser = new Parser(this);
     }
 
     public void parsePage(final String url) {
@@ -170,5 +117,21 @@ public class MainFeedPresenter extends Presenter {
         if(newsModel == null){
             parsePage(url);
         }
+    }
+
+    @Override
+    public void onDataDetails(String imageUrl, String text) {
+
+    }
+
+    @Override
+    public void onDataFeed(List<NewsFeedModel> data) {
+        view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
+        view.dismissDialog();
+    }
+
+    @Override
+    public void onError(String message) {
+        view.showMessage(message);
     }
 }

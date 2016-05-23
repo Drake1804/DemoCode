@@ -26,6 +26,8 @@ public class NewsFeedModel extends RealmObject {
     @SerializedName("imageUrl")
     private String imageUrl;
 
+    private String resource;
+
 
     public String getTitle() {
         return title;
@@ -47,6 +49,10 @@ public class NewsFeedModel extends RealmObject {
         return imageUrl;
     }
 
+    public String getResource() {
+        return resource;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -65,5 +71,9 @@ public class NewsFeedModel extends RealmObject {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 }

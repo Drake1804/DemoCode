@@ -1,9 +1,12 @@
 package com.drake1804.f1feedler.presenter;
 
+import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Parser;
 import com.drake1804.f1feedler.view.view.DetailsView;
+
+import java.util.List;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
@@ -35,9 +38,14 @@ public class DetailsPresenter extends Presenter implements Parser.IOnData {
 
 
     @Override
-    public void onData(String imageUrl, String text) {
+    public void onDataDetails(String imageUrl, String text) {
         view.setData(imageUrl, text);
         view.dismissDialog();
+    }
+
+    @Override
+    public void onDataFeed(List<NewsFeedModel> data) {
+
     }
 
     @Override
