@@ -8,4 +8,5 @@ public interface DetailsView {
     void setData(String imageUrl, String text);
     void showDialog();
     void dismissDialog();
+    void showMessage(String message);
 }

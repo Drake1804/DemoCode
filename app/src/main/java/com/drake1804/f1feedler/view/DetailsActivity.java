@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
@@ -131,5 +132,10 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
