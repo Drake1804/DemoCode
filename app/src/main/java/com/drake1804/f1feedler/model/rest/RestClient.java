@@ -2,11 +2,13 @@ package com.drake1804.f1feedler.model.rest;
 
 import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.model.SessionModel;
+import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
 
+import io.realm.RealmResults;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +22,7 @@ import rx.Observable;
 /**
  * Created by Pavel.Shkaran on 5/18/2016.
  */
-public class RestClient {
+public class RestClient implements TokenManager {
 
     private static RestAPI restAPI;
     private static RestClient restClient;
@@ -56,6 +58,7 @@ public class RestClient {
                             }
                         })
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
+                .addInterceptor(new TokenInterceptor(restClient))
                 .build();
 
 
@@ -88,4 +91,27 @@ public class RestClient {
         return restAPI.signUp(jsonObject);
     }
 
+    @Override
+    public String getToken() {
+
+        return null;
+    }
+
+    @Override
+    public boolean hasToken() {
+        return false;
+    }
+
+    @Override
+    public void clearToken() {
+        RealmResults<SessionModel> realmResults = DataSourceController.getRealm().where(SessionModel.class).findAll();
+        DataSourceController.getRealm().beginTransaction();
+        realmResults.deleteAllFromRealm();
+        DataSourceController.getRealm().commitTransaction();
+    }
+
+    @Override
+    public String refreshToken() {
+        return null;
+    }
 }

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsModel;
+import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 import com.squareup.picasso.Picasso;
@@ -100,8 +101,7 @@ public class MainFeedPresenter extends Presenter {
     }
 
     private void saveNewsLinks(final List<NewsFeedModel> list){
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.copyToRealmOrUpdate(list);
@@ -109,8 +109,7 @@ public class MainFeedPresenter extends Presenter {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                view.setData(realm.where(NewsFeedModel.class).findAll());
-                realm.close();
+                view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
             }
         });
     }

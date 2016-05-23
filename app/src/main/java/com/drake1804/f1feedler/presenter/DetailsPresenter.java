@@ -3,6 +3,7 @@ package com.drake1804.f1feedler.presenter;
 import android.os.AsyncTask;
 
 import com.drake1804.f1feedler.model.NewsModel;
+import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.view.view.DetailsView;
 
 import org.jsoup.Jsoup;
@@ -12,6 +13,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 import io.realm.Realm;
+import timber.log.Timber;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
@@ -62,7 +64,9 @@ public class DetailsPresenter extends Presenter {
                     Elements body = document.getElementsByAttributeValue("class", "post_body");
 
                     savePage(head.get(0).getElementsByAttributeValue("itemprop", "contentUrl").attr("src"), body.get(0).getElementsByAttributeValue("itemprop", "articleBody").html());
-                } catch (Exception e){}
+                } catch (Exception e){
+                    Timber.e(e.getMessage());
+                }
                 view.dismissDialog();
             }
         }.execute();
@@ -70,8 +74,7 @@ public class DetailsPresenter extends Presenter {
     }
 
     private void savePage(final String imageUrl, final String text){
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 NewsModel newsModel = new NewsModel();
@@ -83,7 +86,7 @@ public class DetailsPresenter extends Presenter {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                NewsModel newsModel = realm.where(NewsModel.class)
+                NewsModel newsModel = DataSourceController.getRealm().where(NewsModel.class)
                         .equalTo("imageUrl", imageUrl)
                         .findFirst();
                 view.setData(newsModel.getImageUrl(), newsModel.getText());

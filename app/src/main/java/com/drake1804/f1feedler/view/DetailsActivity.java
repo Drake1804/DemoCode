@@ -22,6 +22,7 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsView {
 
@@ -103,7 +104,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView {
 
     @Override
     public void setData(String imageUrl, String text) {
-        Picasso.with(this).load(imageUrl).into(image);
+        try {
+            Picasso.with(this).load(imageUrl).into(image);
+            this.text.setText(Html.fromHtml(text));
+        } catch (Exception e){
+            Timber.e(e.getMessage());
+        }
         this.text.setText(Html.fromHtml(text));
     }
 

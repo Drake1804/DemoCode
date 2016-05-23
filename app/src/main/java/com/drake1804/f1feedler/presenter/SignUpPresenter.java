@@ -2,6 +2,7 @@ package com.drake1804.f1feedler.presenter;
 
 import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
+import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.view.view.SignUpView;
 
 import java.util.List;
@@ -60,8 +61,7 @@ public class SignUpPresenter extends Presenter {
     }
 
     private void cleanSession(){
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<SessionModel> sessionModels = realm.where(SessionModel.class)
