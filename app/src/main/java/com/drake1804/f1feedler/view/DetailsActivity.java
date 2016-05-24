@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
+import com.drake1804.f1feedler.utils.AppUtils;
+import com.drake1804.f1feedler.view.custom.DetailsBottomBar;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class DetailsActivity extends AppCompatActivity implements DetailsView {
+public class DetailsActivity extends AppCompatActivity implements DetailsView, DetailsBottomBar.IController {
 
     @Bind(R.id.refresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -39,17 +42,20 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView {
     @Bind(R.id.text)
     TextView text;
 
+    @Bind(R.id.bottom_bar)
+    DetailsBottomBar bottomBar;
+
     @Bind(R.id.scrollView)
     ScrollView scrollView;
-
-    @Bind(R.id.bottom_bar)
-    LinearLayout bottomBar;
 
     private DetailsPresenter presenter;
 
     private int scrollLastPoint;
     private int divScrollUp = 500;
     private int divScrollDown = 500;
+
+    private static final int MAX_FONT = 19;
+    private static final int MIN_FONT = 12;
 
 
     @Override
@@ -137,5 +143,34 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView {
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFontBigger() {
+        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) < MAX_FONT){
+            bottomBar.setVisibilityButtonBigger(true);
+            bottomBar.setVisibilityButtonSmaller(true);
+            title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
+            text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
+            Timber.d("TEXT_SIZE: "+AppUtils.convertPixelsToDp(text.getTextSize(), this));
+        }
+        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MAX_FONT){
+            bottomBar.setVisibilityButtonBigger(false);
+        }
+    }
+
+    @Override
+    public void onFontSmaller() {
+        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) > MIN_FONT){
+            bottomBar.setVisibilityButtonSmaller(true);
+            bottomBar.setVisibilityButtonBigger(true);
+            title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
+            text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
+            Timber.d("TEXT_SIZE: "+AppUtils.convertPixelsToDp(text.getTextSize(), this));
+        }
+
+        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MIN_FONT){
+            bottomBar.setVisibilityButtonSmaller(false);
+        }
     }
 }

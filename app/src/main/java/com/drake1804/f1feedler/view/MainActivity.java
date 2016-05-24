@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.model.NewsFeedModel;
-import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
@@ -27,7 +25,6 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity implements MainFeedView {
 
@@ -96,12 +93,12 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.offline_mode:
-                OfflineMode.offlineMode(adapter.getNewsFeedModels(), presenter);
+                OfflineMode.createMode();
                 break;
             case R.id.action_settings:
                 break;
             case R.id.offline_mode_clear:
-                OfflineMode.clearOfflineCache(this);
+//                OfflineMode.clearOfflineCache(this);
                 break;
         }
 
@@ -136,12 +133,5 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
-
-    private void offlineMode(List<NewsFeedModel> newsFeedModels){
-        for(NewsFeedModel model : newsFeedModels){
-            presenter.loadForOfflineMode(model.getLink());
-            Log.d("OFFLINE_MODE", model.getLink());
-        }
     }
 }

@@ -31,9 +31,6 @@ import timber.log.Timber;
  */
 public class Parser {
 
-    public static final String F1NEWS = "f1news.ru";
-    public static final String F1WORLD = "f1-world.ru";
-    public static final String CHAMPIONAT = "championat.com";
 
     private IOnData iOnData;
 
@@ -46,9 +43,9 @@ public class Parser {
             @Override
             public void call(Subscriber<? super List<Source>> subscriber) {
                 List<Source> sources = new ArrayList<>();
-                sources.add(new Source(F1NEWS, Tweakables.F1NEWS_FEED_URL));
-                sources.add(new Source(CHAMPIONAT, Tweakables.CHAMPIONAT_FEED_URL));
-                sources.add(new Source(F1WORLD, Tweakables.F1WORLD_FEED_URL));
+                sources.add(new Source(Tweakables.F1NEWS, Tweakables.F1NEWS_FEED_URL));
+                sources.add(new Source(Tweakables.CHAMPIONAT, Tweakables.CHAMPIONAT_FEED_URL));
+                sources.add(new Source(Tweakables.F1WORLD, Tweakables.F1WORLD_FEED_URL));
                 OkHttpClient client = new OkHttpClient();
 
                 for(Source source : sources){
@@ -82,15 +79,16 @@ public class Parser {
 
             @Override
             public void onNext(List<Source> sources) {
+                List<NewsFeedModel> newsFeedModels = new ArrayList<>();
                 for(Source s : sources){
-                    switch (s.getName()){
-                        case F1NEWS:
-                            List<NewsFeedModel> newsFeedModels = new ArrayList<>();
-                            try {
-                                Elements topLevel = s.getDocument().getElementsByTag("item");
+                    Elements topLevel = s.getDocument().getElementsByTag("item");
 
+                    switch (s.getName()){
+                        case Tweakables.F1NEWS:
+                            try {
                                 for(Element element : topLevel){
                                     NewsFeedModel newsFeedModel = new NewsFeedModel();
+                                    newsFeedModel.setResource(Tweakables.F1NEWS);
                                     newsFeedModel.setTitle(element.getElementsByTag("title").text());
                                     newsFeedModel.setDescription(element.getElementsByTag("description").text());
                                     newsFeedModel.setLink(element.getElementsByTag("link").text());
@@ -108,19 +106,58 @@ public class Parser {
                                 ignored.printStackTrace();
                             }
                             break;
-                        case F1WORLD:
+                        case Tweakables.F1WORLD:
+                            try {
+                                for(Element element : topLevel){
+                                    NewsFeedModel newsFeedModel = new NewsFeedModel();
+                                    newsFeedModel.setResource(Tweakables.F1WORLD);
+                                    newsFeedModel.setTitle(element.getElementsByTag("title").text());
+                                    newsFeedModel.setDescription(element.getElementsByTag("description").text());
+                                    newsFeedModel.setLink(element.getElementsByTag("link").text());
+                                    if(TextUtils.equals(newsFeedModel.getLink(), "")){
+                                        newsFeedModel.setLink(element.getElementsByTag("guid").text());
+                                    }
+                                    newsFeedModel.setCreatingDate(element.getElementsByTag("pubDate").text());
+                                    newsFeedModel.setImageUrl(element.getElementsByTag("image").tagName("url").text());
+                                    newsFeedModels.add(newsFeedModel);
+                                }
+                                saveNewsLinks(newsFeedModels);
+                            } catch (Exception ignored){
+                                ignored.printStackTrace();
+                            }
                             break;
-                        case CHAMPIONAT:
+                        case Tweakables.CHAMPIONAT:
+                            try {
+                                for(Element element : topLevel){
+                                    NewsFeedModel newsFeedModel = new NewsFeedModel();
+                                    newsFeedModel.setResource(Tweakables.CHAMPIONAT);
+                                    newsFeedModel.setTitle(element.getElementsByTag("title").text());
+                                    newsFeedModel.setDescription(element.getElementsByTag("description").text());
+                                    newsFeedModel.setLink(element.getElementsByTag("link").text());
+                                    if(TextUtils.equals(newsFeedModel.getLink(), "")){
+                                        newsFeedModel.setLink(element.getElementsByTag("guid").text());
+                                    }
+                                    newsFeedModel.setCreatingDate(element.getElementsByTag("pubDate").text());
+                                    if(element.getElementsByTag("enclosure").size() > 0){
+                                        newsFeedModel.setImageUrl(element.getElementsByTag("enclosure").get(0).attributes().get("url"));
+                                    }
+                                    newsFeedModels.add(newsFeedModel);
+                                }
+                                saveNewsLinks(newsFeedModels);
+                            } catch (Exception ignored){
+                                ignored.printStackTrace();
+                            }
                             break;
                     }
                 }
+                saveNewsLinks(newsFeedModels);
             }
         });
 
     }
 
     public void parseNews(final String url){
-        if(url.contains(F1NEWS)){
+        if(url.contains(Tweakables.F1NEWS)){
             Observable.create(new Observable.OnSubscribe<Document>() {
                 @Override
                 public void call(Subscriber<? super Document> subscriber) {
@@ -134,7 +171,7 @@ public class Parser {
                     }
                 }
             })
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<Document>() {
                         @Override
@@ -155,9 +192,9 @@ public class Parser {
                             savePage(url, head.get(0).getElementsByAttributeValue("itemprop", "contentUrl").attr("src"), body.get(0).getElementsByAttributeValue("itemprop", "articleBody").html());
                         }
                     });
-        } else if(url.contains(F1WORLD)){
+        } else if(url.contains(Tweakables.F1WORLD)){
 
-        } else if(url.contains(CHAMPIONAT)){
+        } else if(url.contains(Tweakables.CHAMPIONAT)){
 
         }
     }

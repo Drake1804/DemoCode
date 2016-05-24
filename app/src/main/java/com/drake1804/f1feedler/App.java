@@ -19,14 +19,14 @@ public class App extends Application {
         super.onCreate();
         DataSourceController.initSingleton(this);
 
-        Picasso.with(getApplicationContext())
-                .setIndicatorsEnabled(true);
-
-        Picasso.with(getApplicationContext())
-                .setLoggingEnabled(true);
-
         if(BuildConfig.DEBUG){
             Timber.plant(new Timber.DebugTree());
+
+            Picasso.with(getApplicationContext())
+                    .setIndicatorsEnabled(true);
+
+//            Picasso.with(getApplicationContext())
+//                    .setLoggingEnabled(true);
         }
     }
 }
