@@ -1,5 +1,7 @@
 package com.drake1804.f1feedler.utils;
 
+import android.text.TextUtils;
+
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.model.Source;
@@ -14,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -44,15 +49,19 @@ public class Parser {
                 sources.add(new Source(F1NEWS, Tweakables.F1NEWS_FEED_URL));
                 sources.add(new Source(CHAMPIONAT, Tweakables.CHAMPIONAT_FEED_URL));
                 sources.add(new Source(F1WORLD, Tweakables.F1WORLD_FEED_URL));
+                OkHttpClient client = new OkHttpClient();
 
                 for(Source source : sources){
-                    Document document;
+                    Request request = new Request.Builder()
+                            .url(source.getUrl())
+                            .build();
                     try {
-                        document = Jsoup.connect(source.getUrl()).get();
+                        Response response = client.newCall(request).execute();
                         Timber.d("Loaded: "+source.getUrl());
-                        source.setDocument(document);
+                        source.setDocument(Jsoup.parse(response.body().string()));
                     } catch (IOException e) {
-                        iOnData.onError(e.getLocalizedMessage());
+                        e.printStackTrace();
+                        subscriber.onError(e);
                     }
                 }
                 subscriber.onNext(sources);
@@ -85,6 +94,9 @@ public class Parser {
                                     newsFeedModel.setTitle(element.getElementsByTag("title").text());
                                     newsFeedModel.setDescription(element.getElementsByTag("description").text());
                                     newsFeedModel.setLink(element.getElementsByTag("link").text());
+                                    if(TextUtils.equals(newsFeedModel.getLink(), "")){
+                                        newsFeedModel.setLink(element.getElementsByTag("guid").text());
+                                    }
                                     newsFeedModel.setCreatingDate(element.getElementsByTag("pubDate").text());
                                     if(element.getElementsByTag("enclosure").size() > 0){
                                         newsFeedModel.setImageUrl(element.getElementsByTag("enclosure").get(0).attributes().get("url"));
@@ -92,7 +104,9 @@ public class Parser {
                                     newsFeedModels.add(newsFeedModel);
                                 }
                                 saveNewsLinks(newsFeedModels);
-                            } catch (Exception ignored){}
+                            } catch (Exception ignored){
+                                ignored.printStackTrace();
+                            }
                             break;
                         case F1WORLD:
                             break;
@@ -158,6 +172,11 @@ public class Parser {
             @Override
             public void onSuccess() {
                 iOnData.onDataFeed(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
             }
         });
     }

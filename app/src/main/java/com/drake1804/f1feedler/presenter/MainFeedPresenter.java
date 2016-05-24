@@ -126,7 +126,7 @@ public class MainFeedPresenter extends Presenter implements Parser.IOnData {
 
     @Override
     public void onDataFeed(List<NewsFeedModel> data) {
-        view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
+        view.setData(data);
         view.dismissDialog();
     }
 

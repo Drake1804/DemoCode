@@ -74,12 +74,6 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 presenter.getNewsFeed();
             }
         });
-
-        Realm realm = Realm.getDefaultInstance();
-        List<SessionModel> sessionModels =  realm.where(SessionModel.class)
-                .findAll();
-
-        showMessage(sessionModels.size()+"");
     }
 
     @Override
