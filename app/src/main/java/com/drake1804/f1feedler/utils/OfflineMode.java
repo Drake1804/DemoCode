@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsModel;
@@ -218,8 +219,6 @@ public class OfflineMode {
         newsModel.setText(text);
         DataSourceController.getRealm().copyToRealmOrUpdate(newsModel);
         DataSourceController.getRealm().commitTransaction();
-
-//        iOnData.onDataDetails(newsModel.getImageUrl(), newsModel.getText());
     }
 
     private static void loadForOfflineNews(String url){
@@ -227,6 +226,22 @@ public class OfflineMode {
         if(newsModel == null){
             parseNews(url);
         }
+    }
+
+    @Deprecated
+    public static void clearOfflineData(){ //TODO rewrite
+        final RealmResults<NewsFeedModel> feedModelRealmResults = DataSourceController.getRealm().where(NewsFeedModel.class).findAll();
+        final RealmResults<NewsModel> newsModelRealmResults = DataSourceController.getRealm().where(NewsModel.class).findAll();
+
+        DataSourceController.getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                feedModelRealmResults.deleteAllFromRealm();
+                newsModelRealmResults.deleteAllFromRealm();
+                Timber.d("Offline data was cleared!");
+            }
+        });
+
     }
 
     /*private static RealmResults<NewsFeedModel> newsFeedModelList;

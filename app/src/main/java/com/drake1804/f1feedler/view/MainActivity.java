@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
             case R.id.action_settings:
                 break;
             case R.id.offline_mode_clear:
-//                OfflineMode.clearOfflineCache(this);
+//                OfflineMode.clearOfflineData();
                 break;
         }
 

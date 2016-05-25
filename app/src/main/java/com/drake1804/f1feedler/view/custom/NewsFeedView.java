@@ -76,6 +76,7 @@ public class NewsFeedView extends LinearLayout {
         if(!TextUtils.equals(model.getImageUrl(), "")){
             Picasso.with(context)
                     .load(model.getImageUrl())
+                    .placeholder(R.drawable.placeholder)
                     .into(image);
         }
         title.setText(model.getTitle());

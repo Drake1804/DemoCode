@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
