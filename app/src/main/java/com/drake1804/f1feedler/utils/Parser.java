@@ -94,5 +94,4 @@ public class Parser {
         void onDataDetails(String imageUrl, String text);
         void onError(String message);
     }
-
 }

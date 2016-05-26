@@ -3,6 +3,8 @@ package com.drake1804.f1feedler.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +37,9 @@ import timber.log.Timber;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsView, DetailsBottomBar.IController {
 
+    @Bind(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     @Bind(R.id.refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -51,7 +56,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     DetailsBottomBar bottomBar;
 
     @Bind(R.id.scrollView)
-    ScrollView scrollView;
+    NestedScrollView scrollView;
 
     private DetailsPresenter presenter;
 
@@ -72,7 +77,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle(getIntent().getStringExtra("title"));
+        collapsingToolbarLayout.setTitle(getIntent().getStringExtra("title"));
         title.setText(getIntent().getStringExtra("title"));
 
         presenter = new DetailsPresenter(this);
@@ -86,22 +91,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         });
 
         showDialog();
-
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                int scrollY = scrollView.getScrollY();
-                if(scrollY == 0) swipeRefreshLayout.setEnabled(true);
-                else swipeRefreshLayout.setEnabled(false);
-                if(scrollLastPoint == 0){
-                    scrollLastPoint = scrollY;
-                } else if(scrollY - scrollLastPoint > divScrollDown) {
-                    bottomBar.setVisibility(View.GONE);
-                } else if(scrollY - scrollLastPoint < divScrollUp) {
-                    bottomBar.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,7 +158,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
             bottomBar.setVisibilityButtonSmaller(true);
             title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
             text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
-            Timber.d("TEXT_SIZE: "+AppUtils.convertPixelsToDp(text.getTextSize(), this));
+            Timber.d("TEXT_SIZE: " + AppUtils.convertPixelsToDp(text.getTextSize(), this));
         }
         if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MAX_FONT){
             bottomBar.setVisibilityButtonBigger(false);
@@ -183,7 +172,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
             bottomBar.setVisibilityButtonBigger(true);
             title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
             text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
-            Timber.d("TEXT_SIZE: "+AppUtils.convertPixelsToDp(text.getTextSize(), this));
+            Timber.d("TEXT_SIZE: " + AppUtils.convertPixelsToDp(text.getTextSize(), this));
         }
 
         if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MIN_FONT){
@@ -203,8 +192,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     @OnClick(R.id.read_on_the_web)
     public void readOnTheWeb(){
-        Uri webpage = Uri.parse(getIntent().getStringExtra("link"));
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra("link")));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }

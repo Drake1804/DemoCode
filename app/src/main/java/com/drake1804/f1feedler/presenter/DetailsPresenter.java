@@ -11,7 +11,6 @@ import com.drake1804.f1feedler.view.view.DetailsView;
 public class DetailsPresenter extends Presenter implements Parser.IOnData {
 
     private DetailsView view;
-    private String url;
     private Parser parser;
 
 
@@ -21,7 +20,6 @@ public class DetailsPresenter extends Presenter implements Parser.IOnData {
     }
 
     public void getPage(String url, String imageUrl){
-        this.url = url;
         NewsModel model = DataSourceController.getRealm().where(NewsModel.class)
                 .equalTo("url", url)
                 .findFirst();

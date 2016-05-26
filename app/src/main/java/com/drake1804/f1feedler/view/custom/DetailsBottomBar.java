@@ -95,7 +95,6 @@ public class DetailsBottomBar extends LinearLayout {
         } else {
             bigger.setVisibility(GONE);
         }
-
     }
 
     public void setVisibilityButtonSmaller(boolean state){
