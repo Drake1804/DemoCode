@@ -1,63 +1,74 @@
 package com.drake1804.f1feedler.presenter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-
 import com.drake1804.f1feedler.model.NewsFeedModel;
-import com.drake1804.f1feedler.model.NewsModel;
+import com.drake1804.f1feedler.model.NewsFeedWrapper;
+import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.utils.DataSourceController;
-import com.drake1804.f1feedler.utils.Parser;
-import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.MainFeedView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public class MainFeedPresenter extends Presenter implements Parser.IOnData {
+public class MainFeedPresenter extends Presenter {
 
     private MainFeedView view;
-    private Context context;
-    private Parser parser;
 
     public void getNewsFeed(){
         view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
-        parser.parseFeed();
+        loadFeed();
     }
 
-    public MainFeedPresenter(MainFeedView view, Context context) {
+    public MainFeedPresenter(MainFeedView view) {
         this.view = view;
-        this.context = context;
-        parser = new Parser(this);
     }
 
-    @Override
-    public void onDataDetails(String imageUrl, String text) {
+    public void loadFeed(){
+        RestClient.getInstance().getFeed()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<NewsFeedWrapper>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showMessage(e.getMessage());
+                        view.dismissDialog();
+                    }
+
+                    @Override
+                    public void onNext(NewsFeedWrapper newsFeedWrapper) {
+                        saveNewsLinks(newsFeedWrapper.items);
+                        view.dismissDialog();
+                    }
+                });
     }
 
-    @Override
-    public void onDataFeed(List<NewsFeedModel> data) {
-        view.setData(data);
-        view.dismissDialog();
-    }
-
-    @Override
-    public void onError(String message) {
-        view.showMessage(message);
+    private void saveNewsLinks(final List<NewsFeedModel> list){
+        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(list);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+            }
+        });
     }
 }

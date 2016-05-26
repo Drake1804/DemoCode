@@ -3,6 +3,7 @@ package com.drake1804.f1feedler.view.custom;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -39,6 +40,9 @@ public class NewsFeedView extends LinearLayout {
 
     @Bind(R.id.resource)
     TextView resource;
+
+    @Bind(R.id.icon)
+    ImageView icon;
 
 
     public NewsFeedView(Context context) {
@@ -79,9 +83,14 @@ public class NewsFeedView extends LinearLayout {
                     .placeholder(R.drawable.placeholder)
                     .into(image);
         }
+        if(model.getResource() != null){
+            Picasso.with(context)
+                    .load(model.getResource().getImageUrl())
+                    .into(icon);
+            resource.setText(model.getResource().getTitle());
+        }
         title.setText(model.getTitle());
         date.setText(model.getCreatingDate());
-        description.setText(model.getDescription());
-        resource.setText(model.getResource());
+        description.setText(Html.fromHtml(model.getDescription()));
     }
 }

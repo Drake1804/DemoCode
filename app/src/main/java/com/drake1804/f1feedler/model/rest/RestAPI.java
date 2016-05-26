@@ -1,10 +1,13 @@
 package com.drake1804.f1feedler.model.rest;
 
+import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.SessionModel;
 import com.google.gson.JsonObject;
 
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -17,5 +20,8 @@ public interface RestAPI {
 
     @POST("signup")
     Observable<SessionModel> signUp(@Body JsonObject json);
+
+    @GET("news")
+    Observable<NewsFeedWrapper> getFeed(@Query("l") String language, @Query("category[]") int category);
 
 }

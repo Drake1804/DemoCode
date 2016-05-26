@@ -11,8 +11,8 @@ import io.realm.annotations.PrimaryKey;
 public class NewsFeedModel extends RealmObject {
 
     @PrimaryKey
-    @SerializedName("link")
-    private String link;
+    @SerializedName("uuid")
+    private String uuid;
 
     @SerializedName("title")
     private String title;
@@ -20,14 +20,24 @@ public class NewsFeedModel extends RealmObject {
     @SerializedName("description")
     private String description;
 
-    @SerializedName("creatingDate")
-    private String creatingDate;
+    @SerializedName("link")
+    private String link;
 
-    @SerializedName("imageUrl")
+    @SerializedName("image_url")
     private String imageUrl;
 
-    private String resource;
+    @SerializedName("pub_date")
+    private String creatingDate;
 
+    @SerializedName("resource")
+    private ResourceModel resource;
+
+    @SerializedName("social")
+    private SocialModel social;
+
+    public String getUuid() {
+        return uuid;
+    }
 
     public String getTitle() {
         return title;
@@ -41,16 +51,24 @@ public class NewsFeedModel extends RealmObject {
         return link;
     }
 
-    public String getCreatingDate() {
-        return creatingDate;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public String getResource() {
+    public String getCreatingDate() {
+        return creatingDate;
+    }
+
+    public ResourceModel getResource() {
         return resource;
+    }
+
+    public SocialModel getSocial() {
+        return social;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public void setTitle(String title) {
@@ -65,15 +83,19 @@ public class NewsFeedModel extends RealmObject {
         this.link = link;
     }
 
-    public void setCreatingDate(String creatingDate) {
-        this.creatingDate = creatingDate;
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public void setResource(String resource) {
+    public void setCreatingDate(String creatingDate) {
+        this.creatingDate = creatingDate;
+    }
+
+    public void setResource(ResourceModel resource) {
         this.resource = resource;
+    }
+
+    public void setSocial(SocialModel social) {
+        this.social = social;
     }
 }

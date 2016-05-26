@@ -71,12 +71,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         title.setText(getIntent().getStringExtra("title"));
 
         presenter = new DetailsPresenter(this);
-        presenter.getPage(getIntent().getStringExtra("link"));
+        presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.getPage(getIntent().getStringExtra("link"));
+                presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
             }
         });
 

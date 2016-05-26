@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
         setSupportActionBar(toolbar);
 
         adapter = new MainFeedAdapter(this);
-        presenter = new MainFeedPresenter(this, this);
+        presenter = new MainFeedPresenter(this);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mainFeed.setLayoutManager(mLayoutManager);
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                 intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
                 intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
+                intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
                 startActivity(intent);
             }
         });

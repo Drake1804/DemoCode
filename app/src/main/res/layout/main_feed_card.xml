@@ -27,15 +27,37 @@
                     android:layout_height="200dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"/>
-                <TextView
-                    android:id="@+id/resource"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="f1news"
-                    android:layout_gravity="bottom|right"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginBottom="4dp">
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="8dp"
+                        android:scaleType="centerInside"/>
+                    <TextView
+                        android:id="@+id/resource"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="f1news"
+                        android:textColor="@android:color/white"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="8dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Date"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
                     android:layout_marginRight="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:textColor="@android:color/white"/>
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="8dp"/>
             </FrameLayout>
 
             <View
@@ -56,15 +78,6 @@
                     tools:text="Title"
                     android:textSize="18sp"
                     android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Date"
-                    android:textSize="12sp"
-                    android:textColor="@color/cardview_dark_background"
-                    android:layout_marginTop="4dp"/>
 
                 <TextView
                     android:id="@+id/description"

@@ -1,6 +1,8 @@
 package com.drake1804.f1feedler.model.rest;
 
 import com.drake1804.f1feedler.BuildConfig;
+import com.drake1804.f1feedler.model.NewsFeedModel;
+import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Tweakables;
@@ -58,7 +60,7 @@ public class RestClient implements TokenManager {
                             }
                         })
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
-                .addInterceptor(new TokenInterceptor(restClient))
+                /*.addInterceptor(new TokenInterceptor(restClient))*/
                 .build();
 
 
@@ -89,6 +91,10 @@ public class RestClient implements TokenManager {
         jsonObject.addProperty("password", password);
 
         return restAPI.signUp(jsonObject);
+    }
+
+    public Observable<NewsFeedWrapper> getFeed(){
+        return restAPI.getFeed("ru", 10);
     }
 
     @Override
