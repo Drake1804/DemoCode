@@ -81,6 +81,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
             }
         });
 
+        showDialog();
+
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -121,6 +123,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     @Override
     public void setData(String imageUrl, String text) {
+        dismissDialog();
         try {
             Picasso.with(this).load(imageUrl).into(image);
             this.text.setText(Html.fromHtml(text));
@@ -132,7 +135,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     @Override
     public void showDialog() {
-        swipeRefreshLayout.post(new TimerTask() {
+        swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
               swipeRefreshLayout.setRefreshing(true);
@@ -142,7 +145,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     @Override
     public void dismissDialog() {
-        swipeRefreshLayout.post(new TimerTask() {
+        swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(false);

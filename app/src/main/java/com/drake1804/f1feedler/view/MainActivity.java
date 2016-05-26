@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
         mainFeed.setLayoutManager(mLayoutManager);
         mainFeed.setAdapter(adapter);
 
+        showDialog();
+
         ItemClickSupport.addTo(mainFeed).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
