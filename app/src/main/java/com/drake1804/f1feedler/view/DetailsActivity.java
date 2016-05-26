@@ -1,5 +1,7 @@
 package com.drake1804.f1feedler.view;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -27,6 +30,7 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsView, DetailsBottomBar.IController {
@@ -195,5 +199,14 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     @Override
     public void dislike() {
         showMessage("Dislike");
+    }
+
+    @OnClick(R.id.read_on_the_web)
+    public void readOnTheWeb(){
+        Uri webpage = Uri.parse(getIntent().getStringExtra("link"));
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }

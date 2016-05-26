@@ -32,7 +32,13 @@
             android:name=".view.DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- The BROWSABLE category is required to get links from web pages. -->
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.LoginActivity"
             android:label="@string/title_activity_login"
