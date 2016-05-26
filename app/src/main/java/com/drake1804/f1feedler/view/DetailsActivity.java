@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -96,6 +97,13 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
             }
         });
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.details_menu, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -103,6 +111,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         switch(id) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.menu_fav:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -172,5 +182,15 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MIN_FONT){
             bottomBar.setVisibilityButtonSmaller(false);
         }
+    }
+
+    @Override
+    public void like() {
+        showMessage("Like");
+    }
+
+    @Override
+    public void dislike() {
+        showMessage("Dislike");
     }
 }

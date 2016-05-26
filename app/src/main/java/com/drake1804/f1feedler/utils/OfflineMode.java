@@ -3,13 +3,16 @@ package com.drake1804.f1feedler.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.model.NewsFeedModel;
+import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.model.Source;
+import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.PicassoTools;
@@ -42,7 +45,6 @@ import timber.log.Timber;
  */
 public class OfflineMode {
 
-    private static Parser parser;
     private static Context context;
     private static Target target = new Target() {
         @Override
@@ -62,39 +64,14 @@ public class OfflineMode {
     };
 
     public OfflineMode(Context context) {
-        this.parser = new Parser((Parser.IOnData) context);
         this.context = context;
     }
 
     public static void createMode(){
-        Observable.create(new Observable.OnSubscribe<List<Source>>() {
-            @Override
-            public void call(Subscriber<? super List<Source>> subscriber) {
-                List<Source> sources = new ArrayList<>();
-                sources.add(new Source(Tweakables.F1NEWS, Tweakables.F1NEWS_FEED_URL));
-                sources.add(new Source(Tweakables.CHAMPIONAT, Tweakables.CHAMPIONAT_FEED_URL));
-                sources.add(new Source(Tweakables.F1WORLD, Tweakables.F1WORLD_FEED_URL));
-                OkHttpClient client = new OkHttpClient();
-
-                for(Source source : sources){
-                    Request request = new Request.Builder()
-                            .url(source.getUrl())
-                            .build();
-                    try {
-                        Response response = client.newCall(request).execute();
-                        Timber.d("Loaded: "+source.getUrl());
-                        source.setDocument(Jsoup.parse(response.body().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        subscriber.onError(e);
-                    }
-                }
-                subscriber.onNext(sources);
-            }
-        })
+        RestClient.getInstance().getFeed()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Source>>() {
+                .subscribe(new Observer<NewsFeedWrapper>() {
                     @Override
                     public void onCompleted() {
 
@@ -102,43 +79,12 @@ public class OfflineMode {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
                     }
 
                     @Override
-                    public void onNext(List<Source> sources) {
-                        for(Source s : sources){
-                            switch (s.getName()){
-                                case Tweakables.F1NEWS:
-                                    List<NewsFeedModel> newsFeedModels = new ArrayList<>();
-                                    try {
-                                        Elements topLevel = s.getDocument().getElementsByTag("item");
-
-                                        for(Element element : topLevel){
-                                            NewsFeedModel newsFeedModel = new NewsFeedModel();
-                                            newsFeedModel.setTitle(element.getElementsByTag("title").text());
-                                            newsFeedModel.setDescription(element.getElementsByTag("description").text());
-                                            newsFeedModel.setLink(element.getElementsByTag("link").text());
-                                            if(TextUtils.equals(newsFeedModel.getLink(), "")){
-                                                newsFeedModel.setLink(element.getElementsByTag("guid").text());
-                                            }
-                                            newsFeedModel.setCreatingDate(element.getElementsByTag("pubDate").text());
-                                            if(element.getElementsByTag("enclosure").size() > 0){
-                                                newsFeedModel.setImageUrl(element.getElementsByTag("enclosure").get(0).attributes().get("url"));
-                                            }
-                                            newsFeedModels.add(newsFeedModel);
-                                        }
-                                        saveNewsLinks(newsFeedModels);
-                                    } catch (Exception ignored){
-                                        ignored.printStackTrace();
-                                    }
-                                    break;
-                                case Tweakables.F1WORLD:
-                                    break;
-                                case Tweakables.CHAMPIONAT:
-                                    break;
-                            }
-                        }
+                    public void onNext(NewsFeedWrapper newsFeedWrapper) {
+                        saveNewsLinks(newsFeedWrapper.items);
                     }
                 });
     }
@@ -153,7 +99,7 @@ public class OfflineMode {
             @Override
             public void onSuccess() {
                 for(NewsFeedModel model : list){
-                    loadForOfflineNews(model.getLink());
+                    loadForOfflineNews(model.getLink(), model.getImageUrl());
                 }
             }
         }, new Realm.Transaction.OnError() {
@@ -164,48 +110,52 @@ public class OfflineMode {
         });
     }
 
-    public static void parseNews(final String url){
-        if(url.contains(Tweakables.F1NEWS)){
-            Observable.create(new Observable.OnSubscribe<Document>() {
-                @Override
-                public void call(Subscriber<? super Document> subscriber) {
-                    Document document;
-                    try {
-                        document = Jsoup.connect(url).get();
-                        Timber.d("Loaded: "+url);
-                        subscriber.onNext(document);
-                    } catch (IOException e) {
-//                        iOnData.onError(e.getLocalizedMessage());
-                    }
+    public static void parseNews(final String url, @Nullable final String imageUrl){
+        Observable.create(new Observable.OnSubscribe<Document>() {
+            @Override
+            public void call(Subscriber<? super Document> subscriber) {
+                Document document;
+                try {
+                    document = Jsoup.connect(url).get();
+                    Timber.d("Loaded: "+url);
+                    subscriber.onNext(document);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            })
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<Document>() {
-                        @Override
-                        public void onCompleted() {
+            }
+        })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Document>() {
+                    @Override
+                    public void onCompleted() {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-//                            iOnData.onError(e.getMessage());
-                        }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
 
-                        @Override
-                        public void onNext(Document document) {
+                    @Override
+                    public void onNext(Document document) {
+                        if(url.contains(Tweakables.F1NEWS)){
                             Elements head = document.getElementsByAttributeValue("class", "post_head");
                             Elements body = document.getElementsByAttributeValue("class", "post_body");
 
                             savePage(url, head.get(0).getElementsByAttributeValue("itemprop", "contentUrl").attr("src"), body.get(0).getElementsByAttributeValue("itemprop", "articleBody").html());
-                            Timber.d("PAGE: "+url);
+                        } else if(url.contains(Tweakables.F1WORLD)){
+
+                        } else if(url.contains(Tweakables.CHAMPIONAT)){
+
+                        } else if(url.contains(Tweakables.AUTOSPORT)){
+                            Elements top = document.getElementsByAttributeValue("id", "story");
+                            Elements article = top.get(0).getElementsByAttributeValue("class", "field-item even");
+
+                            savePage(url, imageUrl, article.html());
                         }
-                    });
-        } else if(url.contains(Tweakables.F1WORLD)){
-
-        } else if(url.contains(Tweakables.CHAMPIONAT)){
-
-        }
+                    }
+                });
     }
 
     private static void savePage(final String url, final String imageUrl, final String text){
@@ -221,10 +171,10 @@ public class OfflineMode {
         DataSourceController.getRealm().commitTransaction();
     }
 
-    private static void loadForOfflineNews(String url){
+    private static void loadForOfflineNews(String url, String imageUrl){
         NewsModel newsModel = DataSourceController.getRealm().where(NewsModel.class).equalTo("url", url).findFirst();
         if(newsModel == null){
-            parseNews(url);
+            parseNews(url, imageUrl);
         }
     }
 
@@ -243,54 +193,5 @@ public class OfflineMode {
         });
 
     }
-
-    /*private static RealmResults<NewsFeedModel> newsFeedModelList;
-    private static RealmResults<NewsModel> newsModelList;
-
-    private static RealmChangeListener newsFeedListener = new RealmChangeListener() {
-        @Override
-        public void onChange(Object element) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    newsFeedModelList.deleteAllFromRealm();
-                }
-            });
-        }
-    };
-
-    private static RealmChangeListener newsModelListener = new RealmChangeListener() {
-        @Override
-        public void onChange(Object element) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    newsModelList.deleteAllFromRealm();
-                }
-            });
-        }
-    };
-
-
-    public static void offlineMode(List<NewsFeedModel> newsFeedModels, MainFeedPresenter presenter){
-        for(NewsFeedModel model : newsFeedModels){
-            presenter.loadForOfflineMode(model.getLink());
-            Log.d("OFFLINE_MODE", model.getLink());
-        }
-    }
-
-    public static void clearOfflineCache(Context context){ //TODO doesn't work correct
-        Realm realm = Realm.getDefaultInstance();
-        newsFeedModelList = realm.where(NewsFeedModel.class).findAllAsync();
-        newsModelList = realm.where(NewsModel.class).findAllAsync();
-
-        newsFeedModelList.addChangeListener(newsFeedListener);
-        newsModelList.addChangeListener(newsModelListener);
-
-        PicassoTools.clearCache(Picasso.with(context));
-
-    }*/
 
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
+import com.drake1804.f1feedler.utils.TimeAgo;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -90,7 +91,7 @@ public class NewsFeedView extends LinearLayout {
             resource.setText(model.getResource().getTitle());
         }
         title.setText(model.getTitle());
-        date.setText(model.getCreatingDate());
+        date.setText(TimeAgo.toDuration(System.currentTimeMillis() - model.getCreatingDate().getTime()));
         description.setText(Html.fromHtml(model.getDescription()));
     }
 }

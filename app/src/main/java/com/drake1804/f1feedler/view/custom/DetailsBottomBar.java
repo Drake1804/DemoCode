@@ -72,9 +72,21 @@ public class DetailsBottomBar extends LinearLayout {
         controller.onFontBigger();
     }
 
+    @OnClick(R.id.dislike)
+    public void onDislike(){
+        controller.dislike();
+    }
+
+    @OnClick(R.id.like)
+    public void onLike(){
+        controller.like();
+    }
+
     public interface IController {
         void onFontBigger();
         void onFontSmaller();
+        void like();
+        void dislike();
     }
 
     public void setVisibilityButtonBigger(boolean state){

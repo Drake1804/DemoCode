@@ -2,6 +2,8 @@ package com.drake1804.f1feedler.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -27,7 +29,7 @@ public class NewsFeedModel extends RealmObject {
     private String imageUrl;
 
     @SerializedName("pub_date")
-    private String creatingDate;
+    private Date creatingDate;
 
     @SerializedName("resource")
     private ResourceModel resource;
@@ -55,7 +57,7 @@ public class NewsFeedModel extends RealmObject {
         return imageUrl;
     }
 
-    public String getCreatingDate() {
+    public Date getCreatingDate() {
         return creatingDate;
     }
 
@@ -87,7 +89,7 @@ public class NewsFeedModel extends RealmObject {
         this.imageUrl = imageUrl;
     }
 
-    public void setCreatingDate(String creatingDate) {
+    public void setCreatingDate(Date creatingDate) {
         this.creatingDate = creatingDate;
     }
 

@@ -6,6 +6,8 @@ import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Tweakables;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -63,12 +65,16 @@ public class RestClient implements TokenManager {
                 /*.addInterceptor(new TokenInterceptor(restClient))*/
                 .build();
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat("EEE, dd MMM yyyy HH:mm:ss Z")
+                .create();
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Tweakables.BASE_API_URL)
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         restAPI = retrofit.create(RestAPI.class);
     }

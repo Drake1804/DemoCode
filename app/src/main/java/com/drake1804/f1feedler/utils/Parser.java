@@ -22,13 +22,11 @@ import timber.log.Timber;
  */
 public class Parser {
 
-
     private IOnData iOnData;
 
     public Parser(IOnData iOnData) {
         this.iOnData = iOnData;
     }
-
 
 
     public void parseNews(final String url, @Nullable final String imageUrl){
@@ -68,6 +66,8 @@ public class Parser {
                         } else if(url.contains(Tweakables.F1WORLD)){
 
                         } else if(url.contains(Tweakables.CHAMPIONAT)){
+
+                        } else if(url.contains(Tweakables.AUTOSPORT)){
                             Elements top = document.getElementsByAttributeValue("id", "story");
                             Elements article = top.get(0).getElementsByAttributeValue("class", "field-item even");
 
