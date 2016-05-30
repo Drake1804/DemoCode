@@ -4,31 +4,19 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.TextView;
 
-import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
-import com.drake1804.f1feedler.utils.AppUtils;
 import com.drake1804.f1feedler.view.MainActivity;
 import com.drake1804.f1feedler.view.custom.NewsFeedView;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHolder> {
+public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHolderMain> {
 
     private List<NewsFeedModel> newsFeedModels;
     private Context context;
@@ -39,16 +27,28 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        NewsFeedView newsFeedView = new NewsFeedView(context);
+    public ViewHolderMain onCreateViewHolder(ViewGroup parent, int viewType) {
+        NewsFeedView newsFeedView;
+        if(viewType == 0){
+            newsFeedView = new NewsFeedView(context, true);
+        } else {
+            newsFeedView = new NewsFeedView(context, false);
+        }
         DisplayMetrics metrics = new DisplayMetrics();
         ((MainActivity) context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         newsFeedView.setLayoutParams(new LinearLayoutCompat.LayoutParams(metrics.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT));
-        return new ViewHolder(newsFeedView);
+        return new ViewHolderMain(newsFeedView);
+    }
+
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolderMain holder, int position) {
         holder.newsFeedView.setData(newsFeedModels.get(position));
     }
 
@@ -67,11 +67,11 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolderMain extends RecyclerView.ViewHolder {
 
         NewsFeedView newsFeedView;
 
-        public ViewHolder(NewsFeedView itemView) {
+        public ViewHolderMain(NewsFeedView itemView) {
             super(itemView);
             newsFeedView = itemView;
         }

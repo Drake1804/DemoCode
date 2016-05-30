@@ -46,34 +46,39 @@ public class NewsFeedView extends LinearLayout {
     ImageView icon;
 
 
-    public NewsFeedView(Context context) {
+    public NewsFeedView(Context context, boolean isMainNews) {
         super(context);
         this.context = context;
-        init();
+        init(isMainNews);
     }
 
-    public NewsFeedView(Context context, AttributeSet attrs) {
+    public NewsFeedView(Context context, AttributeSet attrs, boolean isMainNews) {
         super(context, attrs);
         this.context = context;
-        init();
+        init(isMainNews);
     }
 
-    public NewsFeedView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NewsFeedView(Context context, AttributeSet attrs, int defStyleAttr, boolean isMainNews) {
         super(context, attrs, defStyleAttr);
         this.context = context;
-        init();
+        init(isMainNews);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public NewsFeedView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public NewsFeedView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, boolean isMainNews) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.context = context;
-        init();
+        init(isMainNews);
     }
 
 
-    private void init(){
-        View v = LayoutInflater.from(context).inflate(R.layout.main_feed_card, this, true);
+    private void init(boolean isMainNews){
+        View v;
+        if(isMainNews){
+            v = LayoutInflater.from(context).inflate(R.layout.top_news_card, this, true);
+        } else {
+            v = LayoutInflater.from(context).inflate(R.layout.main_feed_card, this, true);
+        }
         ButterKnife.bind(this, v);
     }
 

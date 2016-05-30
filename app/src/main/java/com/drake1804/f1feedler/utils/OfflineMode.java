@@ -4,35 +4,23 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.NewsModel;
-import com.drake1804.f1feedler.model.Source;
 import com.drake1804.f1feedler.model.rest.RestClient;
-import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoTools;
 import com.squareup.picasso.Target;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;

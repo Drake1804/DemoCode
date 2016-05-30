@@ -35,13 +35,14 @@
                 tools:text="Some title"
                 android:gravity="center_horizontal"
                 android:layout_margin="16dp"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/primary_text"/>
 
             <TextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp"
+                android:textColor="@color/primary_text"/>
             <Button
                 android:id="@+id/read_on_the_web"
                 android:layout_width="wrap_content"

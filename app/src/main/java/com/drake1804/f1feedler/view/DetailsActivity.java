@@ -60,10 +60,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     private DetailsPresenter presenter;
 
-    private int scrollLastPoint;
-    private int divScrollUp = 500;
-    private int divScrollDown = 500;
-
     private static final int MAX_FONT = 19;
     private static final int MIN_FONT = 12;
 
