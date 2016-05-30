@@ -1,9 +1,15 @@
 package com.drake1804.f1feedler.presenter;
 
+import com.drake1804.f1feedler.model.CommentsWrapper;
 import com.drake1804.f1feedler.model.NewsModel;
+import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Parser;
 import com.drake1804.f1feedler.view.view.DetailsView;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
@@ -28,6 +34,28 @@ public class DetailsPresenter extends Presenter implements Parser.IOnData {
         } else {
             parser.parseNews(url, imageUrl);
         }
+    }
+
+    public void getComments(String newsId){
+        RestClient.getInstance().getCommentsForNews(newsId)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CommentsWrapper>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showMessage(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(CommentsWrapper commentsWrapper) {
+                        view.setComments(commentsWrapper.comments);
+                    }
+                });
     }
 
 

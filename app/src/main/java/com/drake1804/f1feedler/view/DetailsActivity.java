@@ -7,6 +7,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -22,12 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
+import com.drake1804.f1feedler.adapter.CommentsAdapter;
+import com.drake1804.f1feedler.model.CommentModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
 import com.drake1804.f1feedler.utils.AppUtils;
 import com.drake1804.f1feedler.view.custom.DetailsBottomBar;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
 import java.util.TimerTask;
 
 import butterknife.Bind;
@@ -58,7 +63,13 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     @Bind(R.id.scrollView)
     NestedScrollView scrollView;
 
+    @Bind(R.id.comments)
+    RecyclerView comments;
+
+    private CommentsAdapter adapter;
     private DetailsPresenter presenter;
+
+    private LinearLayoutManager mLayoutManager;
 
     private static final int MAX_FONT = 19;
     private static final int MIN_FONT = 12;
@@ -78,11 +89,19 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
         presenter = new DetailsPresenter(this);
         presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
+        presenter.getComments("rhfgsf3b653sfj6jb2frn3sfrhfgsf3rhfgsf3");
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        adapter = new CommentsAdapter(this);
+        comments.setLayoutManager(mLayoutManager);
+        comments.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
+                presenter.getComments(getIntent().getStringExtra("uuid"));
             }
         });
 
@@ -120,6 +139,11 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
             Timber.e(e.getMessage());
         }
         this.text.setText(Html.fromHtml(text));
+    }
+
+    @Override
+    public void setComments(List<CommentModel> comments) {
+        adapter.setCommentModels(comments);
     }
 
     @Override

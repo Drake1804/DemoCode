@@ -1,6 +1,7 @@
 package com.drake1804.f1feedler.model.rest;
 
 import com.drake1804.f1feedler.BuildConfig;
+import com.drake1804.f1feedler.model.CommentsWrapper;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.SessionModel;
@@ -100,7 +101,11 @@ public class RestClient implements TokenManager {
     }
 
     public Observable<NewsFeedWrapper> getFeed(){
-        return restAPI.getFeed("ru", 10);
+        return restAPI.getFeed("ALL", "RUS", "ENG",  "formula_one");
+    }
+
+    public Observable<CommentsWrapper> getCommentsForNews(String newsId){
+        return restAPI.getCommentsForNews(newsId);
     }
 
     @Override

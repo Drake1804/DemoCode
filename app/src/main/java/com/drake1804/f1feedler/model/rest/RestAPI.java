@@ -1,5 +1,6 @@
 package com.drake1804.f1feedler.model.rest;
 
+import com.drake1804.f1feedler.model.CommentsWrapper;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.SessionModel;
 import com.google.gson.JsonObject;
@@ -22,6 +23,9 @@ public interface RestAPI {
     Observable<SessionModel> signUp(@Body JsonObject json);
 
     @GET("news")
-    Observable<NewsFeedWrapper> getFeed(@Query("l") String language, @Query("category[]") int category);
+    Observable<NewsFeedWrapper> getFeed(@Query("country[]") String country, @Query("language[]") String language1, @Query("language[]") String language2, @Query("category[]") String category);
+
+    @GET("news_comments")
+    Observable<CommentsWrapper> getCommentsForNews(@Query("id") String newsId);
 
 }

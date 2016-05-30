@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
                 intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
                 intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
                 intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
