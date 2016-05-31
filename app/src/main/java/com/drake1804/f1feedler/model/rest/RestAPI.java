@@ -23,7 +23,7 @@ public interface RestAPI {
     Observable<SessionModel> signUp(@Body JsonObject json);
 
     @GET("news")
-    Observable<NewsFeedWrapper> getFeed(@Query("country[]") String country, @Query("language[]") String language1, @Query("language[]") String language2, @Query("category[]") String category);
+    Observable<NewsFeedWrapper> getFeed(@Query("country[]") String country, @Query("language[]") String language, @Query("category[]") String category);
 
     @GET("news_comments")
     Observable<CommentsWrapper> getCommentsForNews(@Query("id") String newsId);

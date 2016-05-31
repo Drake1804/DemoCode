@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,14 +61,17 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     @Bind(R.id.text)
     TextView text;
 
-    @Bind(R.id.bottom_bar)
-    DetailsBottomBar bottomBar;
-
     @Bind(R.id.scrollView)
     NestedScrollView scrollView;
 
     @Bind(R.id.comments)
     RecyclerView comments;
+
+    @Bind(R.id.rate_spinner)
+    Spinner rate;
+
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     private CommentsAdapter adapter;
     private DetailsPresenter presenter;
@@ -73,6 +80,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     private static final int MAX_FONT = 19;
     private static final int MIN_FONT = 12;
+
+    private boolean isHidden = false;
 
 
     @Override
@@ -89,7 +98,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
         presenter = new DetailsPresenter(this);
         presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
-        presenter.getComments("rhfgsf3b653sfj6jb2frn3sfrhfgsf3rhfgsf3");
+        presenter.getComments(getIntent().getStringExtra("uuid"));
 
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -102,6 +111,44 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
             public void onRefresh() {
                 presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
                 presenter.getComments(getIntent().getStringExtra("uuid"));
+            }
+        });
+
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY - oldScrollY > 20 && !isHidden){
+                    fab.animate().translationYBy(350).setDuration(500);
+                    isHidden = true;
+                }
+                if(scrollY - oldScrollY < -50 && isHidden){
+                    fab.animate().translationYBy(-350);
+                    isHidden = false;
+                }
+            }
+        });
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.rate, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rate.setAdapter(adapter);
+
+        rate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 1:
+                        showMessage("Like");
+                        break;
+                    case 2:
+                        showMessage("Dislike");
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -123,6 +170,11 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
                 onBackPressed();
                 return true;
             case R.id.menu_fav:
+                return true;
+            case R.id.menu_night:
+                item.setChecked(!item.isChecked());
+                return true;
+            case R.id.menu_font:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -174,29 +226,18 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     @Override
     public void onFontBigger() {
         if(AppUtils.convertPixelsToDp(text.getTextSize(), this) < MAX_FONT){
-            bottomBar.setVisibilityButtonBigger(true);
-            bottomBar.setVisibilityButtonSmaller(true);
             title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
             text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
             Timber.d("TEXT_SIZE: " + AppUtils.convertPixelsToDp(text.getTextSize(), this));
-        }
-        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MAX_FONT){
-            bottomBar.setVisibilityButtonBigger(false);
         }
     }
 
     @Override
     public void onFontSmaller() {
         if(AppUtils.convertPixelsToDp(text.getTextSize(), this) > MIN_FONT){
-            bottomBar.setVisibilityButtonSmaller(true);
-            bottomBar.setVisibilityButtonBigger(true);
             title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
             text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
             Timber.d("TEXT_SIZE: " + AppUtils.convertPixelsToDp(text.getTextSize(), this));
-        }
-
-        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) == MIN_FONT){
-            bottomBar.setVisibilityButtonSmaller(false);
         }
     }
 

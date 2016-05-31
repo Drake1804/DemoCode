@@ -101,7 +101,7 @@ public class RestClient implements TokenManager {
     }
 
     public Observable<NewsFeedWrapper> getFeed(){
-        return restAPI.getFeed("ALL", "RUS", "ENG",  "formula_one");
+        return restAPI.getFeed("ALL", "RUS", "formula_one");
     }
 
     public Observable<CommentsWrapper> getCommentsForNews(String newsId){

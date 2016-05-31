@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp">
 
@@ -20,7 +20,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
@@ -29,9 +29,15 @@
                 <ImageView
                     android:id="@+id/image"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="290dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"/>
+                <com.drake1804.f1feedler.view.custom.LabelView
+                    android:id="@+id/label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginTop="25dp"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

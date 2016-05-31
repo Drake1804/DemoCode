@@ -21,10 +21,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.drake1804.f1feedler.view.custom.DetailsBottomBar
-                android:id="@+id/bottom_bar"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:scaleType="centerInside"/>
+
+                <TextView
+                    android:id="@+id/resource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Resource"
+                    android:layout_toRightOf="@id/logo"/>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Date"
+                    android:layout_toRightOf="@id/logo"
+                    android:layout_below="@id/resource"/>
+
+                <Spinner
+                    android:id="@+id/rate_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/title"

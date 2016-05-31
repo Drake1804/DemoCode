@@ -5,7 +5,10 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.view.MainActivity;
 import com.drake1804.f1feedler.view.custom.NewsFeedView;
@@ -20,6 +23,7 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
 
     private List<NewsFeedModel> newsFeedModels;
     private Context context;
+    private int lastPosition = -1;
 
     public MainFeedAdapter(Context context) {
         this.context = context;
@@ -50,6 +54,12 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolderMain holder, int position) {
         holder.newsFeedView.setData(newsFeedModels.get(position));
+
+        Animation animation = AnimationUtils.loadAnimation(context,
+                (position > lastPosition) ? R.anim.up_from_bottom
+                        : R.anim.down_from_top);
+        holder.itemView.startAnimation(animation);
+        lastPosition = position;
     }
 
     @Override
