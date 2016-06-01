@@ -9,7 +9,10 @@ import com.drake1804.f1feedler.view.view.MainFeedView;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -54,7 +57,8 @@ public class MainFeedPresenter extends Presenter {
     }
 
     private void saveNewsLinks(final List<NewsFeedModel> list){
-        DataSourceController.getRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(list),
+        DataSourceController.getRealm().executeTransactionAsync(realm ->
+                realm.copyToRealmOrUpdate(list),
                 () -> view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll()),
                 error -> error.printStackTrace());
     }
