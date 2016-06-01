@@ -14,8 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="TOP NEWS"
-            android:textStyle="bold"
-            android:textColor="@color/primary_text"/>
+            android:textColor="@color/primary_text"
+            fontPath="fonts/Roboto-Light.ttf"/>
 
 
 

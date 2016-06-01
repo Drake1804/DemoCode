@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -21,6 +22,15 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp">
+                <com.github.silvestrpredko.dotprogressbar.DotProgressBar
+                    android:id="@+id/dot_progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    custom:amount="5"
+                    custom:duration="@android:integer/config_mediumAnimTime"
+                    custom:endColor="@color/light_blue_A400"
+                    custom:startColor="@color/light_blue_A700"
+                    android:layout_gravity="center_vertical"/>
                 <ImageView
                     android:id="@+id/image"
                     android:layout_width="match_parent"

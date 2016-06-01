@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.utils.TimeAgo;
+import com.github.silvestrpredko.dotprogressbar.DotProgressBar;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -44,6 +45,9 @@ public class NewsFeedView extends LinearLayout {
 
     @Bind(R.id.icon)
     ImageView icon;
+
+    @Bind(R.id.dot_progress_bar)
+    DotProgressBar dotProgressBar;
 
 
     public NewsFeedView(Context context, boolean isMainNews) {
@@ -76,17 +80,21 @@ public class NewsFeedView extends LinearLayout {
         View v;
         if(isMainNews){
             v = LayoutInflater.from(context).inflate(R.layout.top_news_card, this, true);
+            ButterKnife.bind(this, v);
         } else {
             v = LayoutInflater.from(context).inflate(R.layout.main_feed_card, this, true);
+            ButterKnife.bind(this, v);
+            dotProgressBar.setStartColor(getContext().getColor(R.color.colorPrimary));
+            dotProgressBar.setEndColor(getContext().getColor(R.color.colorPrimaryDark));
+            dotProgressBar.setDotAmount(5);
+            dotProgressBar.setAnimationTime(500);
         }
-        ButterKnife.bind(this, v);
     }
 
     public void setData(NewsFeedModel model){
         if(!TextUtils.equals(model.getImageUrl(), "")){
             Picasso.with(context)
                     .load(model.getImageUrl())
-                    .placeholder(R.drawable.placeholder)
                     .into(image);
         }
         if(model.getResource() != null){

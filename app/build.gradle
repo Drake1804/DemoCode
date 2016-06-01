@@ -39,6 +39,8 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
     compile 'com.jakewharton.timber:timber:4.1.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    compile 'com.github.silvestrpredko:dot-progress-bar:0.1.4@aar'
 }
 
 apply plugin: 'realm-android'

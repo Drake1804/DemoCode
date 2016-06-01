@@ -2,8 +2,11 @@ package com.drake1804.f1feedler.utils;
 
 import android.content.Context;
 
+import com.drake1804.f1feedler.R;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by Pavel.Shkaran on 5/23/2016.
@@ -19,6 +22,11 @@ public class DataSourceController {
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
         realm = Realm.getDefaultInstance();
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Roboto-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build());
     }
 
     public static synchronized DataSourceController getInstance() {
