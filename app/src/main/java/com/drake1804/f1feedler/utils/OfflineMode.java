@@ -1,5 +1,6 @@
 package com.drake1804.f1feedler.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -33,8 +34,8 @@ import timber.log.Timber;
  */
 public class OfflineMode {
 
-    private static Context context;
-    private static Target target = new Target() {
+    private Context context;
+    private Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
@@ -55,7 +56,7 @@ public class OfflineMode {
         this.context = context;
     }
 
-    public static void createMode(){
+    public void createMode(final ProgressDialog dialog){
         RestClient.getInstance().getFeed()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,33 +73,22 @@ public class OfflineMode {
 
                     @Override
                     public void onNext(NewsFeedWrapper newsFeedWrapper) {
-                        saveNewsLinks(newsFeedWrapper.items);
+                        saveNewsLinks(newsFeedWrapper.items, dialog);
                     }
                 });
     }
 
-    private static void saveNewsLinks(final List<NewsFeedModel> list){
-        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(list);
+    private void saveNewsLinks(final List<NewsFeedModel> list, final ProgressDialog dialog){
+        DataSourceController.getRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(list), () -> {
+            for (int i = 0; i < list.size(); i++) {
+                NewsFeedModel model = list.get(i);
+                loadForOfflineNews(model.getLink(), model.getImageUrl());
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                for(NewsFeedModel model : list){
-                    loadForOfflineNews(model.getLink(), model.getImageUrl());
-                }
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                error.printStackTrace();
-            }
-        });
+
+        }, error -> error.printStackTrace());
     }
 
-    public static void parseNews(final String url, @Nullable final String imageUrl){
+    public void parseNews(final String url, @Nullable final String imageUrl){
         Observable.create(new Observable.OnSubscribe<Document>() {
             @Override
             public void call(Subscriber<? super Document> subscriber) {
@@ -146,7 +136,7 @@ public class OfflineMode {
                 });
     }
 
-    private static void savePage(final String url, final String imageUrl, final String text){
+    private void savePage(final String url, final String imageUrl, final String text){
         Picasso.with(context)
                 .load(imageUrl)
                 .into(target);
@@ -159,26 +149,20 @@ public class OfflineMode {
         DataSourceController.getRealm().commitTransaction();
     }
 
-    private static void loadForOfflineNews(String url, String imageUrl){
+    private void loadForOfflineNews(String url, String imageUrl){
         NewsModel newsModel = DataSourceController.getRealm().where(NewsModel.class).equalTo("url", url).findFirst();
         if(newsModel == null){
             parseNews(url, imageUrl);
         }
     }
 
-    @Deprecated
-    public static void clearOfflineData(){ //TODO rewrite
-        final RealmResults<NewsFeedModel> feedModelRealmResults = DataSourceController.getRealm().where(NewsFeedModel.class).findAll();
-        final RealmResults<NewsModel> newsModelRealmResults = DataSourceController.getRealm().where(NewsModel.class).findAll();
 
-        DataSourceController.getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                feedModelRealmResults.deleteAllFromRealm();
-                newsModelRealmResults.deleteAllFromRealm();
-                Timber.d("Offline data was cleared!");
-            }
-        });
+    public void clearOfflineData(){
+        DataSourceController.getRealm().beginTransaction();
+        DataSourceController.getRealm().delete(NewsFeedModel.class);
+        DataSourceController.getRealm().delete(NewsModel.class);
+        DataSourceController.getRealm().commitTransaction();
+        Timber.d("Offline data was cleared!");
 
     }
 

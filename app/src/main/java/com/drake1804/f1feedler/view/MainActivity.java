@@ -1,5 +1,6 @@
 package com.drake1804.f1feedler.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -57,24 +58,16 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
 
         showDialog();
 
-        ItemClickSupport.addTo(mainFeed).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
-                intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
-                intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
-                intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
-                startActivity(intent);
-            }
+        ItemClickSupport.addTo(mainFeed).setOnItemClickListener((recyclerView, position, v) -> {
+            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+            intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
+            intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
+            intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
+            intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
+            startActivity(intent);
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.getNewsFeed();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
     }
 
     @Override
@@ -92,17 +85,20 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        OfflineMode offlineMode;
         switch (item.getItemId()){
             case R.id.menu_signIn:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.offline_mode:
-                OfflineMode.createMode();
+                offlineMode = new OfflineMode(this);
+                offlineMode.createMode(new ProgressDialog(this));
                 break;
             case R.id.action_settings:
                 break;
             case R.id.offline_mode_clear:
-//                OfflineMode.clearOfflineData();
+                offlineMode = new OfflineMode(this);
+                offlineMode.clearOfflineData();
                 break;
         }
 
@@ -121,21 +117,11 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
 
     @Override
     public void showDialog() {
-        swipeRefreshLayout.post(new TimerTask() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(true));
     }
 
     @Override
     public void dismissDialog() {
-        swipeRefreshLayout.post(new TimerTask() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
     }
 }

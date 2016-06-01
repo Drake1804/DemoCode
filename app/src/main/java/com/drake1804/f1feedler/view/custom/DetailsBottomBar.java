@@ -19,6 +19,7 @@ import butterknife.OnClick;
 /**
  * Created by Pavel.Shkaran on 5/24/2016.
  */
+@Deprecated
 public class DetailsBottomBar extends LinearLayout {
 
     private Context context;

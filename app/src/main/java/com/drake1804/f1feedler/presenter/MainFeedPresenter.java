@@ -54,21 +54,8 @@ public class MainFeedPresenter extends Presenter {
     }
 
     private void saveNewsLinks(final List<NewsFeedModel> list){
-        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(list);
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                error.printStackTrace();
-            }
-        });
+        DataSourceController.getRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(list),
+                () -> view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll()),
+                error -> error.printStackTrace());
     }
 }

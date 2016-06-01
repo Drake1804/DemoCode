@@ -49,6 +49,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     @Bind(R.id.refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -89,71 +92,14 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        collapsingToolbarLayout.setTitle(getIntent().getStringExtra("title"));
-        title.setText(getIntent().getStringExtra("title"));
-
-        presenter = new DetailsPresenter(this);
-        presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
-        presenter.getComments(getIntent().getStringExtra("uuid"));
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new CommentsAdapter(this);
-        comments.setLayoutManager(mLayoutManager);
-        comments.setAdapter(adapter);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
-                presenter.getComments(getIntent().getStringExtra("uuid"));
-            }
-        });
-
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(scrollY - oldScrollY > 20 && !isHidden){
-                    fab.animate().translationYBy(350).setDuration(500);
-                    isHidden = true;
-                }
-                if(scrollY - oldScrollY < -50 && isHidden){
-                    fab.animate().translationYBy(-350);
-                    isHidden = false;
-                }
-            }
-        });
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.rate, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        rate.setAdapter(adapter);
-
-        rate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 1:
-                        showMessage("Like");
-                        break;
-                    case 2:
-                        showMessage("Dislike");
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        showDialog();
+        init();
+        initListeners();
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -200,22 +146,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     @Override
     public void showDialog() {
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-              swipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(true));
     }
 
     @Override
     public void dismissDialog() {
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
     }
 
     @Override
@@ -257,5 +193,62 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    private void init(){
+        collapsingToolbarLayout.setTitle(getIntent().getStringExtra("title"));
+        title.setText(getIntent().getStringExtra("title"));
+
+        presenter = new DetailsPresenter(this);
+        presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
+        presenter.getComments(getIntent().getStringExtra("uuid"));
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        adapter = new CommentsAdapter(this);
+        comments.setLayoutManager(mLayoutManager);
+        comments.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.rate, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rate.setAdapter(adapter);
+    }
+
+    private void initListeners(){
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
+            presenter.getComments(getIntent().getStringExtra("uuid"));
+        });
+
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if(scrollY - oldScrollY > 20 && !isHidden){
+                fab.animate().translationYBy(350).setDuration(500);
+                isHidden = true;
+            }
+            if(scrollY - oldScrollY < -50 && isHidden){
+                fab.animate().translationYBy(-350);
+                isHidden = false;
+            }
+        });
+
+        rate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 1:
+                        showMessage("Like");
+                        break;
+                    case 2:
+                        showMessage("Dislike");
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 }

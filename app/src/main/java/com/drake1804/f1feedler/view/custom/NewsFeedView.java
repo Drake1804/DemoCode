@@ -85,15 +85,12 @@ public class NewsFeedView extends LinearLayout {
             v = LayoutInflater.from(context).inflate(R.layout.main_feed_card, this, true);
         }
         ButterKnife.bind(this, v);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dotProgressBar.setVisibility(VISIBLE);
-                dotProgressBar.setStartColor(getContext().getColor(R.color.colorPrimary));
-                dotProgressBar.setEndColor(getContext().getColor(R.color.colorAccent));
-                dotProgressBar.setDotAmount(5);
-                dotProgressBar.setAnimationTime(500);
-            }
+        new Handler().postDelayed(() -> {
+            dotProgressBar.setVisibility(VISIBLE);
+            dotProgressBar.setStartColor(getContext().getColor(R.color.colorPrimary));
+            dotProgressBar.setEndColor(getContext().getColor(R.color.colorAccent));
+            dotProgressBar.setDotAmount(5);
+            dotProgressBar.setAnimationTime(500);
         }, 700);
     }
 

@@ -41,29 +41,20 @@ public class LoginPresenter extends Presenter {
 
                     @Override
                     public void onNext(final SessionModel sessionModel) {
-                        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.copyToRealmOrUpdate(sessionModel);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                view.onResult(true);
-                            }
+                        DataSourceController.getRealm().executeTransactionAsync(realm -> {
+                            realm.copyToRealmOrUpdate(sessionModel);
+                        }, () -> {
+                            view.onResult(true);
                         });
                     }
                 });
     }
 
     private void cleanSession(){
-        DataSourceController.getRealm().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<SessionModel> sessionModels = realm.where(SessionModel.class)
-                        .findAll();
-                sessionModels.deleteAllFromRealm();
-            }
+        DataSourceController.getRealm().executeTransactionAsync(realm -> {
+            RealmResults<SessionModel> sessionModels = realm.where(SessionModel.class)
+                    .findAll();
+            sessionModels.deleteAllFromRealm();
         });
     }
 
