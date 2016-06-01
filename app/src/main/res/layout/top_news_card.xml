@@ -30,7 +30,8 @@
                     custom:duration="@android:integer/config_mediumAnimTime"
                     custom:endColor="@color/light_blue_A400"
                     custom:startColor="@color/light_blue_A700"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="wrap_content"

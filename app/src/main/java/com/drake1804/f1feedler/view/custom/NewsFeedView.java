@@ -3,6 +3,7 @@ package com.drake1804.f1feedler.view.custom;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -80,15 +81,20 @@ public class NewsFeedView extends LinearLayout {
         View v;
         if(isMainNews){
             v = LayoutInflater.from(context).inflate(R.layout.top_news_card, this, true);
-            ButterKnife.bind(this, v);
         } else {
             v = LayoutInflater.from(context).inflate(R.layout.main_feed_card, this, true);
-            ButterKnife.bind(this, v);
-            dotProgressBar.setStartColor(getContext().getColor(R.color.colorPrimary));
-            dotProgressBar.setEndColor(getContext().getColor(R.color.colorPrimaryDark));
-            dotProgressBar.setDotAmount(5);
-            dotProgressBar.setAnimationTime(500);
         }
+        ButterKnife.bind(this, v);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dotProgressBar.setVisibility(VISIBLE);
+                dotProgressBar.setStartColor(getContext().getColor(R.color.colorPrimary));
+                dotProgressBar.setEndColor(getContext().getColor(R.color.colorAccent));
+                dotProgressBar.setDotAmount(5);
+                dotProgressBar.setAnimationTime(500);
+            }
+        }, 700);
     }
 
     public void setData(NewsFeedModel model){
