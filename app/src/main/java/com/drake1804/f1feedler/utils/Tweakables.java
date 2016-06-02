@@ -14,4 +14,7 @@ public class Tweakables {
     public static final String CHAMPIONAT = "championat.com";
     public static final String AUTOSPORT = "autosport.com";
 
+
+    public static final String HAWK_KEY_NIGHT_MODE = "DAY_NIGHT";
+
 }

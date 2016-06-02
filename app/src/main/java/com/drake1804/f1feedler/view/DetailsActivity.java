@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +26,9 @@ import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.CommentsAdapter;
 import com.drake1804.f1feedler.model.CommentModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
+import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -72,6 +75,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private DetailsPresenter presenter;
     private LinearLayoutManager mLayoutManager;
     private boolean isHidden = false;
+    private boolean isNight = false;
 
 
     @Override
@@ -89,8 +93,9 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.details_menu, menu);
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(isNight);
         return true;
     }
 
@@ -105,7 +110,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             case R.id.menu_fav:
                 return true;
             case R.id.menu_night:
-                item.setChecked(!item.isChecked());
+                item.setChecked(isNight);
+                if(isNight){
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    isNight = false;
+                } else {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    isNight = true;
+                }
+                Hawk.put(Tweakables.HAWK_KEY_NIGHT_MODE, isNight);
+                recreate();
                 return true;
             case R.id.menu_font:
                 return true;
@@ -177,6 +191,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 R.array.rate, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rate.setAdapter(adapter);
+
+        if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
+            isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
+        }
     }
 
     private void initListeners(){

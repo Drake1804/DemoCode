@@ -5,6 +5,9 @@ import android.content.Context;
 import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.R;
 import com.facebook.stetho.Stetho;
+import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.HawkBuilder;
+import com.orhanobut.hawk.LogLevel;
 import com.squareup.picasso.Picasso;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
@@ -12,6 +15,9 @@ import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -32,6 +38,32 @@ public class DataSourceController {
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
+
+        Hawk.init(context)
+                .setEncryptionMethod(HawkBuilder.EncryptionMethod.NO_ENCRYPTION)
+                .setStorage(HawkBuilder.newSharedPrefStorage(context))
+                .setLogLevel(LogLevel.FULL)
+                .build();
+
+        Hawk.<Boolean>getObservable(Tweakables.HAWK_KEY_NIGHT_MODE)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Hawk.put(Tweakables.HAWK_KEY_NIGHT_MODE, false);
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+
+                    }
+                });
 
         if(BuildConfig.DEBUG){
             Timber.plant(new Timber.DebugTree());

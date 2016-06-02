@@ -1,16 +1,14 @@
 package com.drake1804.f1feedler.view;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
@@ -19,10 +17,11 @@ import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
+import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.MainFeedView;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
-import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +41,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
+    private boolean isNight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,14 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     protected void onResume() {
         super.onResume();
         presenter.getNewsFeed();
+        if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
+            isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
+        }
+        /*if(isNight){
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }*/
     }
 
     @Override
