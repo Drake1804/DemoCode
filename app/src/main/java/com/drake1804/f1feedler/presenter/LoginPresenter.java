@@ -41,7 +41,7 @@ public class LoginPresenter extends Presenter {
 
                     @Override
                     public void onNext(final SessionModel sessionModel) {
-                        DataSourceController.getRealm().executeTransactionAsync(realm -> {
+                        view.getRealm().executeTransactionAsync(realm -> {
                             realm.copyToRealmOrUpdate(sessionModel);
                         }, () -> {
                             view.onResult(true);
@@ -51,7 +51,7 @@ public class LoginPresenter extends Presenter {
     }
 
     private void cleanSession(){
-        DataSourceController.getRealm().executeTransactionAsync(realm -> {
+        view.getRealm().executeTransactionAsync(realm -> {
             RealmResults<SessionModel> sessionModels = realm.where(SessionModel.class)
                     .findAll();
             sessionModels.deleteAllFromRealm();

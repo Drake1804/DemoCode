@@ -13,4 +13,5 @@ public class Tweakables {
     public static final String F1WORLD = "f1-world.ru";
     public static final String CHAMPIONAT = "championat.com";
     public static final String AUTOSPORT = "autosport.com";
+
 }

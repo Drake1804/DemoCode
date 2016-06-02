@@ -22,10 +22,10 @@ public class TimeAgo {
     public static String toDuration(long duration) {
         if(duration > 0){
             StringBuffer res = new StringBuffer();
-            for(int i=0;i< TimeAgo.times.size(); i++) {
+            for(int i=0; i< TimeAgo.times.size(); i++) {
                 Long current = TimeAgo.times.get(i);
                 long temp = duration/current;
-                if(temp>0) {
+                if(temp > 0) {
                     res.append(temp).append(" ").append( TimeAgo.timesString.get(i) ).append(temp > 1 ? "s" : "").append(" ago");
                     break;
                 }

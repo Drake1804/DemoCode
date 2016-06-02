@@ -19,8 +19,9 @@ import com.drake1804.f1feedler.view.view.SignUpView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 
-public class RegistrationActivity extends AppCompatActivity implements SignUpView {
+public class RegistrationActivity extends BaseActivity implements SignUpView {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -49,8 +50,7 @@ public class RegistrationActivity extends AppCompatActivity implements SignUpVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        hideDialog();
-
+        dismissDialog();
     }
 
     @OnClick(R.id.sign_up_button)
@@ -88,12 +88,17 @@ public class RegistrationActivity extends AppCompatActivity implements SignUpVie
     }
 
     @Override
+    public Realm getRealm() {
+        return realm;
+    }
+
+    @Override
     public void showDialog() {
         progress.show();
     }
 
     @Override
-    public void hideDialog() {
+    public void dismissDialog() {
         progress.dismiss();
     }
 

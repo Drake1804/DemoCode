@@ -26,8 +26,9 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
-public class MainActivity extends AppCompatActivity implements MainFeedView {
+public class MainActivity extends BaseActivity implements MainFeedView {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -49,25 +50,9 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        adapter = new MainFeedAdapter(this);
-        presenter = new MainFeedPresenter(this);
-        mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mainFeed.setLayoutManager(mLayoutManager);
-        mainFeed.setAdapter(adapter);
-
+        init();
+        initListeners();
         showDialog();
-
-        ItemClickSupport.addTo(mainFeed).setOnItemClickListener((recyclerView, position, v) -> {
-            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-            intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
-            intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
-            intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
-            intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
-            startActivity(intent);
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
     }
 
     @Override
@@ -116,6 +101,11 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
     }
 
     @Override
+    public Realm getRealm() {
+        return realm;
+    }
+
+    @Override
     public void showDialog() {
         swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(true));
     }
@@ -124,4 +114,27 @@ public class MainActivity extends AppCompatActivity implements MainFeedView {
     public void dismissDialog() {
         swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
     }
+
+    public void init(){
+        adapter = new MainFeedAdapter(this);
+        presenter = new MainFeedPresenter(this);
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mainFeed.setLayoutManager(mLayoutManager);
+        mainFeed.setAdapter(adapter);
+    }
+
+    public void initListeners(){
+        ItemClickSupport.addTo(mainFeed).setOnItemClickListener((recyclerView, position, v) -> {
+            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+            intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
+            intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
+            intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
+            intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
+            startActivity(intent);
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
+    }
+
 }

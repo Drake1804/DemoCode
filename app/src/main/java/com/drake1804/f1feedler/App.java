@@ -23,29 +23,5 @@ public class App extends Application {
         super.onCreate();
         DataSourceController.initSingleton(this);
 
-        if(BuildConfig.DEBUG){
-            Timber.plant(new Timber.DebugTree());
-
-            Picasso.with(getApplicationContext())
-                    .setIndicatorsEnabled(true);
-
-//            Picasso.with(getApplicationContext())
-//                    .setLoggingEnabled(true);
-
-            Stetho.initialize(
-                    Stetho.newInitializerBuilder(this)
-                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                            .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-                            .build());
-
-            RealmInspectorModulesProvider.builder(this)
-                    .withFolder(getCacheDir())
-                    .withEncryptionKey("encrypted.realm", "keyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy".getBytes())
-                    .withMetaTables()
-                    .withDescendingOrder()
-                    .withLimit(1000)
-                    .databaseNamePattern(Pattern.compile(".+\\.realm"))
-                    .build();
-        }
     }
 }

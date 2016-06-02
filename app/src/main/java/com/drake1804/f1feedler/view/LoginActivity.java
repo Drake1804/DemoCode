@@ -17,11 +17,12 @@ import com.drake1804.f1feedler.view.view.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 
 /**
  * A signIn screen that offers signIn via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends BaseActivity implements LoginView {
 
     /*@Bind(R.id.toolbar)
     Toolbar toolbar;*/
@@ -60,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        hideDialog();
+        dismissDialog();
     }
 
     @OnClick(R.id.email_sign_in_button)
@@ -102,12 +103,17 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
+    public Realm getRealm() {
+        return realm;
+    }
+
+    @Override
     public void showDialog() {
         progress.show();
     }
 
     @Override
-    public void hideDialog() {
+    public void dismissDialog() {
         progress.dismiss();
     }
 

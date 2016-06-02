@@ -7,10 +7,7 @@ import java.util.List;
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public interface MainFeedView {
+public interface MainFeedView extends BaseView {
 
-    void showMessage(String message);
     void setData(List<NewsFeedModel> data);
-    void showDialog();
-    void dismissDialog();
 }

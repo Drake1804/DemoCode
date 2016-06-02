@@ -7,22 +7,16 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,20 +25,18 @@ import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.CommentsAdapter;
 import com.drake1804.f1feedler.model.CommentModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
-import com.drake1804.f1feedler.utils.AppUtils;
-import com.drake1804.f1feedler.view.custom.DetailsBottomBar;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 import timber.log.Timber;
 
-public class DetailsActivity extends AppCompatActivity implements DetailsView, DetailsBottomBar.IController {
+public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -78,12 +70,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
 
     private CommentsAdapter adapter;
     private DetailsPresenter presenter;
-
     private LinearLayoutManager mLayoutManager;
-
-    private static final int MAX_FONT = 19;
-    private static final int MIN_FONT = 12;
-
     private boolean isHidden = false;
 
 
@@ -145,6 +132,11 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     }
 
     @Override
+    public Realm getRealm() {
+        return realm;
+    }
+
+    @Override
     public void showDialog() {
         swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(true));
     }
@@ -157,34 +149,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsView, D
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onFontBigger() {
-        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) < MAX_FONT){
-            title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
-            text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) + 1);
-            Timber.d("TEXT_SIZE: " + AppUtils.convertPixelsToDp(text.getTextSize(), this));
-        }
-    }
-
-    @Override
-    public void onFontSmaller() {
-        if(AppUtils.convertPixelsToDp(text.getTextSize(), this) > MIN_FONT){
-            title.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
-            text.setTextSize(AppUtils.convertPixelsToDp(text.getTextSize(), this) - 1);
-            Timber.d("TEXT_SIZE: " + AppUtils.convertPixelsToDp(text.getTextSize(), this));
-        }
-    }
-
-    @Override
-    public void like() {
-        showMessage("Like");
-    }
-
-    @Override
-    public void dislike() {
-        showMessage("Dislike");
     }
 
     @OnClick(R.id.read_on_the_web)

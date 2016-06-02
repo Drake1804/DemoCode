@@ -7,11 +7,8 @@ import java.util.List;
 /**
  * Created by Pavel.Shkaran on 5/13/2016.
  */
-public interface DetailsView {
+public interface DetailsView extends BaseView {
 
     void setData(String imageUrl, String text);
     void setComments(List<CommentModel> comments);
-    void showDialog();
-    void dismissDialog();
-    void showMessage(String message);
 }

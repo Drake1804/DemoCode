@@ -43,19 +43,17 @@ public class SignUpPresenter extends Presenter {
 
                     @Override
                     public void onNext(final SessionModel sessionModel) {
-                        final Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransactionAsync(realm1 -> {
-                            realm1.copyToRealmOrUpdate(sessionModel);
+                        view.getRealm().executeTransactionAsync(realm -> {
+                            realm.copyToRealmOrUpdate(sessionModel);
                         }, () -> {
                             view.onResult(true);
-                            realm.close();
                         });
                     }
                 });
     }
 
     private void cleanSession(){
-        DataSourceController.getRealm().executeTransactionAsync(realm -> {
+        view.getRealm().executeTransactionAsync(realm -> {
             RealmResults<SessionModel> sessionModels = realm.where(SessionModel.class)
                     .findAll();
             sessionModels.deleteAllFromRealm();

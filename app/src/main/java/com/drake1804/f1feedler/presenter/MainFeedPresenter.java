@@ -24,7 +24,7 @@ public class MainFeedPresenter extends Presenter {
     private MainFeedView view;
 
     public void getNewsFeed(){
-        view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll());
+        view.setData(view.getRealm().where(NewsFeedModel.class).findAll());
         loadFeed();
     }
 
@@ -57,9 +57,9 @@ public class MainFeedPresenter extends Presenter {
     }
 
     private void saveNewsLinks(final List<NewsFeedModel> list){
-        DataSourceController.getRealm().executeTransactionAsync(realm ->
+        view.getRealm().executeTransactionAsync(realm ->
                 realm.copyToRealmOrUpdate(list),
-                () -> view.setData(DataSourceController.getRealm().where(NewsFeedModel.class).findAll()),
+                () -> view.setData(view.getRealm().where(NewsFeedModel.class).findAll()),
                 error -> error.printStackTrace());
     }
 }

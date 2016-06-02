@@ -2,10 +2,17 @@ package com.drake1804.f1feedler.utils;
 
 import android.content.Context;
 
+import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.R;
+import com.facebook.stetho.Stetho;
+import com.squareup.picasso.Picasso;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
+
+import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -27,6 +34,31 @@ public class DataSourceController {
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
+
+        if(BuildConfig.DEBUG){
+            Timber.plant(new Timber.DebugTree());
+
+            Picasso.with(context)
+                    .setIndicatorsEnabled(true);
+            Picasso.with(context)
+                    .setLoggingEnabled(true);
+
+            Stetho.initialize(
+                    Stetho.newInitializerBuilder(context)
+                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
+                            .enableWebKitInspector(RealmInspectorModulesProvider.builder(context).build())
+                            .build());
+
+            RealmInspectorModulesProvider.builder(context)
+                    .withFolder(context.getCacheDir())
+                    .withEncryptionKey("encrypted.realm", "keyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy".getBytes())
+                    .withMetaTables()
+                    .withDescendingOrder()
+                    .withLimit(1000)
+                    .databaseNamePattern(Pattern.compile(".+\\.realm"))
+                    .build();
+        }
+
     }
 
     public static synchronized DataSourceController getInstance() {
@@ -41,6 +73,7 @@ public class DataSourceController {
         return sInstance;
     }
 
+    @Deprecated
     public static Realm getRealm() {
         return realm;
     }

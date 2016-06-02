@@ -121,10 +121,10 @@ public class RestClient implements TokenManager {
 
     @Override
     public void clearToken() {
-        RealmResults<SessionModel> realmResults = DataSourceController.getRealm().where(SessionModel.class).findAll();
+        /*RealmResults<SessionModel> realmResults = DataSourceController.getRealm().where(SessionModel.class).findAll();
         DataSourceController.getRealm().beginTransaction();
         realmResults.deleteAllFromRealm();
-        DataSourceController.getRealm().commitTransaction();
+        DataSourceController.getRealm().commitTransaction();*/
     }
 
     @Override
