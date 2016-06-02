@@ -59,14 +59,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     protected void onResume() {
         super.onResume();
         presenter.getNewsFeed();
-        if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
-            isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
-        }
-        /*if(isNight){
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }*/
     }
 
     @Override
