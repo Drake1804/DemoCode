@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -35,6 +34,8 @@ import timber.log.Timber;
 public class OfflineMode {
 
     private Context context;
+    private Realm realm;
+    private ProgressDialog dialog;
     private Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -52,11 +53,16 @@ public class OfflineMode {
         }
     };
 
-    public OfflineMode(Context context) {
+    public OfflineMode(Context context, Realm realm) {
         this.context = context;
+        this.realm = realm;
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Loading...");
+        dialog.setCancelable(false);
     }
 
-    public void createMode(final ProgressDialog dialog){
+    public void createMode(){
+        dialog.show();
         RestClient.getInstance().getFeed()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -73,19 +79,19 @@ public class OfflineMode {
 
                     @Override
                     public void onNext(NewsFeedWrapper newsFeedWrapper) {
-                        saveNewsLinks(newsFeedWrapper.items, dialog);
+                        saveNewsLinks(newsFeedWrapper.items);
                     }
                 });
     }
 
-    private void saveNewsLinks(final List<NewsFeedModel> list, final ProgressDialog dialog){
-        DataSourceController.getRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(list), () -> {
+    private void saveNewsLinks(final List<NewsFeedModel> list){
+        realm.executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(list), () -> {
             for (int i = 0; i < list.size(); i++) {
                 NewsFeedModel model = list.get(i);
                 loadForOfflineNews(model.getLink(), model.getImageUrl());
             }
 
-        }, error -> error.printStackTrace());
+        }, Throwable::printStackTrace);
     }
 
     public void parseNews(final String url, @Nullable final String imageUrl){
@@ -95,7 +101,7 @@ public class OfflineMode {
                 Document document;
                 try {
                     document = Jsoup.connect(url).get();
-                    Timber.d("Loaded: "+url);
+                    Timber.d("Loaded: %s",url);
                     subscriber.onNext(document);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -140,17 +146,18 @@ public class OfflineMode {
         Picasso.with(context)
                 .load(imageUrl)
                 .into(target);
-        DataSourceController.getRealm().beginTransaction();
+        realm.beginTransaction();
         NewsModel newsModel = new NewsModel();
         newsModel.setUrl(url);
         newsModel.setImageUrl(imageUrl);
         newsModel.setText(text);
-        DataSourceController.getRealm().copyToRealmOrUpdate(newsModel);
-        DataSourceController.getRealm().commitTransaction();
+        realm.copyToRealmOrUpdate(newsModel);
+        realm.commitTransaction();
+        dialog.dismiss();
     }
 
     private void loadForOfflineNews(String url, String imageUrl){
-        NewsModel newsModel = DataSourceController.getRealm().where(NewsModel.class).equalTo("url", url).findFirst();
+        NewsModel newsModel = realm.where(NewsModel.class).equalTo("url", url).findFirst();
         if(newsModel == null){
             parseNews(url, imageUrl);
         }
@@ -158,12 +165,13 @@ public class OfflineMode {
 
 
     public void clearOfflineData(){
-        DataSourceController.getRealm().beginTransaction();
-        DataSourceController.getRealm().delete(NewsFeedModel.class);
-        DataSourceController.getRealm().delete(NewsModel.class);
-        DataSourceController.getRealm().commitTransaction();
+        dialog.show();
+        realm.beginTransaction();
+        realm.delete(NewsFeedModel.class);
+        realm.delete(NewsModel.class);
+        realm.commitTransaction();
         Timber.d("Offline data was cleared!");
-
+        dialog.dismiss();
     }
 
 }

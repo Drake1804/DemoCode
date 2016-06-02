@@ -1,5 +1,6 @@
 package com.drake1804.f1feedler.presenter;
 
+import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.rest.RestClient;
@@ -49,7 +50,9 @@ public class MainFeedPresenter extends Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showMessage(e.getMessage());
+                        if(BuildConfig.DEBUG){
+                            view.showMessage(e.getMessage());
+                        }
                         view.dismissDialog();
                     }
 

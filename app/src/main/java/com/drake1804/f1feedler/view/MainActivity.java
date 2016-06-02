@@ -70,19 +70,17 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        OfflineMode offlineMode;
+        OfflineMode offlineMode = new OfflineMode(this, getRealm());
         switch (item.getItemId()){
             case R.id.menu_signIn:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.offline_mode:
-                offlineMode = new OfflineMode(this);
-                offlineMode.createMode(new ProgressDialog(this));
+                offlineMode.createMode();
                 break;
             case R.id.action_settings:
                 break;
             case R.id.offline_mode_clear:
-                offlineMode = new OfflineMode(this);
                 offlineMode.clearOfflineData();
                 break;
         }

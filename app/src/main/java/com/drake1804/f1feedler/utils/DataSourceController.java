@@ -21,14 +21,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class DataSourceController {
 
     private static DataSourceController sInstance;
-    private static Realm realm;
 
     private DataSourceController(Context context) {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(context)
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
-        realm = Realm.getDefaultInstance();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
@@ -71,10 +69,5 @@ public class DataSourceController {
             sInstance = new DataSourceController(context);
         }
         return sInstance;
-    }
-
-    @Deprecated
-    public static Realm getRealm() {
-        return realm;
     }
 }
