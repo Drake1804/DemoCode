@@ -100,4 +100,39 @@ public class NewsFeedModel extends RealmObject {
     public void setSocial(SocialModel social) {
         this.social = social;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NewsFeedModel model = (NewsFeedModel) o;
+
+        if (!uuid.equals(model.uuid)) return false;
+        if (title != null ? !title.equals(model.title) : model.title != null) return false;
+        if (description != null ? !description.equals(model.description) : model.description != null)
+            return false;
+        if (link != null ? !link.equals(model.link) : model.link != null) return false;
+        if (imageUrl != null ? !imageUrl.equals(model.imageUrl) : model.imageUrl != null)
+            return false;
+        if (creatingDate != null ? !creatingDate.equals(model.creatingDate) : model.creatingDate != null)
+            return false;
+        if (resource != null ? !resource.equals(model.resource) : model.resource != null)
+            return false;
+        return social != null ? social.equals(model.social) : model.social == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid.hashCode();
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
+        result = 31 * result + (creatingDate != null ? creatingDate.hashCode() : 0);
+        result = 31 * result + (resource != null ? resource.hashCode() : 0);
+        result = 31 * result + (social != null ? social.hashCode() : 0);
+        return result;
+    }
 }

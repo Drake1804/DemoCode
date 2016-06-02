@@ -6,6 +6,7 @@ import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.Realm;
@@ -22,9 +23,13 @@ import rx.schedulers.Schedulers;
 public class MainFeedPresenter extends Presenter {
 
     private MainFeedView view;
+    private boolean hasNewNews = false;
+    private int oldDataSize = 0;
 
     public void getNewsFeed(){
-        view.setData(view.getRealm().where(NewsFeedModel.class).findAll());
+        List<NewsFeedModel> old = view.getRealm().where(NewsFeedModel.class).findAll();
+        oldDataSize = old.size();
+        view.setData(old);
         loadFeed();
     }
 
@@ -57,9 +62,18 @@ public class MainFeedPresenter extends Presenter {
     }
 
     private void saveNewsLinks(final List<NewsFeedModel> list){
-        view.getRealm().executeTransactionAsync(realm ->
-                realm.copyToRealmOrUpdate(list),
-                () -> view.setData(view.getRealm().where(NewsFeedModel.class).findAll()),
-                error -> error.printStackTrace());
+        view.getRealm().executeTransactionAsync(realm -> {
+            List<NewsFeedModel> newsFeedModelListNew = realm.copyToRealmOrUpdate(list);
+            if(newsFeedModelListNew.size() != oldDataSize){
+                hasNewNews = true;
+            }
+        },
+                () -> {
+                    if(hasNewNews){
+                        view.setData(view.getRealm().where(NewsFeedModel.class).findAll());
+                        hasNewNews = false;
+                    }
+                },
+                Throwable::printStackTrace);
     }
 }
