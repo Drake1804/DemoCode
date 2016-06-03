@@ -41,7 +41,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
-    private boolean isNight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +80,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             case R.id.action_settings:
                 break;
             case R.id.offline_mode_clear:
-                offlineMode.clearOfflineData();
+                offlineMode.clearOfflineData(adapter, presenter);
                 break;
         }
 

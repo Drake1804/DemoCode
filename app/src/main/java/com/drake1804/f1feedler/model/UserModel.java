@@ -7,7 +7,7 @@ import io.realm.RealmObject;
 /**
  * Created by Pavel.Shkaran on 5/17/2016.
  */
-public class UserModel extends RealmObject {
+public class UserModel {
 
     @SerializedName("userId")
     private String userId;

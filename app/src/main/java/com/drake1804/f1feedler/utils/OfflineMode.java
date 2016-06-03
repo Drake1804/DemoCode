@@ -6,10 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 
+import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.NewsModel;
+import com.drake1804.f1feedler.model.ResourceModel;
+import com.drake1804.f1feedler.model.SocialModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
+import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -21,6 +25,7 @@ import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -164,14 +169,24 @@ public class OfflineMode {
     }
 
 
-    public void clearOfflineData(){
+    public void clearOfflineData(MainFeedAdapter adapter, MainFeedPresenter presenter){
         dialog.show();
-        realm.beginTransaction();
-        realm.delete(NewsFeedModel.class);
-        realm.delete(NewsModel.class);
-        realm.commitTransaction();
-        Timber.d("Offline data was cleared!");
-        dialog.dismiss();
+        RealmResults<NewsFeedModel> newsFeedModels = realm.where(NewsFeedModel.class).findAll();
+        RealmResults<NewsModel> newsModels = realm.where(NewsModel.class).findAll();
+        RealmResults<ResourceModel> resourceModels = realm.where(ResourceModel.class).findAll();
+        RealmResults<SocialModel> socialModels = realm.where(SocialModel.class).findAll();
+
+        realm.executeTransaction(realm1 -> {
+            newsFeedModels.deleteAllFromRealm();
+            newsModels.deleteAllFromRealm();
+            resourceModels.deleteAllFromRealm();
+            socialModels.deleteAllFromRealm();
+            adapter.getNewsFeedModels().clear();
+            adapter.notifyDataSetChanged();
+            Timber.d("Offline data was cleared!");
+            dialog.dismiss();
+            presenter.getNewsFeed();
+        });
     }
 
 }

@@ -38,7 +38,7 @@ public class MainFeedPresenter extends Presenter {
         this.view = view;
     }
 
-    public void loadFeed(){
+    private void loadFeed(){
         RestClient.getInstance().getFeed()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())

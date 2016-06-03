@@ -45,26 +45,6 @@ public class DataSourceController {
                 .setLogLevel(LogLevel.FULL)
                 .build();
 
-        Hawk.<Boolean>getObservable(Tweakables.HAWK_KEY_NIGHT_MODE)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Hawk.put(Tweakables.HAWK_KEY_NIGHT_MODE, false);
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-
-                    }
-                });
-
         if(BuildConfig.DEBUG){
             Timber.plant(new Timber.DebugTree());
 

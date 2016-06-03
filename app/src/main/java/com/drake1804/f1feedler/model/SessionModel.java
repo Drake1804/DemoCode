@@ -8,7 +8,7 @@ import io.realm.annotations.PrimaryKey;
 /**
  * Created by Pavel.Shkaran on 5/18/2016.
  */
-public class SessionModel extends RealmObject {
+public class SessionModel {
 
     @PrimaryKey
     @SerializedName("user_id")
