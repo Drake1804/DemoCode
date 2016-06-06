@@ -1,10 +1,9 @@
 package com.drake1804.f1feedler.view;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
@@ -28,6 +27,7 @@ import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.CommentsAdapter;
 import com.drake1804.f1feedler.model.CommentModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
+import com.drake1804.f1feedler.utils.AppBarStateChangeListener;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.orhanobut.hawk.Hawk;
@@ -42,6 +42,9 @@ import io.realm.Realm;
 import timber.log.Timber;
 
 public class DetailsActivity extends BaseActivity implements DetailsView {
+
+    @Bind(R.id.app_bar)
+    AppBarLayout appBar;
 
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -67,17 +70,23 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Bind(R.id.comments)
     RecyclerView comments;
 
-    @Bind(R.id.rate_spinner)
-    Spinner rate;
-
     @Bind(R.id.fab)
     FloatingActionButton fab;
+
+    @Bind(R.id.logo)
+    ImageView logo;
+
+    @Bind(R.id.resource)
+    TextView recource;
+
+    @Bind(R.id.date)
+    TextView date;
 
     private CommentsAdapter adapter;
     private DetailsPresenter presenter;
     private LinearLayoutManager mLayoutManager;
-    private boolean isHidden = false;
     private boolean isNight = false;
+    private boolean isVisible = true;
 
 
     @Override
@@ -148,6 +157,21 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     @Override
+    public ImageView getLogoView() {
+        return logo;
+    }
+
+    @Override
+    public TextView getResource() {
+        return recource;
+    }
+
+    @Override
+    public TextView getDate() {
+        return date;
+    }
+
+    @Override
     public Realm getRealm() {
         return realm;
     }
@@ -180,9 +204,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         collapsingToolbarLayout.setTitle(getIntent().getStringExtra("title"));
         title.setText(getIntent().getStringExtra("title"));
 
-        presenter = new DetailsPresenter(this);
+        presenter = new DetailsPresenter(this, this);
         presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
         presenter.getComments(getIntent().getStringExtra("uuid"));
+        presenter.setHeader(getIntent().getStringExtra("logoUrl"), getIntent().getStringExtra("resource"), getIntent().getLongExtra("date", 0));
 
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -190,10 +215,19 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         comments.setLayoutManager(mLayoutManager);
         comments.setAdapter(adapter);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.rate, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        rate.setAdapter(adapter);
+        appBar.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                switch (state){
+                    case EXPANDED:
+                        fab.setVisibility(View.VISIBLE);
+                        break;
+                    case COLLAPSED:
+                        fab.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
 
         if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
             isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
@@ -204,36 +238,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
             presenter.getComments(getIntent().getStringExtra("uuid"));
-        });
-
-        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if(scrollY - oldScrollY > 20 && !isHidden){
-                fab.animate().translationYBy(350).setDuration(500);
-                isHidden = true;
-            }
-            if(scrollY - oldScrollY < -50 && isHidden){
-                fab.animate().translationYBy(-350);
-                isHidden = false;
-            }
-        });
-
-        rate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 1:
-                        showMessage("Like");
-                        break;
-                    case 2:
-                        showMessage("Dislike");
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
     }
 }

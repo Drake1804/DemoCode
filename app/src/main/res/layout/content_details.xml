@@ -49,11 +49,6 @@
                     android:layout_toRightOf="@id/logo"
                     android:layout_below="@id/resource"/>
 
-                <Spinner
-                    android:id="@+id/rate_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"/>
 
             </RelativeLayout>
 

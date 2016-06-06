@@ -80,8 +80,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
                 dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 dialog.setMessage("Loading...");
                 dialog.setCancelable(false);
-                dialog.setProgress(25);
-                dialog.setMax(100);
                 offlineMode.createMode(dialog);
                 break;
             case R.id.action_settings:
@@ -135,6 +133,9 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
             intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
             intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
+            intent.putExtra("logoUrl", adapter.getNewsFeedModels().get(position).getResource().getImageUrl());
+            intent.putExtra("resource", adapter.getNewsFeedModels().get(position).getResource().getTitle());
+            intent.putExtra("date", adapter.getNewsFeedModels().get(position).getCreatingDate().getTime());
             startActivity(intent);
         });
 

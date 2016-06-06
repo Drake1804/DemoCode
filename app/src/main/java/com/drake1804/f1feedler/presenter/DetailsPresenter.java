@@ -1,14 +1,16 @@
 package com.drake1804.f1feedler.presenter;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.model.CommentsWrapper;
 import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
-import com.drake1804.f1feedler.utils.DataSourceController;
+import com.drake1804.f1feedler.utils.TimeAgo;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
+import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,9 +31,11 @@ import timber.log.Timber;
 public class DetailsPresenter extends Presenter {
 
     private DetailsView view;
+    private Context context;
 
-    public DetailsPresenter(DetailsView view) {
+    public DetailsPresenter(DetailsView view, Context context) {
         this.view = view;
+        this.context = context;
     }
 
     public void getPage(String url, String imageUrl){
@@ -99,7 +103,6 @@ public class DetailsPresenter extends Presenter {
                 });
     }
 
-
     private void savePage(final String url, @Nullable final String imageUrl, final String text){
         view.getRealm().beginTransaction();
         NewsModel newsModel = new NewsModel();
@@ -136,5 +139,13 @@ public class DetailsPresenter extends Presenter {
                         view.setComments(commentsWrapper.comments);
                     }
                 });
+    }
+
+    public void setHeader(String logoUrl, String resource, long date){
+        Picasso.with(context)
+                .load(logoUrl)
+                .into(view.getLogoView());
+        view.getResource().setText(resource);
+        view.getDate().setText(TimeAgo.toDuration(System.currentTimeMillis() - date));
     }
 }
