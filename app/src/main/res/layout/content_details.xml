@@ -40,14 +40,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Resource"
-                    android:layout_toRightOf="@id/logo"/>
+                    android:layout_toRightOf="@id/logo"
+                    android:layout_marginLeft="8dp"
+                    fontPath="fonts/Roboto-Bold.ttf"/>
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Date"
                     android:layout_toRightOf="@id/logo"
-                    android:layout_below="@id/resource"/>
+                    android:layout_below="@id/resource"
+                    android:layout_marginLeft="8dp"
+                    fontPath="fonts/Roboto-Light.ttf"/>
 
 
             </RelativeLayout>
@@ -61,21 +65,22 @@
                 tools:text="Some title"
                 android:gravity="center_horizontal"
                 android:layout_margin="16dp"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/primary_text"
+                fontPath="fonts/Roboto-Bold.ttf"/>
 
             <TextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/primary_text"
+                fontPath="fonts/RobotoCondensed-Regular.ttf"/>
             <Button
                 android:id="@+id/read_on_the_web"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="read on the web"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="24dp"/>
+                android:text="@string/read_on_web"
+                android:layout_gravity="center_horizontal"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/comments"

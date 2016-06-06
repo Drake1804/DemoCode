@@ -20,11 +20,7 @@
     </string>
     <string name="title_activity_registration">RegistrationActivity</string>
 
+    <string name="read_on_web">read on the web</string>
 
-    <string-array name="rate">
-        <item>Nothing selected</item>
-        <item>Like</item>
-        <item>Dislike</item>
-    </string-array>
 
 </resources>
