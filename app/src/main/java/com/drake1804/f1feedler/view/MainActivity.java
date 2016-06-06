@@ -1,5 +1,6 @@
 package com.drake1804.f1feedler.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -75,7 +76,13 @@ public class MainActivity extends BaseActivity implements MainFeedView {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.offline_mode:
-                offlineMode.createMode();
+                ProgressDialog dialog = new ProgressDialog(this);
+                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(false);
+                dialog.setProgress(25);
+                dialog.setMax(100);
+                offlineMode.createMode(dialog);
                 break;
             case R.id.action_settings:
                 break;

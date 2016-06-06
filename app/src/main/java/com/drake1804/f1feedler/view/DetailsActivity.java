@@ -3,6 +3,8 @@ package com.drake1804.f1feedler.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
@@ -167,10 +169,11 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @OnClick(R.id.read_on_the_web)
     public void readOnTheWeb(){
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra("link")));
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+        new CustomTabsIntent.Builder()
+                .setToolbarColor(getColor(R.color.colorPrimary))
+                .setShowTitle(true)
+                .build()
+                .launchUrl(this, Uri.parse(getIntent().getStringExtra("link")));
     }
 
     private void init(){

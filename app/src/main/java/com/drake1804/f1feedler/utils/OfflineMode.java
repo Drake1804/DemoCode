@@ -4,7 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.model.NewsFeedModel;
@@ -14,6 +17,7 @@ import com.drake1804.f1feedler.model.ResourceModel;
 import com.drake1804.f1feedler.model.SocialModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
+import com.drake1804.f1feedler.view.MainActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -41,6 +45,8 @@ public class OfflineMode {
     private Context context;
     private Realm realm;
     private ProgressDialog dialog;
+    private int preloaded;
+    private int newsForSave;
     private Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -61,12 +67,10 @@ public class OfflineMode {
     public OfflineMode(Context context, Realm realm) {
         this.context = context;
         this.realm = realm;
-        dialog = new ProgressDialog(context);
-        dialog.setMessage("Loading...");
-        dialog.setCancelable(false);
     }
 
-    public void createMode(){
+    public void createMode(ProgressDialog dialog){
+        this.dialog = dialog;
         dialog.show();
         RestClient.getInstance().getFeed()
                 .subscribeOn(Schedulers.computation())
@@ -92,9 +96,12 @@ public class OfflineMode {
     private void saveNewsLinks(final List<NewsFeedModel> list){
         realm.executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(list), () -> {
             for (int i = 0; i < list.size(); i++) {
+                newsForSave = list.size();
                 NewsFeedModel model = list.get(i);
                 loadForOfflineNews(model.getLink(), model.getImageUrl());
             }
+            Timber.d("news for save: "+newsForSave);
+            dialog.setMax(newsForSave);
 
         }, Throwable::printStackTrace);
     }
@@ -109,6 +116,7 @@ public class OfflineMode {
                     Timber.d("Loaded: %s",url);
                     subscriber.onNext(document);
                 } catch (IOException e) {
+                    newsForSave--;
                     e.printStackTrace();
                 }
             }
@@ -151,6 +159,14 @@ public class OfflineMode {
         Picasso.with(context)
                 .load(imageUrl)
                 .into(target);
+
+        preloaded++;
+        new Handler().post(() -> dialog.setProgress(preloaded));
+        if(preloaded == newsForSave){
+            dialog.dismiss();
+        }
+        Timber.d("preloaded loaded: %s", preloaded);
+
         realm.beginTransaction();
         NewsModel newsModel = new NewsModel();
         newsModel.setUrl(url);
@@ -158,7 +174,6 @@ public class OfflineMode {
         newsModel.setText(text);
         realm.copyToRealmOrUpdate(newsModel);
         realm.commitTransaction();
-        dialog.dismiss();
     }
 
     private void loadForOfflineNews(String url, String imageUrl){
@@ -170,7 +185,6 @@ public class OfflineMode {
 
 
     public void clearOfflineData(MainFeedAdapter adapter, MainFeedPresenter presenter){
-        dialog.show();
         RealmResults<NewsFeedModel> newsFeedModels = realm.where(NewsFeedModel.class).findAll();
         RealmResults<NewsModel> newsModels = realm.where(NewsModel.class).findAll();
         RealmResults<ResourceModel> resourceModels = realm.where(ResourceModel.class).findAll();
@@ -184,7 +198,7 @@ public class OfflineMode {
             adapter.getNewsFeedModels().clear();
             adapter.notifyDataSetChanged();
             Timber.d("Offline data was cleared!");
-            dialog.dismiss();
+            Toast.makeText(context, "Data was cleared", Toast.LENGTH_LONG);
             presenter.getNewsFeed();
         });
     }
