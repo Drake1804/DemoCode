@@ -60,27 +60,30 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 tools:text="Some title"
                 android:gravity="center_horizontal"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:textColor="@color/primary_text"
                 fontPath="fonts/Roboto-Bold.ttf"/>
 
-            <TextView
+            <org.sufficientlysecure.htmltextview.HtmlTextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="16dp"
                 android:textColor="@color/primary_text"
-                fontPath="fonts/RobotoCondensed-Regular.ttf"/>
+                android:textAppearance="@android:style/TextAppearance.Small"
+                fontPath="fonts/Roboto-Regular.ttf"/>
+
             <Button
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/read_on_the_web"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/read_on_web"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/comments"

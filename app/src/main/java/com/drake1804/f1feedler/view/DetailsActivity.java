@@ -16,10 +16,7 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +29,8 @@ import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
+
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     ImageView image;
 
     @Bind(R.id.text)
-    TextView text;
+    HtmlTextView text;
 
     @Bind(R.id.scrollView)
     NestedScrollView scrollView;
@@ -148,7 +147,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         } catch (Exception e){
             Timber.e(e.getMessage());
         }
-        this.text.setText(Html.fromHtml(text));
+        this.text.setHtmlFromString(text, new HtmlTextView.RemoteImageGetter());
     }
 
     @Override
