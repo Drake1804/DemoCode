@@ -50,6 +50,7 @@ public class DetailsPresenter extends Presenter {
     }
 
     public void parseNews(final String url, @Nullable final String imageUrl){
+        view.showDialog();
         Observable.create(new Observable.OnSubscribe<Document>() {
             @Override
             public void call(Subscriber<? super Document> subscriber) {
@@ -59,6 +60,7 @@ public class DetailsPresenter extends Presenter {
                     Timber.d("Loaded: %s", url);
                     subscriber.onNext(document);
                 } catch (IOException e) {
+                    view.dismissDialog();
                     if(BuildConfig.DEBUG) {
                         view.showMessage(e.getLocalizedMessage());
                         Timber.e(e.getLocalizedMessage());
@@ -76,6 +78,7 @@ public class DetailsPresenter extends Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        view.dismissDialog();
                         if(BuildConfig.DEBUG){
                             view.showMessage(e.getMessage());
                             Timber.e(e.getLocalizedMessage());
@@ -99,6 +102,7 @@ public class DetailsPresenter extends Presenter {
 
                             savePage(url, imageUrl, article.html());
                         }
+                        view.dismissDialog();
                     }
                 });
     }
