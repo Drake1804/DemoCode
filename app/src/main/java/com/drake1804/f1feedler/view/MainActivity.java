@@ -144,6 +144,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             intent.putExtra("resource", adapter.getNewsFeedModels().get(position).getResource().getTitle());
             intent.putExtra("date", adapter.getNewsFeedModels().get(position).getCreatingDate().getTime());
             startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
         });
 
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());

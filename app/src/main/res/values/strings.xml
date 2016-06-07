@@ -23,6 +23,15 @@
     <string name="read_on_web">read on the web</string>
     <string name="data_was_cleared">Data was cleared</string>
     <string name="show_table">show table</string>
+    <string name="font_size">Font size</string>
+
+    <string-array name="font_size_array">
+        <item name="tiny">Tiny</item>
+        <item name="small">Small</item>
+        <item name="tiny">Medium</item>
+        <item name="small">Large</item>
+        <item name="tiny">Huge</item>
+    </string-array>
 
 
 </resources>

@@ -16,5 +16,6 @@ public class Tweakables {
 
 
     public static final String HAWK_KEY_NIGHT_MODE = "DAY_NIGHT";
+    public static final String HAWK_KEY_FONT_SIZE = "FONT_SIZE";
 
 }
