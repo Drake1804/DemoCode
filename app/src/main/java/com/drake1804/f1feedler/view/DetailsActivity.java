@@ -29,6 +29,12 @@ import com.drake1804.f1feedler.presenter.DetailsPresenter;
 import com.drake1804.f1feedler.utils.AppBarStateChangeListener;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
@@ -85,10 +91,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Bind(R.id.date)
     TextView date;
 
+    @Bind(R.id.facebook_share)
+    ShareButton shareButtonFb;
+
     private CommentsAdapter adapter;
     private DetailsPresenter presenter;
     private LinearLayoutManager mLayoutManager;
     private static boolean isNight = false;
+    private CallbackManager callbackManager;
 
 
     @Override
@@ -212,6 +222,26 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .launchUrl(this, Uri.parse(getIntent().getStringExtra("link")));
     }
 
+    @OnClick(R.id.facebook_share)
+    public void onShare(){
+        shareButtonFb.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
     private void init(){
         collapsingToolbarLayout.setTitle(getIntent().getStringExtra("title"));
         title.setText(getIntent().getStringExtra("title"));
@@ -226,6 +256,8 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         adapter = new CommentsAdapter(this);
         comments.setLayoutManager(mLayoutManager);
         comments.setAdapter(adapter);
+
+        callbackManager = CallbackManager.Factory.create();
 
         appBar.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
@@ -251,6 +283,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
             presenter.getComments(getIntent().getStringExtra("uuid"));
         });
+
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(getIntent().getStringExtra("link")))
+                .setContentTitle(getIntent().getStringExtra("title"))
+                .setImageUrl(Uri.parse(getIntent().getStringExtra("imageUrl")))
+                .build();
+        shareButtonFb.setShareContent(content);
     }
 
     class ClickableTableSpanImpl extends ClickableTableSpan {

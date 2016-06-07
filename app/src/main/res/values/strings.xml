@@ -5,6 +5,9 @@
     <string name="title_activity_details">DetailsActivity</string>
     <string name="title_activity_login">Sign in</string>
 
+
+    <string name="facebook_app_id">184274191973856</string>
+
     <!-- Strings related to signIn -->
     <string name="prompt_email">Email</string>
     <string name="login">Login</string>

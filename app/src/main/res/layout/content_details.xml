@@ -77,6 +77,12 @@
                 android:textAppearance="@android:style/TextAppearance.Small"
                 fontPath="fonts/Roboto-Regular.ttf"/>
 
+            <com.facebook.share.widget.ShareButton
+                android:id="@+id/facebook_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/com_facebook_share_button_text"/>
+
             <Button
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/read_on_the_web"
