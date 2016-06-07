@@ -1,6 +1,5 @@
 package com.drake1804.f1feedler.view;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,8 +36,6 @@ import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -302,29 +299,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             dialog.dismiss();
             Hawk.put(Tweakables.HAWK_KEY_FONT_SIZE, which);
         });
-
-        /*builderSingle.setAdapter(arrayAdapter, 1, (dialog, which) -> {
-            String strName = (String) arrayAdapter.getItem(which);
-            Timber.d(strName);
-            switch (which){
-                case 0:
-                    text.setTextSize(12);
-                    break;
-                case 1:
-                    text.setTextSize(14);
-                    break;
-                case 2:
-                    text.setTextSize(16);
-                    break;
-                case 3:
-                    text.setTextSize(18);
-                    break;
-                case 4:
-                    text.setTextSize(20);
-                    break;
-            }
-            Hawk.put(Tweakables.HAWK_KEY_FONT_SIZE, which);
-        });*/
         builderSingle.show();
     }
 }

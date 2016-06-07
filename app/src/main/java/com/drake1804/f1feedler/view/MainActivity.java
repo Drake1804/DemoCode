@@ -1,26 +1,37 @@
 package com.drake1804.f1feedler.view;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.MainFeedAdapter;
+import com.drake1804.f1feedler.gcm.QuickstartPreferences;
+import com.drake1804.f1feedler.gcm.RegistrationIntentService;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.MainFeedView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
@@ -28,9 +39,12 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends BaseActivity implements MainFeedView {
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -44,6 +58,8 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private boolean isReceiverRegistered;
 
     static {
         AppCompatDelegate.setDefaultNightMode(
@@ -66,7 +82,15 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     protected void onResume() {
         super.onResume();
         presenter.getNewsFeed();
+        registerReceiver();
     }
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        isReceiverRegistered = false;
+        super.onPause();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,6 +155,14 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mainFeed.setLayoutManager(mLayoutManager);
         mainFeed.setAdapter(adapter);
+
+//        registerReceiver();
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
     }
 
     public void initListeners(){
@@ -147,7 +179,38 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         });
 
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
+
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Timber.d("This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void registerReceiver(){
+        if(!isReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+            isReceiverRegistered = true;
+        }
     }
 
 }
