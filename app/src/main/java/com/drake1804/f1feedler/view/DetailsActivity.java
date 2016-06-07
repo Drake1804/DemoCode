@@ -1,5 +1,6 @@
 package com.drake1804.f1feedler.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
@@ -30,6 +31,8 @@ import com.drake1804.f1feedler.view.view.DetailsView;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
+import org.sufficientlysecure.htmltextview.ClickableTableSpan;
+import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.List;
@@ -85,7 +88,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private DetailsPresenter presenter;
     private LinearLayoutManager mLayoutManager;
     private boolean isNight = false;
-    private boolean isVisible = true;
 
 
     @Override
@@ -139,15 +141,19 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     @Override
-    public void setData(String imageUrl, String text) {
+    public void setData(String imageUrl, String text1) {
         dismissDialog();
         try {
             Picasso.with(this).load(imageUrl).into(image);
-            this.text.setText(Html.fromHtml(text));
         } catch (Exception e){
             Timber.e(e.getMessage());
         }
-        this.text.setHtmlFromString(text, new HtmlTextView.RemoteImageGetter());
+        text.setRemoveFromHtmlSpace(true);
+        text.setClickableTableSpan(new ClickableTableSpanImpl());
+        DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
+        drawTableLinkSpan.setTableLinkText("[tap for table]");
+        text.setDrawTableLinkSpan(drawTableLinkSpan);
+        text.setHtmlFromString(text1, new HtmlTextView.RemoteImageGetter());
     }
 
     @Override
@@ -238,5 +244,19 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
             presenter.getComments(getIntent().getStringExtra("uuid"));
         });
+    }
+
+    class ClickableTableSpanImpl extends ClickableTableSpan {
+        @Override
+        public ClickableTableSpan newInstance() {
+            return new ClickableTableSpanImpl();
+        }
+
+        @Override
+        public void onClick(View widget) {
+            Intent intent = new Intent(DetailsActivity.this, WebActivity.class);
+            intent.putExtra(WebActivity.EXTRA_TABLE_HTML, getTableHtml());
+            startActivity(intent);
+        }
     }
 }

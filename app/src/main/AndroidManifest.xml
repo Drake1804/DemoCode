@@ -53,6 +53,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.drake1804.f1feedler.view.LoginActivity" />
         </activity>
+        <activity android:name=".view.WebActivity"/>
     </application>
 
 </manifest>
