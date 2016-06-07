@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
@@ -198,7 +199,7 @@ public class OfflineMode {
             adapter.getNewsFeedModels().clear();
             adapter.notifyDataSetChanged();
             Timber.d("Offline data was cleared!");
-            Toast.makeText(context, "Data was cleared", Toast.LENGTH_LONG);
+            Toast.makeText(context, context.getString(R.string.data_was_cleared), Toast.LENGTH_LONG);
             presenter.getNewsFeed();
         });
     }

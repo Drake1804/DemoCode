@@ -45,6 +45,11 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
 
+    static {
+        AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

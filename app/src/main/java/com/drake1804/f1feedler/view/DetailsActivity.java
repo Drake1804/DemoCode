@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,7 +78,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     ImageView logo;
 
     @Bind(R.id.resource)
-    TextView recource;
+    TextView resource;
 
     @Bind(R.id.date)
     TextView date;
@@ -87,7 +86,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private CommentsAdapter adapter;
     private DetailsPresenter presenter;
     private LinearLayoutManager mLayoutManager;
-    private boolean isNight = false;
+    private static boolean isNight = false;
 
 
     @Override
@@ -107,7 +106,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.details_menu, menu);
         MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(isNight);
+        if(isNight){
+            menuItem.setChecked(true);
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            menuItem.setChecked(false);
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         return true;
     }
 
@@ -122,13 +127,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             case R.id.menu_fav:
                 return true;
             case R.id.menu_night:
-                item.setChecked(isNight);
-                if(isNight){
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                if(Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE)){
                     isNight = false;
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 } else {
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     isNight = true;
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 }
                 Hawk.put(Tweakables.HAWK_KEY_NIGHT_MODE, isNight);
                 recreate();
@@ -151,7 +155,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         text.setRemoveFromHtmlSpace(true);
         text.setClickableTableSpan(new ClickableTableSpanImpl());
         DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
-        drawTableLinkSpan.setTableLinkText("[tap for table]");
+        drawTableLinkSpan.setTableLinkText(getString(R.string.show_table));
         text.setDrawTableLinkSpan(drawTableLinkSpan);
         text.setHtmlFromString(text1, new HtmlTextView.RemoteImageGetter());
     }
@@ -168,7 +172,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     public TextView getResource() {
-        return recource;
+        return resource;
     }
 
     @Override

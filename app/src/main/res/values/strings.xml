@@ -21,6 +21,8 @@
     <string name="title_activity_registration">RegistrationActivity</string>
 
     <string name="read_on_web">read on the web</string>
+    <string name="data_was_cleared">Data was cleared</string>
+    <string name="show_table">show table</string>
 
 
 </resources>
