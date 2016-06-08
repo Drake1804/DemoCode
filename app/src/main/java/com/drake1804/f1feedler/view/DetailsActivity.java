@@ -288,6 +288,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .setContentUrl(Uri.parse(getIntent().getStringExtra("link")))
                 .setContentTitle(getIntent().getStringExtra("title"))
                 .setImageUrl(Uri.parse(getIntent().getStringExtra("imageUrl")))
+                .setContentDescription(getString(R.string.share_credentials_fb))
                 .build();
         shareButtonFb.setShareContent(content);
     }

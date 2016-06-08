@@ -23,6 +23,7 @@
     </string>
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="details_page">Details page</string>
+    <string name="share_credentials_fb">Posted with app F1Feedler link on Google Play</string>
 
     <string name="read_on_web">read on the web</string>
     <string name="data_was_cleared">Data was cleared</string>
