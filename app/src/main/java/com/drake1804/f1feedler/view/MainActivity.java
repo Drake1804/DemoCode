@@ -53,8 +53,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends BaseActivity implements MainFeedView {
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -70,8 +68,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private boolean isReceiverRegistered;
 
     static {
         AppCompatDelegate.setDefaultNightMode(
@@ -89,39 +85,23 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         initListeners();
         showDialog();
 
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    getPackageName(),
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        }
-        catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-
-        }
-
+        presenter.getNewsFeed();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.getNewsFeed();
-        registerReceiver();
+        presenter.registerReceiver();
     }
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-        isReceiverRegistered = false;
         super.onPause();
+        presenter.unregisterReceiver();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -179,15 +159,16 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     public void onTop(){
         mainFeed.smoothScrollToPosition(0);
     }
+
     public void init(){
         adapter = new MainFeedAdapter(this);
-        presenter = new MainFeedPresenter(this);
+        presenter = new MainFeedPresenter(this, this);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mainFeed.setLayoutManager(mLayoutManager);
         mainFeed.setAdapter(adapter);
 
-        if (checkPlayServices()) {
+        if (presenter.checkPlayServices()) {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
@@ -207,13 +188,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         });
 
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-            }
-        };
-
         mainFeed.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -226,30 +200,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         });
 
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
-    }
-
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Timber.e("This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private void registerReceiver(){
-        if(!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
-        }
     }
 
 }
