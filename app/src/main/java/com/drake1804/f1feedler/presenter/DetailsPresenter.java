@@ -1,20 +1,28 @@
 package com.drake1804.f1feedler.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.ArrayAdapter;
 
 import com.drake1804.f1feedler.BuildConfig;
+import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.CommentsWrapper;
 import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.utils.TimeAgo;
 import com.drake1804.f1feedler.utils.Tweakables;
+import com.drake1804.f1feedler.view.WebActivity;
 import com.drake1804.f1feedler.view.view.DetailsView;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 
 import java.io.IOException;
 
@@ -151,5 +159,40 @@ public class DetailsPresenter extends Presenter {
                 .into(view.getLogoView());
         view.getResource().setText(resource);
         view.getDate().setText(TimeAgo.toDuration(System.currentTimeMillis() - date));
+    }
+
+    public void startFontSizeDialog(){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+        builderSingle.setIcon(R.mipmap.ic_launcher);
+        builderSingle.setTitle(context.getString(R.string.font_size));
+        final ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
+                context,
+                R.array.font_size_array,
+                android.R.layout.select_dialog_singlechoice);
+
+        builderSingle.setSingleChoiceItems(R.array.font_size_array, Hawk.get(Tweakables.HAWK_KEY_FONT_SIZE, 1), (dialog, which) -> {
+            String strName = (String) arrayAdapter.getItem(which);
+            Timber.d(strName);
+            switch (which){
+                case 0:
+                    view.getTextView().setTextSize(12);
+                    break;
+                case 1:
+                    view.getTextView().setTextSize(14);
+                    break;
+                case 2:
+                    view.getTextView().setTextSize(16);
+                    break;
+                case 3:
+                    view.getTextView().setTextSize(18);
+                    break;
+                case 4:
+                    view.getTextView().setTextSize(20);
+                    break;
+            }
+            dialog.dismiss();
+            Hawk.put(Tweakables.HAWK_KEY_FONT_SIZE, which);
+        });
+        builderSingle.show();
     }
 }

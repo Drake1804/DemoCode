@@ -17,4 +17,5 @@ public interface DetailsView extends BaseView {
     ImageView getLogoView();
     TextView getResource();
     TextView getDate();
+    TextView getTextView();
 }

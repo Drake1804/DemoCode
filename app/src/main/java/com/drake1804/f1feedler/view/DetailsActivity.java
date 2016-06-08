@@ -150,7 +150,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 recreate();
                 return true;
             case R.id.menu_font:
-                startFontSizeDialog();
+                presenter.startFontSizeDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -191,6 +191,11 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Override
     public TextView getDate() {
         return date;
+    }
+
+    @Override
+    public TextView getTextView() {
+        return text;
     }
 
     @Override
@@ -296,40 +301,5 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             intent.putExtra(WebActivity.EXTRA_TABLE_HTML, getTableHtml());
             startActivity(intent);
         }
-    }
-
-    private void startFontSizeDialog(){
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(DetailsActivity.this);
-        builderSingle.setIcon(R.mipmap.ic_launcher);
-        builderSingle.setTitle(getString(R.string.font_size));
-        final ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
-                DetailsActivity.this,
-                R.array.font_size_array,
-                android.R.layout.select_dialog_singlechoice);
-
-        builderSingle.setSingleChoiceItems(R.array.font_size_array, Hawk.get(Tweakables.HAWK_KEY_FONT_SIZE, 1), (dialog, which) -> {
-            String strName = (String) arrayAdapter.getItem(which);
-            Timber.d(strName);
-            switch (which){
-                case 0:
-                    text.setTextSize(12);
-                    break;
-                case 1:
-                    text.setTextSize(14);
-                    break;
-                case 2:
-                    text.setTextSize(16);
-                    break;
-                case 3:
-                    text.setTextSize(18);
-                    break;
-                case 4:
-                    text.setTextSize(20);
-                    break;
-            }
-            dialog.dismiss();
-            Hawk.put(Tweakables.HAWK_KEY_FONT_SIZE, which);
-        });
-        builderSingle.show();
     }
 }
