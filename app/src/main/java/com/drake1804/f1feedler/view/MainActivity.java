@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDelegate;
@@ -21,6 +22,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.Realm;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -60,6 +63,9 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
     @Bind(R.id.mainFeed)
     RecyclerView mainFeed;
+
+    @Bind(R.id.fab)
+    FloatingActionButton fabOnTop;
 
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
@@ -169,6 +175,10 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
     }
 
+    @OnClick(R.id.fab)
+    public void onTop(){
+        mainFeed.smoothScrollToPosition(0);
+    }
     public void init(){
         adapter = new MainFeedAdapter(this);
         presenter = new MainFeedPresenter(this);
@@ -177,10 +187,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         mainFeed.setLayoutManager(mLayoutManager);
         mainFeed.setAdapter(adapter);
 
-//        registerReceiver();
-
         if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
@@ -207,6 +214,17 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             }
         };
 
+        mainFeed.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if(mLayoutManager.findFirstVisibleItemPosition() > 5 && fabOnTop.getVisibility() == View.GONE){
+                    fabOnTop.setVisibility(View.VISIBLE);
+                } else if(mLayoutManager.findFirstVisibleItemPosition() < 3 && fabOnTop.getVisibility() == View.VISIBLE){
+                    fabOnTop.setVisibility(View.GONE);
+                }
+            }
+        });
+
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
     }
 
@@ -218,7 +236,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
                 apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             } else {
-                Timber.d("This device is not supported.");
+                Timber.e("This device is not supported.");
                 finish();
             }
             return false;
