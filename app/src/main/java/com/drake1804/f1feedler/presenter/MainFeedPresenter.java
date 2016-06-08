@@ -52,7 +52,6 @@ public class MainFeedPresenter extends Presenter {
 
             }
         };
-
     }
 
     public void getNewsFeed(){

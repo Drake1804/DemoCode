@@ -7,6 +7,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -26,7 +27,6 @@ import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.CommentsAdapter;
 import com.drake1804.f1feedler.model.CommentModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
-import com.drake1804.f1feedler.utils.AppBarStateChangeListener;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.facebook.CallbackManager;
@@ -216,10 +216,15 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @OnClick(R.id.read_on_the_web)
     public void readOnTheWeb(){
         new CustomTabsIntent.Builder()
-                .setToolbarColor(getColor(R.color.colorPrimary))
+                .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setShowTitle(true)
                 .build()
                 .launchUrl(this, Uri.parse(getIntent().getStringExtra("link")));
+    }
+
+    @OnClick(R.id.fab)
+    public void onRateClick(){
+        startActivity(new Intent(this, RatePopupActivity.class));
     }
 
     @OnClick(R.id.facebook_share)
@@ -258,20 +263,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         comments.setAdapter(adapter);
 
         callbackManager = CallbackManager.Factory.create();
-
-        appBar.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-            @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                switch (state){
-                    case EXPANDED:
-                        fab.setVisibility(View.VISIBLE);
-                        break;
-                    case COLLAPSED:
-                        fab.setVisibility(View.GONE);
-                        break;
-                }
-            }
-        });
 
         if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
             isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
