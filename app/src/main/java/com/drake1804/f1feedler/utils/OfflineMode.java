@@ -157,9 +157,13 @@ public class OfflineMode {
     }
 
     private void savePage(final String url, final String imageUrl, final String text){
-        Picasso.with(context)
-                .load(imageUrl)
-                .into(target);
+        if(!imageUrl.isEmpty()){
+            Picasso.with(context)
+                    .load(imageUrl)
+                    .into(target);
+        } else {
+            newsForSave--;
+        }
 
         preloaded++;
         new Handler().post(() -> dialog.setProgress(preloaded));

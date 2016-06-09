@@ -79,7 +79,8 @@
                 android:id="@+id/register_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Create new account?"
+                android:text="@string/create_new_account"
+                android:padding="16dp"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="26dp"/>
 
