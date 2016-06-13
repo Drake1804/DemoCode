@@ -79,9 +79,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Bind(R.id.comments)
     RecyclerView comments;
 
-    @Bind(R.id.fab)
-    FloatingActionButton fab;
-
     @Bind(R.id.logo)
     ImageView logo;
 

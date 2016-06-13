@@ -56,6 +56,12 @@ public class NewsFeedView extends LinearLayout {
     @Bind(R.id.menu)
     ImageButton menu;
 
+    @Bind(R.id.likes)
+    TextView likes;
+
+    @Bind(R.id.comments)
+    TextView comments;
+
 
     public NewsFeedView(Context context, boolean isMainNews) {
         super(context);
@@ -116,5 +122,7 @@ public class NewsFeedView extends LinearLayout {
         title.setText(model.getTitle());
         date.setText(TimeAgo.toDuration(System.currentTimeMillis() - model.getCreatingDate().getTime()));
         description.setText(Html.fromHtml(model.getDescription()));
+        likes.setText(model.getSocial().getLikes()+"");
+        comments.setText(model.getSocial().getComments()+"");
     }
 }
