@@ -3,9 +3,11 @@ package com.drake1804.f1feedler;
 import android.app.Application;
 
 import com.drake1804.f1feedler.utils.DataSourceController;
+import com.drake1804.f1feedler.utils.Tweakables;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
@@ -27,5 +29,6 @@ public class App extends Application {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+        FlurryAgent.init(this, Tweakables.FLURRY_ANALYTICS_KEY);
     }
 }
