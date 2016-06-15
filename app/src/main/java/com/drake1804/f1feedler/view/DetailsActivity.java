@@ -107,12 +107,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        MainActivity.rxBus.toObserverable().subscribe(o -> {
-            if(o instanceof NewsFeedModel){
-
-            }
-        });
-
         init();
         initListeners();
     }
@@ -228,7 +222,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setShowTitle(true)
                 .build()
-                .launchUrl(this, Uri.parse(getIntent().getStringExtra("link")));
+                .launchUrl(this, Uri.parse(currentNews.getLink()));
     }
 
     @OnClick(R.id.fab)
@@ -257,13 +251,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     private void init(){
-        collapsingToolbarLayout.setTitle(getIntent().getStringExtra("title"));
-        title.setText(getIntent().getStringExtra("title"));
 
         presenter = new DetailsPresenter(this, this);
-        presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
-        presenter.getComments(getIntent().getStringExtra("uuid"));
-        presenter.setHeader(getIntent().getStringExtra("logoUrl"), getIntent().getStringExtra("resource"), getIntent().getLongExtra("date", 0));
+        currentNews = realm.where(NewsFeedModel.class).equalTo("uuid", getIntent().getStringExtra("uuid")).findFirst();
+
+        collapsingToolbarLayout.setTitle(currentNews.getTitle());
+        title.setText(currentNews.getTitle());
+
+        presenter.getPage(currentNews.getLink(), currentNews.getImageUrl());
+        presenter.getComments(currentNews.getUuid());
+        presenter.setHeader(currentNews.getResource().getImageUrl(), currentNews.getResource().getTitle(), currentNews.getCreatingDate() != null ? currentNews.getCreatingDate().getTime() : 0);
 
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -276,28 +273,21 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
             isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
         }
-
-        DataSourceController.getRxBus().toObserverable()
-                .subscribe(o -> {
-                    if(o instanceof NewsFeedModel){
-                        currentNews = (NewsFeedModel) o;
-                    }
-                });
     }
 
     private void initListeners(){
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            presenter.getPage(getIntent().getStringExtra("link"), getIntent().getStringExtra("imageUrl"));
-            presenter.getComments(getIntent().getStringExtra("uuid"));
+            presenter.getPage(currentNews.getLink(), currentNews.getImageUrl());
+            presenter.getComments(currentNews.getUuid());
         });
 
-        /*ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse(getIntent().getStringExtra("link")))
-                .setContentTitle(getIntent().getStringExtra("title"))
-                .setImageUrl(Uri.parse(getIntent().getStringExtra("imageUrl")))
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(currentNews.getLink()))
+                .setContentTitle(currentNews.getTitle())
+                .setImageUrl(Uri.parse(currentNews.getImageUrl()))
                 .setContentDescription(getString(R.string.share_credentials_fb))
                 .build();
-        shareButtonFb.setShareContent(content);*/
+        shareButtonFb.setShareContent(content);
     }
 
     class ClickableTableSpanImpl extends ClickableTableSpan {

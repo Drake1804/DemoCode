@@ -160,18 +160,10 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
     public void initListeners(){
         ItemClickSupport.addTo(mainFeed).setOnItemClickListener((recyclerView, position, v) -> {
-            startActivity(new Intent(MainActivity.this, DetailsActivity.class));
+            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+            intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
+            startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            new Handler().postDelayed(() -> rxBus.send(adapter.getNewsFeedModels().get(position)), 500);
-            /*Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-            *//*intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
-            intent.putExtra("title", adapter.getNewsFeedModels().get(position).getTitle());
-            intent.putExtra("link", adapter.getNewsFeedModels().get(position).getLink());
-            intent.putExtra("imageUrl", adapter.getNewsFeedModels().get(position).getImageUrl());
-            intent.putExtra("logoUrl", adapter.getNewsFeedModels().get(position).getResource().getImageUrl());
-            intent.putExtra("resource", adapter.getNewsFeedModels().get(position).getResource().getTitle());
-            intent.putExtra("date", adapter.getNewsFeedModels().get(position).getCreatingDate().getTime());*//*
-            startActivity(new Intent(MainActivity.this, DetailsActivity.class));*/
         });
 
         mainFeed.addOnScrollListener(new RecyclerView.OnScrollListener() {
