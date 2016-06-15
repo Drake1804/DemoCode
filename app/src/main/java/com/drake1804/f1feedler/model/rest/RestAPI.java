@@ -22,6 +22,9 @@ public interface RestAPI {
     @POST("signup")
     Observable<SessionModel> signUp(@Body JsonObject json);
 
+    @POST("refresh_token")
+    Observable<SessionModel> refreshToken(@Body JsonObject json);
+
     @GET("news")
     Observable<NewsFeedWrapper> getFeed(@Query("country[]") String country, @Query("language[]") String language, @Query("category[]") String category);
 

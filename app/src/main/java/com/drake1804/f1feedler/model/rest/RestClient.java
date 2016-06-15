@@ -39,31 +39,28 @@ public class RestClient implements TokenManager {
         return restClient;
     }
 
-    static {
+    private RestClient() {
         setupRestClient();
     }
 
-    public static void setupRestClient() {
+    public void setupRestClient() {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(
-                        new Interceptor() {
-                            @Override
-                            public Response intercept(Interceptor.Chain chain) throws IOException {
-                                Request original = chain.request();
+                        chain -> {
+                            Request original = chain.request();
 
-                                Request.Builder requestBuilder = original.newBuilder()
-                                        .header("Content-Type", "application/json")
-                                        .header("X-FinAnts-Application-Id", Tweakables.APP_ID)
-                                        .header("X-FinAnts-REST-API-Key", Tweakables.REST_KEY)
-                                        .method(original.method(), original.body());
+                            Request.Builder requestBuilder = original.newBuilder()
+                                    .header("Content-Type", "application/json")
+                                    .header("X-FinAnts-Application-Id", Tweakables.APP_ID)
+                                    .header("X-FinAnts-REST-API-Key", Tweakables.REST_KEY)
+                                    .method(original.method(), original.body());
 
-                                Request request = requestBuilder.build();
-                                return chain.proceed(request);
-                            }
+                            Request request = requestBuilder.build();
+                            return chain.proceed(request);
                         })
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
-                /*.addInterceptor(new TokenInterceptor(restClient))*/
+                .addInterceptor(new TokenInterceptor(RestClient.this))
                 .build();
 
         Gson gson = new GsonBuilder()
@@ -100,6 +97,13 @@ public class RestClient implements TokenManager {
         return restAPI.signUp(jsonObject);
     }
 
+    public Observable<SessionModel> refreshToken(String refreshToken){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("refresh_token", refreshToken);
+
+        return restAPI.refreshToken(jsonObject);
+    }
+
     public Observable<NewsFeedWrapper> getFeed(){
         return restAPI.getFeed("ALL", "RUS", "formula_one");
     }
@@ -110,13 +114,12 @@ public class RestClient implements TokenManager {
 
     @Override
     public String getToken() {
-
-        return null;
+        return "demoToken_esfjhkjsdhfkjdhgkdhfgkjh";
     }
 
     @Override
     public boolean hasToken() {
-        return false;
+        return true;
     }
 
     @Override
@@ -128,7 +131,8 @@ public class RestClient implements TokenManager {
     }
 
     @Override
-    public String refreshToken() {
-        return null;
+    public void refreshToken() {
+        this.clearToken();
+        refreshToken("getRefreshToken");
     }
 }

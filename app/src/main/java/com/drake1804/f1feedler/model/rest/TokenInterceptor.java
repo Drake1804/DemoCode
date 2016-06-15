@@ -11,31 +11,31 @@ import okhttp3.Response;
  */
 public class TokenInterceptor implements Interceptor {
 
-    private final TokenManager mTokenManager;
+    private final RestClient mRestClient;
 
-    public TokenInterceptor(TokenManager mTokenManager) {
-        this.mTokenManager = mTokenManager;
+    public TokenInterceptor(RestClient restClient) {
+        mRestClient = restClient;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request initialRequest = chain.request();
-        Request modifiedRequest = initialRequest;
-        if (mTokenManager.hasToken()) {
-            modifiedRequest = initialRequest.newBuilder()
-                    .addHeader("USER_TOKEN", mTokenManager.getToken())
+        Request request = chain.request();
+
+        if (mRestClient.hasToken()) {
+            request = chain.request().newBuilder()
+                    .addHeader("Authorization", mRestClient.getToken())
                     .build();
         }
-        Response response = chain.proceed(modifiedRequest);
-        boolean unauthorized = response.code() == 401;
-        if (unauthorized) {
-            mTokenManager.clearToken();
-            String newToken = mTokenManager.refreshToken();
-            modifiedRequest = initialRequest.newBuilder()
-                    .addHeader("USER_TOKEN", mTokenManager.getToken())
+
+        Response response = chain.proceed(request);
+
+        if (response.code() == 401) {
+            mRestClient.refreshToken();
+            request = chain.request().newBuilder()
+                    .addHeader("Authorization", mRestClient.getToken())
                     .build();
-            return chain.proceed(modifiedRequest);
-        }
-        return response;
+            return chain.proceed(request);
+        } else
+            return response;
     }
 }
