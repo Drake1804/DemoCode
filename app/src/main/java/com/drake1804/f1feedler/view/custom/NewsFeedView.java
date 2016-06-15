@@ -23,7 +23,7 @@ import com.drake1804.f1feedler.view.RatePopupActivity;
 import com.github.silvestrpredko.dotprogressbar.DotProgressBar;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -32,34 +32,34 @@ import butterknife.OnClick;
  */
 public class NewsFeedView extends LinearLayout {
 
-    @Bind(R.id.image)
+    @BindView(R.id.image)
     ImageView image;
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView title;
 
-    @Bind(R.id.date)
+    @BindView(R.id.date)
     TextView date;
 
-    @Bind(R.id.description)
+    @BindView(R.id.description)
     TextView description;
 
-    @Bind(R.id.resource)
+    @BindView(R.id.resource)
     TextView resource;
 
-    @Bind(R.id.icon)
+    @BindView(R.id.icon)
     ImageView icon;
 
-    @Bind(R.id.dot_progress_bar)
+    @BindView(R.id.dot_progress_bar)
     DotProgressBar dotProgressBar;
 
-    @Bind(R.id.menu)
+    @BindView(R.id.menu)
     ImageButton menu;
 
-    @Bind(R.id.likes)
+    @BindView(R.id.likes)
     TextView likes;
 
-    @Bind(R.id.comments)
+    @BindView(R.id.comments)
     TextView comments;
 
 

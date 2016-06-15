@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,7 +12,7 @@ import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.presenter.LoginPresenter;
 import com.drake1804.f1feedler.view.view.LoginView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -27,10 +25,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
     /*@Bind(R.id.toolbar)
     Toolbar toolbar;*/
 
-    @Bind(R.id.email)
+    @BindView(R.id.email)
     TextInputEditText login;
 
-    @Bind(R.id.password)
+    @BindView(R.id.password)
     TextInputEditText password;
 
     private ProgressDialog progress;

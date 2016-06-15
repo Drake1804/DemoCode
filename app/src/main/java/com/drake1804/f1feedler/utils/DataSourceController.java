@@ -27,6 +27,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class DataSourceController {
 
     private static DataSourceController sInstance;
+    private static RxBus rxBus;
 
     private DataSourceController(Context context) {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(context)
@@ -67,6 +68,8 @@ public class DataSourceController {
                     .withLimit(1000)
                     .databaseNamePattern(Pattern.compile(".+\\.realm"))
                     .build();
+
+            rxBus = new RxBus();
         }
 
     }
@@ -75,6 +78,9 @@ public class DataSourceController {
         return sInstance;
     }
 
+    public static RxBus getRxBus() {
+        return rxBus;
+    }
 
     public static DataSourceController initSingleton(Context context) {
         if (sInstance == null) {

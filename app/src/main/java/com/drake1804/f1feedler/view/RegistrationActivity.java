@@ -3,33 +3,29 @@ package com.drake1804.f1feedler.view;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.presenter.SignUpPresenter;
 import com.drake1804.f1feedler.view.view.SignUpView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
 public class RegistrationActivity extends BaseActivity implements SignUpView {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.email)
+    @BindView(R.id.email)
     TextInputEditText login;
 
-    @Bind(R.id.password)
+    @BindView(R.id.password)
     TextInputEditText password;
 
     private ProgressDialog progress;

@@ -2,17 +2,14 @@ package com.drake1804.f1feedler.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.drake1804.f1feedler.R;
-import com.drake1804.f1feedler.utils.Tweakables;
-import com.orhanobut.hawk.Hawk;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -22,10 +19,10 @@ public class WebActivity extends AppCompatActivity {
 
     public static final String EXTRA_TABLE_HTML = "EXTRA_TABLE_HTML";
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.web_view)
+    @BindView(R.id.web_view)
     WebView mWebView;
 
     @Override

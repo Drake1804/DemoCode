@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +23,9 @@ import android.widget.Toast;
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.adapter.CommentsAdapter;
 import com.drake1804.f1feedler.model.CommentModel;
+import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
+import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.facebook.CallbackManager;
@@ -44,51 +43,52 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import rx.functions.Action1;
 import timber.log.Timber;
 
 public class DetailsActivity extends BaseActivity implements DetailsView {
 
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     AppBarLayout appBar;
 
-    @Bind(R.id.collapsing_toolbar)
+    @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.refresh)
+    @BindView(R.id.refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView title;
 
-    @Bind(R.id.image)
+    @BindView(R.id.image)
     ImageView image;
 
-    @Bind(R.id.text)
+    @BindView(R.id.text)
     HtmlTextView text;
 
-    @Bind(R.id.scrollView)
+    @BindView(R.id.scrollView)
     NestedScrollView scrollView;
 
-    @Bind(R.id.comments)
+    @BindView(R.id.comments)
     RecyclerView comments;
 
-    @Bind(R.id.logo)
+    @BindView(R.id.logo)
     ImageView logo;
 
-    @Bind(R.id.resource)
+    @BindView(R.id.resource)
     TextView resource;
 
-    @Bind(R.id.date)
+    @BindView(R.id.date)
     TextView date;
 
-    @Bind(R.id.facebook_share)
+    @BindView(R.id.facebook_share)
     ShareButton shareButtonFb;
 
     private CommentsAdapter adapter;
@@ -96,6 +96,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private LinearLayoutManager mLayoutManager;
     private static boolean isNight = false;
     private CallbackManager callbackManager;
+    private NewsFeedModel currentNews;
 
 
     @Override
@@ -105,6 +106,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        MainActivity.rxBus.toObserverable().subscribe(o -> {
+            if(o instanceof NewsFeedModel){
+
+            }
+        });
 
         init();
         initListeners();
@@ -269,6 +276,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
             isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
         }
+
+        DataSourceController.getRxBus().toObserverable()
+                .subscribe(o -> {
+                    if(o instanceof NewsFeedModel){
+                        currentNews = (NewsFeedModel) o;
+                    }
+                });
     }
 
     private void initListeners(){
@@ -277,13 +291,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             presenter.getComments(getIntent().getStringExtra("uuid"));
         });
 
-        ShareLinkContent content = new ShareLinkContent.Builder()
+        /*ShareLinkContent content = new ShareLinkContent.Builder()
                 .setContentUrl(Uri.parse(getIntent().getStringExtra("link")))
                 .setContentTitle(getIntent().getStringExtra("title"))
                 .setImageUrl(Uri.parse(getIntent().getStringExtra("imageUrl")))
                 .setContentDescription(getString(R.string.share_credentials_fb))
                 .build();
-        shareButtonFb.setShareContent(content);
+        shareButtonFb.setShareContent(content);*/
     }
 
     class ClickableTableSpanImpl extends ClickableTableSpan {
