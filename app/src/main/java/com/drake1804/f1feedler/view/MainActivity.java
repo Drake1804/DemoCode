@@ -3,7 +3,6 @@ package com.drake1804.f1feedler.view;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDelegate;
@@ -20,10 +19,8 @@ import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.gcm.RegistrationIntentService;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
-import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
-import com.drake1804.f1feedler.utils.RxBus;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 
 import java.util.List;
@@ -50,7 +47,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
-    public static RxBus rxBus;
 
     static {
         AppCompatDelegate.setDefaultNightMode(
@@ -64,7 +60,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         ButterKnife.setDebug(true);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        rxBus = new RxBus();
 
         init();
         initListeners();
