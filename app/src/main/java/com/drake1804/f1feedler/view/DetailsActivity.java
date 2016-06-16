@@ -251,7 +251,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     private void init(){
-
         presenter = new DetailsPresenter(this, this);
         currentNews = realm.where(NewsFeedModel.class).equalTo("uuid", getIntent().getStringExtra("uuid")).findFirst();
 

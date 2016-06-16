@@ -15,9 +15,6 @@ import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -27,7 +24,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class DataSourceController {
 
     private static DataSourceController sInstance;
-    private static RxBus rxBus;
 
     private DataSourceController(Context context) {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(context)
@@ -68,18 +64,12 @@ public class DataSourceController {
                     .withLimit(1000)
                     .databaseNamePattern(Pattern.compile(".+\\.realm"))
                     .build();
-
-            rxBus = new RxBus();
         }
 
     }
 
     public static synchronized DataSourceController getInstance() {
         return sInstance;
-    }
-
-    public static RxBus getRxBus() {
-        return rxBus;
     }
 
     public static DataSourceController initSingleton(Context context) {
