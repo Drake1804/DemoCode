@@ -23,4 +23,7 @@ public class Tweakables {
     public static final String HAWK_KEY_REFRESH_TOKEN = "HAWK_REFRESH_TOKEN";
     public static final String HAWK_KEY_IS_FIRST_LAUNCH = "HAWK_KEY_IS_FIRST_LAUNCH";
 
+    public static final String ADS_APP_ID = "ca-app-pub-2733737854061294~5640771369";
+    public static final String ADS_BANNER_ID = "ca-app-pub-2733737854061294/8594237765";
+
 }

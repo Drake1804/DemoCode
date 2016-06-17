@@ -7,6 +7,7 @@ import com.drake1804.f1feedler.utils.Tweakables;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.ads.MobileAds;
 import com.orhanobut.hawk.Hawk;
 
 /**
@@ -22,5 +23,8 @@ public class App extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         FlurryAgent.init(this, Tweakables.FLURRY_ANALYTICS_KEY);
+
+        MobileAds.initialize(getApplicationContext(), Tweakables.ADS_APP_ID);
+
     }
 }

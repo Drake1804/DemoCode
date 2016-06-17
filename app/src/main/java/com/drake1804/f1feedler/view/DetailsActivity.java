@@ -25,7 +25,6 @@ import com.drake1804.f1feedler.adapter.CommentsAdapter;
 import com.drake1804.f1feedler.model.CommentModel;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.presenter.DetailsPresenter;
-import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.DetailsView;
 import com.facebook.CallbackManager;
@@ -47,7 +46,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
-import rx.functions.Action1;
 import timber.log.Timber;
 
 public class DetailsActivity extends BaseActivity implements DetailsView {
