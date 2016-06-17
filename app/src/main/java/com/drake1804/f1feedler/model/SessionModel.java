@@ -8,6 +8,7 @@ import io.realm.annotations.PrimaryKey;
 /**
  * Created by Pavel.Shkaran on 5/18/2016.
  */
+@Deprecated
 public class SessionModel {
 
     @PrimaryKey

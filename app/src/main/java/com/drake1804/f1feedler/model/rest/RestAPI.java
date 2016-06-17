@@ -2,9 +2,12 @@ package com.drake1804.f1feedler.model.rest;
 
 import com.drake1804.f1feedler.model.CommentsWrapper;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
-import com.drake1804.f1feedler.model.SessionModel;
+import com.drake1804.f1feedler.model.RefreshTokenResponseModel;
+import com.drake1804.f1feedler.model.SignInResponseModel;
+import com.drake1804.f1feedler.model.SignUpResponseModel;
 import com.google.gson.JsonObject;
 
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -17,13 +20,13 @@ import rx.Observable;
 public interface RestAPI {
 
     @POST("signin")
-    Observable<SessionModel> signIn(@Body JsonObject json);
+    Observable<SignInResponseModel> signIn(@Body JsonObject json);
 
     @POST("signup")
-    Observable<SessionModel> signUp(@Body JsonObject json);
+    Observable<SignUpResponseModel> signUp(@Body JsonObject json);
 
     @POST("refresh_token")
-    Observable<SessionModel> refreshToken(@Body JsonObject json);
+    Call<RefreshTokenResponseModel> refreshToken(@Query("refresh_token") String refreshToken);
 
     @GET("news")
     Observable<NewsFeedWrapper> getFeed(@Query("country[]") String country, @Query("language[]") String language, @Query("category[]") String category);
