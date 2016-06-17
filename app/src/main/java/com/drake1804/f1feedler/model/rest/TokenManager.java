@@ -1,11 +1,14 @@
 package com.drake1804.f1feedler.model.rest;
 
-/**
- * Created by Pavel.Shkaran on 5/20/2016.
- */
+import com.drake1804.f1feedler.model.ItemSessionResponseModel;
+
 public interface TokenManager {
-    String getToken();
+
     boolean hasToken();
-    void clearToken();
-    void refreshToken();
+    String getToken();
+    String refreshToken();
+    void updateSession(ItemSessionResponseModel session);
+    void cleanToken();
+    void cleanSession();
+
 }

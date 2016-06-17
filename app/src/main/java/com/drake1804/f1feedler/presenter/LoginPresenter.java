@@ -1,6 +1,7 @@
 package com.drake1804.f1feedler.presenter;
 
 import com.drake1804.f1feedler.model.SessionModel;
+import com.drake1804.f1feedler.model.SignInResponseModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.view.view.LoginView;
@@ -27,7 +28,7 @@ public class LoginPresenter extends Presenter {
         RestClient.getInstance().signIn(login, password)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<SessionModel>() {
+                .subscribe(new Observer<SignInResponseModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -40,22 +41,16 @@ public class LoginPresenter extends Presenter {
                     }
 
                     @Override
-                    public void onNext(final SessionModel sessionModel) {
-                        /*view.getRealm().executeTransactionAsync(realm -> {
-                            realm.copyToRealmOrUpdate(sessionModel);
-                        }, () -> {
+                    public void onNext(final SignInResponseModel responseModel) {
+                        if (responseModel.isSuccess()) {
                             view.onResult(true);
-                        });*/
+                        }
                     }
                 });
     }
 
     private void cleanSession(){
-        /*view.getRealm().executeTransactionAsync(realm -> {
-            RealmResults<SessionModel> sessionModels = realm.where(SessionModel.class)
-                    .findAll();
-            sessionModels.deleteAllFromRealm();
-        });*/
+        RestClient.getInstance().cleanSession();
     }
 
 }
