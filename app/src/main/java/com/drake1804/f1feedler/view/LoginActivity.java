@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -22,9 +23,6 @@ import io.realm.Realm;
  */
 public class LoginActivity extends BaseActivity implements LoginView {
 
-    /*@Bind(R.id.toolbar)
-    Toolbar toolbar;*/
-
     @BindView(R.id.email)
     TextInputEditText login;
 
@@ -39,6 +37,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        DisplayMetrics display = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(display);
+
+        int width = display.widthPixels;
+        int height = display.heightPixels;
+
+        getWindow().setLayout((int)(width*0.8), (int) (height*0.7));
 
         presenter = new LoginPresenter(this);
         initDialog();
@@ -72,6 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @OnClick(R.id.register_button)
     public void onRegisterButton(){
         startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+        finish();
     }
 
     private void initDialog(){
@@ -79,17 +86,17 @@ public class LoginActivity extends BaseActivity implements LoginView {
         progress.setCancelable(false);
         progress.setCanceledOnTouchOutside(false);
         progress.setIndeterminate(true);
-        progress.setMessage("Loading...");
+        progress.setMessage(getString(R.string.loading));
     }
 
     public boolean isFieldsValid() {
         if(TextUtils.isEmpty(login.getText().toString())){
-            showMessage("Empty signIn");
+            showMessage(getString(R.string.empty_login));
             return false;
         }
 
         if(TextUtils.isEmpty(password.getText().toString())){
-            showMessage("Empty password");
+            showMessage(getString(R.string.empty_password));
             return false;
         }
         return true;

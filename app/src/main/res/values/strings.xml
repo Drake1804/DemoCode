@@ -44,6 +44,11 @@
     <string name="news_app">Formula 1 news app</string>
     <string name="get_smart_news">Get smart sorted news</string>
     <string name="news_reading_fun">News reading can be fun</string>
+    <string name="loading">Loading...</string>
+    <string name="empty_login">Empty login</string>
+    <string name="empty_password">Empty password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
 
 
 

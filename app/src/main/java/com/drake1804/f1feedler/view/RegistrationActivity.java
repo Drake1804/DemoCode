@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
@@ -18,9 +19,6 @@ import butterknife.OnClick;
 import io.realm.Realm;
 
 public class RegistrationActivity extends BaseActivity implements SignUpView {
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
     @BindView(R.id.email)
     TextInputEditText login;
@@ -36,8 +34,14 @@ public class RegistrationActivity extends BaseActivity implements SignUpView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        DisplayMetrics display = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(display);
+
+        int width = display.widthPixels;
+        int height = display.heightPixels;
+
+        getWindow().setLayout((int)(width*0.8), (int) (height*0.7));
 
         presenter = new SignUpPresenter(this);
         initDialog();
@@ -61,17 +65,17 @@ public class RegistrationActivity extends BaseActivity implements SignUpView {
         progress.setCancelable(false);
         progress.setCanceledOnTouchOutside(false);
         progress.setIndeterminate(true);
-        progress.setMessage("Loading...");
+        progress.setMessage(getString(R.string.loading));
     }
 
     public boolean isFieldsValid() {
         if(TextUtils.isEmpty(login.getText().toString())){
-            showMessage("Empty signIn");
+            showMessage(getString(R.string.empty_login));
             return false;
         }
 
         if(TextUtils.isEmpty(password.getText().toString())){
-            showMessage("Empty password");
+            showMessage(getString(R.string.empty_password));
             return false;
         }
         return true;
