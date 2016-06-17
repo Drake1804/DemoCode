@@ -7,6 +7,7 @@ import com.drake1804.f1feedler.utils.Tweakables;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.flurry.android.FlurryAgent;
+import com.orhanobut.hawk.Hawk;
 
 /**
  * Created by Pavel.Shkaran on 5/13/2016.

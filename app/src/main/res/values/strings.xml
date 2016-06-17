@@ -39,6 +39,12 @@
     </string-array>
 
     <string name="create_new_account">Create new account?</string>
+    <string name="smart_news">Smart news compilation</string>
+    <string name="gamification">Gamification</string>
+    <string name="news_app">Formula 1 news app</string>
+    <string name="get_smart_news">Get smart sorted news</string>
+    <string name="news_reading_fun">News reading can be fun</string>
+
 
 
 </resources>
