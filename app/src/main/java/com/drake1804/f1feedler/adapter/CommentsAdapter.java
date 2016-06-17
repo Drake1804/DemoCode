@@ -46,7 +46,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         holder.name.setText(commentModels.get(position).getUserName());
         Picasso.with(context).load(commentModels.get(position).getUserImage()).into(holder.image);
         holder.message.setText(commentModels.get(position).getMessage());
-        holder.date.setText(TimeAgo.toDuration(commentModels.get(position).getTime().getTime()));
+        holder.date.setText(TimeAgo.toDuration(System.currentTimeMillis() - commentModels.get(position).getTime().getTime()));
     }
 
     @Override
