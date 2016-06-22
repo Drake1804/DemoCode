@@ -26,4 +26,6 @@ public class Tweakables {
     public static final String ADS_APP_ID = "ca-app-pub-2733737854061294~5640771369";
     public static final String ADS_BANNER_ID = "ca-app-pub-2733737854061294/8594237765";
 
+    public static final int MAX_FEED_NEWS = 100;
+
 }
