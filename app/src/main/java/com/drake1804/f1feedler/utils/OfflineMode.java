@@ -73,7 +73,7 @@ public class OfflineMode {
     public void createMode(ProgressDialog dialog){
         this.dialog = dialog;
         dialog.show();
-        RestClient.getInstance().getFeed()
+        RestClient.getInstance().getFeed(0)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<NewsFeedWrapper>() {
@@ -89,7 +89,7 @@ public class OfflineMode {
 
                     @Override
                     public void onNext(NewsFeedWrapper newsFeedWrapper) {
-                        saveNewsLinks(newsFeedWrapper.items);
+                        saveNewsLinks(newsFeedWrapper.embedded.items);
                     }
                 });
     }
@@ -204,7 +204,7 @@ public class OfflineMode {
             adapter.notifyDataSetChanged();
             Timber.d("Offline data was cleared!");
             Toast.makeText(context, context.getString(R.string.data_was_cleared), Toast.LENGTH_LONG);
-            presenter.getNewsFeed();
+            presenter.getNewsFeed(0);
         });
     }
 

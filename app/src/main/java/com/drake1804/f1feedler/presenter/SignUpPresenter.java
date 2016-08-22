@@ -1,15 +1,9 @@
 package com.drake1804.f1feedler.presenter;
 
-import com.drake1804.f1feedler.model.SessionModel;
 import com.drake1804.f1feedler.model.SignUpResponseModel;
 import com.drake1804.f1feedler.model.rest.RestClient;
-import com.drake1804.f1feedler.utils.DataSourceController;
 import com.drake1804.f1feedler.view.view.SignUpView;
 
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

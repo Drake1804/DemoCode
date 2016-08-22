@@ -9,6 +9,11 @@ import java.util.List;
  */
 public class NewsFeedWrapper {
 
-    @SerializedName("news")
-    public List<NewsFeedModel> items;
+    @SerializedName("_embedded")
+    public Embedded embedded;
+
+    public class Embedded {
+        @SerializedName("news")
+        public List<NewsFeedModel> items;
+    }
 }

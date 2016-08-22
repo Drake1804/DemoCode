@@ -29,7 +29,7 @@ public interface RestAPI {
     Call<RefreshTokenResponseModel> refreshToken(@Query("refresh_token") String refreshToken);
 
     @GET("news")
-    Observable<NewsFeedWrapper> getFeed(@Query("country[]") String country, @Query("language[]") String language, @Query("category[]") String category);
+    Observable<NewsFeedWrapper> getFeed(@Query("page") int page, @Query("size") int size, @Query("sort") String sort);
 
     @GET("news_comments")
     Observable<CommentsWrapper> getCommentsForNews(@Query("id") String newsId);

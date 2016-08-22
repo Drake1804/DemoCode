@@ -24,8 +24,8 @@ public class IntroPresenter extends Presenter {
         this.view = view;
     }
 
-    public void loadFeed(){
-        RestClient.getInstance().getFeed()
+    public void loadFeed(int page){
+        RestClient.getInstance().getFeed(page)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<NewsFeedWrapper>() {
@@ -43,7 +43,7 @@ public class IntroPresenter extends Presenter {
 
                     @Override
                     public void onNext(NewsFeedWrapper newsFeedWrapper) {
-                        saveNewsLinks(newsFeedWrapper.items);
+                        saveNewsLinks(newsFeedWrapper.embedded.items);
                     }
                 });
     }

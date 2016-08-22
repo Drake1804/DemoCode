@@ -98,8 +98,8 @@ public class RestClient implements TokenManager {
         return restAPI.refreshToken(refreshToken);
     }
 
-    public Observable<NewsFeedWrapper> getFeed() {
-        return restAPI.getFeed("ALL", "RUS", "formula_one");
+    public Observable<NewsFeedWrapper> getFeed(int page) {
+        return restAPI.getFeed(page, Tweakables.MAX_FEED_NEWS, "asc");
     }
 
     public Observable<CommentsWrapper> getCommentsForNews(String newsId) {

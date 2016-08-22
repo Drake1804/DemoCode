@@ -1,6 +1,7 @@
 package com.drake1804.f1feedler.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Since;
 
 import java.util.Date;
 
@@ -12,34 +13,27 @@ import io.realm.annotations.PrimaryKey;
  */
 public class NewsFeedModel extends RealmObject {
 
-    @PrimaryKey
-    @SerializedName("uuid")
-    private String uuid;
-
     @SerializedName("title")
     private String title;
 
     @SerializedName("description")
     private String description;
 
+    @PrimaryKey
     @SerializedName("link")
     private String link;
 
-    @SerializedName("image_url")
+    @SerializedName("image")
     private String imageUrl;
 
-    @SerializedName("pub_date")
+    @SerializedName("createdAt")
     private Date creatingDate;
 
-    @SerializedName("resource")
+    /*@SerializedName("resource")
     private ResourceModel resource;
 
     @SerializedName("social")
-    private SocialModel social;
-
-    public String getUuid() {
-        return uuid;
-    }
+    private SocialModel social;*/
 
     public String getTitle() {
         return title;
@@ -61,17 +55,13 @@ public class NewsFeedModel extends RealmObject {
         return creatingDate;
     }
 
-    public ResourceModel getResource() {
+   /* public ResourceModel getResource() {
         return resource;
     }
 
     public SocialModel getSocial() {
         return social;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+    }*/
 
     public void setTitle(String title) {
         this.title = title;
@@ -93,13 +83,13 @@ public class NewsFeedModel extends RealmObject {
         this.creatingDate = creatingDate;
     }
 
-    public void setResource(ResourceModel resource) {
+    /*public void setResource(ResourceModel resource) {
         this.resource = resource;
     }
 
     public void setSocial(SocialModel social) {
         this.social = social;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
@@ -108,31 +98,23 @@ public class NewsFeedModel extends RealmObject {
 
         NewsFeedModel model = (NewsFeedModel) o;
 
-        if (!uuid.equals(model.uuid)) return false;
         if (title != null ? !title.equals(model.title) : model.title != null) return false;
         if (description != null ? !description.equals(model.description) : model.description != null)
             return false;
         if (link != null ? !link.equals(model.link) : model.link != null) return false;
         if (imageUrl != null ? !imageUrl.equals(model.imageUrl) : model.imageUrl != null)
             return false;
-        if (creatingDate != null ? !creatingDate.equals(model.creatingDate) : model.creatingDate != null)
-            return false;
-        if (resource != null ? !resource.equals(model.resource) : model.resource != null)
-            return false;
-        return social != null ? social.equals(model.social) : model.social == null;
+        return creatingDate != null ? creatingDate.equals(model.creatingDate) : model.creatingDate == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = uuid.hashCode();
-        result = 31 * result + (title != null ? title.hashCode() : 0);
+        int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
         result = 31 * result + (creatingDate != null ? creatingDate.hashCode() : 0);
-        result = 31 * result + (resource != null ? resource.hashCode() : 0);
-        result = 31 * result + (social != null ? social.hashCode() : 0);
         return result;
     }
 }

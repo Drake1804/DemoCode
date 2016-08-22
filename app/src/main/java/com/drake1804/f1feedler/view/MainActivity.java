@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         initListeners();
         showDialog();
 
-        presenter.getNewsFeed();
+        presenter.getNewsFeed(0);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     public void initListeners(){
         ItemClickSupport.addTo(mainFeed).setOnItemClickListener((recyclerView, position, v) -> {
             Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-            intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getUuid());
+            intent.putExtra("uuid", adapter.getNewsFeedModels().get(position).getLink());
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         });
@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed());
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed(0));
     }
 
 }

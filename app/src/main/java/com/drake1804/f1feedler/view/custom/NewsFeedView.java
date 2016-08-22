@@ -113,16 +113,16 @@ public class NewsFeedView extends LinearLayout {
                     .load(model.getImageUrl())
                     .into(image);
         }
-        if(model.getResource() != null){
+        /*if(model.getResource() != null){
             Picasso.with(getContext())
                     .load(model.getResource().getImageUrl())
                     .into(icon);
             resource.setText(model.getResource().getTitle());
-        }
+        }*/
         title.setText(model.getTitle());
         date.setText(TimeAgo.toDuration(System.currentTimeMillis() - model.getCreatingDate().getTime()));
         description.setText(Html.fromHtml(model.getDescription()));
-        likes.setText(model.getSocial().getLikes()+"");
-        comments.setText(model.getSocial().getComments()+"");
+        /*likes.setText(model.getSocial().getLikes()+"");
+        comments.setText(model.getSocial().getComments()+"");*/
     }
 }

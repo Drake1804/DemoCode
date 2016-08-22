@@ -82,7 +82,7 @@ public class IntroActivity extends AppIntro2 implements BaseView {
     private void init(){
         realm = Realm.getDefaultInstance();
         presenter = new IntroPresenter(this);
-        presenter.loadFeed();
+        presenter.loadFeed(0);
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.app_name), getString(R.string.news_app), R.mipmap.ic_launcher, getColor(R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance(getString(R.string.smart_news), getString(R.string.get_smart_news), R.mipmap.ic_launcher, getColor(R.color.colorPrimary)));

@@ -7,7 +7,7 @@ public class Tweakables {
 
     public static final String FLURRY_ANALYTICS_KEY = "643T593NXKC7QMGJ5TVK";
 
-    public static final String BASE_API_URL = "http://api.finants.xyz/v1/";
+    public static final String BASE_API_URL = "http://45.55.205.81:8080/peloton/";
     public static final String APP_ID = "YvvP2Ai7rPx3IcrzNZXs40y9DsAXXmZvkENguP1Z";
     public static final String REST_KEY = "mgajZdld0VHhWsFnjcy04gphlnctjFTkPeLhuGKE";
 
@@ -26,6 +26,6 @@ public class Tweakables {
     public static final String ADS_APP_ID = "ca-app-pub-2733737854061294~5640771369";
     public static final String ADS_BANNER_ID = "ca-app-pub-2733737854061294/8594237765";
 
-    public static final int MAX_FEED_NEWS = 100;
+    public static final int MAX_FEED_NEWS = 20;
 
 }

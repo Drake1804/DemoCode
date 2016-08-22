@@ -250,14 +250,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     private void init(){
         presenter = new DetailsPresenter(this, this);
-        currentNews = realm.where(NewsFeedModel.class).equalTo("uuid", getIntent().getStringExtra("uuid")).findFirst();
+        currentNews = realm.where(NewsFeedModel.class).equalTo("link", getIntent().getStringExtra("uuid")).findFirst();
 
         collapsingToolbarLayout.setTitle(currentNews.getTitle());
         title.setText(currentNews.getTitle());
 
         presenter.getPage(currentNews.getLink(), currentNews.getImageUrl());
-        presenter.getComments(currentNews.getUuid());
-        presenter.setHeader(currentNews.getResource().getImageUrl(), currentNews.getResource().getTitle(), currentNews.getCreatingDate() != null ? currentNews.getCreatingDate().getTime() : 0);
+//        presenter.getComments(currentNews.getId());
+//        presenter.setHeader(currentNews.getResource().getImageUrl(), currentNews.getResource().getTitle(), currentNews.getCreatingDate() != null ? currentNews.getCreatingDate().getTime() : 0);
 
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -275,7 +275,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private void initListeners(){
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.getPage(currentNews.getLink(), currentNews.getImageUrl());
-            presenter.getComments(currentNews.getUuid());
+//            presenter.getComments(currentNews.getId());
         });
 
         ShareLinkContent content = new ShareLinkContent.Builder()

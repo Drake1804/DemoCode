@@ -4,26 +4,17 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
-import com.drake1804.f1feedler.model.NewsModel;
 import com.drake1804.f1feedler.view.DetailsActivity;
-import com.drake1804.f1feedler.view.MainActivity;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.util.List;
 
 import io.realm.Realm;
 
@@ -51,12 +42,11 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private void sendNotification(NewsFeedModel model) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra("uuid", model.getUuid());
         intent.putExtra("title", model.getTitle());
         intent.putExtra("link", model.getLink());
         intent.putExtra("imageUrl", model.getImageUrl());
-        intent.putExtra("logoUrl", model.getResource().getImageUrl());
-        intent.putExtra("resource", model.getResource().getTitle());
+        /*intent.putExtra("logoUrl", model.getResource().getImageUrl());
+        intent.putExtra("resource", model.getResource().getTitle());*/
         intent.putExtra("date", model.getCreatingDate().getTime());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

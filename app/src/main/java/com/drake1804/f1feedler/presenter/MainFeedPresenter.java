@@ -54,15 +54,15 @@ public class MainFeedPresenter extends Presenter {
         };
     }
 
-    public void getNewsFeed(){
+    public void getNewsFeed(int page){
         List<NewsFeedModel> old = view.getRealm().where(NewsFeedModel.class).findAll();
         oldDataSize = old.size();
         view.setData(old);
-        loadFeed();
+        loadFeed(0);
     }
 
-    private void loadFeed(){
-        RestClient.getInstance().getFeed()
+    private void loadFeed(int page){
+        RestClient.getInstance().getFeed(page)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<NewsFeedWrapper>() {
@@ -81,7 +81,7 @@ public class MainFeedPresenter extends Presenter {
 
                     @Override
                     public void onNext(NewsFeedWrapper newsFeedWrapper) {
-                        saveNewsLinks(newsFeedWrapper.items);
+                        saveNewsLinks(newsFeedWrapper.embedded.items);
                         view.dismissDialog();
                     }
                 });
