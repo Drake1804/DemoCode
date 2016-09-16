@@ -55,11 +55,11 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
     public void onBindViewHolder(ViewHolderMain holder, int position) {
         holder.newsFeedView.setData(newsFeedModels.get(position));
 
-        Animation animation = AnimationUtils.loadAnimation(context,
+        /*Animation animation = AnimationUtils.loadAnimation(context,
                 (position > lastPosition) ? R.anim.up_from_bottom
                         : R.anim.down_from_top);
         holder.itemView.startAnimation(animation);
-        lastPosition = position;
+        lastPosition = position;*/
     }
 
     @Override

@@ -53,15 +53,6 @@ public class NewsFeedView extends LinearLayout {
     @BindView(R.id.dot_progress_bar)
     DotProgressBar dotProgressBar;
 
-    @BindView(R.id.menu)
-    ImageButton menu;
-
-    @BindView(R.id.likes)
-    TextView likes;
-
-    @BindView(R.id.comments)
-    TextView comments;
-
 
     public NewsFeedView(Context context, boolean isMainNews) {
         super(context);
@@ -84,10 +75,10 @@ public class NewsFeedView extends LinearLayout {
         init(isMainNews);
     }
 
-    @OnClick(R.id.menu)
+   /* @OnClick(R.id.menu)
     public void onPopup(){
         getContext().startActivity(new Intent(getContext(), RatePopupActivity.class));
-    }
+    }*/
 
 
     private void init(boolean isMainNews){

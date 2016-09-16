@@ -99,7 +99,7 @@ public class RestClient implements TokenManager {
     }
 
     public Observable<NewsFeedWrapper> getFeed(int page) {
-        return restAPI.getFeed(page, Tweakables.MAX_FEED_NEWS, "asc");
+        return restAPI.getFeed(page, Tweakables.MAX_FEED_NEWS, "createdAt,desc");
     }
 
     public Observable<CommentsWrapper> getCommentsForNews(String newsId) {

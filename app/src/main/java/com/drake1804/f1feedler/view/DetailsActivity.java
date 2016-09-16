@@ -113,14 +113,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.details_menu, menu);
-        MenuItem menuItem = menu.getItem(1);
-        if(isNight){
+//        MenuItem menuItem = menu.getItem(1);
+        /*if(isNight){
             menuItem.setChecked(true);
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             menuItem.setChecked(false);
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        }*/
         return true;
     }
 
@@ -132,7 +132,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_fav:
+            /*case R.id.menu_fav:
                 return true;
             case R.id.menu_night:
                 if(Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE)){
@@ -144,7 +144,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 }
                 Hawk.put(Tweakables.HAWK_KEY_NIGHT_MODE, isNight);
                 recreate();
-                return true;
+                return true;*/
             case R.id.menu_font:
                 presenter.startFontSizeDialog();
                 return true;
@@ -223,10 +223,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .launchUrl(this, Uri.parse(currentNews.getLink()));
     }
 
-    @OnClick(R.id.fab)
+    /*@OnClick(R.id.fab)
     public void onRateClick(){
         startActivity(new Intent(this, RatePopupActivity.class));
-    }
+    }*/
 
     @OnClick(R.id.facebook_share)
     public void onShare(){

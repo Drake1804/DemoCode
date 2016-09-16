@@ -48,7 +48,7 @@ public class DataSourceController {
             Picasso.with(context)
                     .setIndicatorsEnabled(true);
             Picasso.with(context)
-                    .setLoggingEnabled(true);
+                    .setLoggingEnabled(false);
 
             Stetho.initialize(
                     Stetho.newInitializerBuilder(context)

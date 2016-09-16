@@ -58,7 +58,7 @@ public class MainFeedPresenter extends Presenter {
         List<NewsFeedModel> old = view.getRealm().where(NewsFeedModel.class).findAll();
         oldDataSize = old.size();
         view.setData(old);
-        loadFeed(0);
+        loadFeed(page);
     }
 
     private void loadFeed(int page){
@@ -68,7 +68,7 @@ public class MainFeedPresenter extends Presenter {
                 .subscribe(new Observer<NewsFeedWrapper>() {
                     @Override
                     public void onCompleted() {
-
+                        MainActivity.loading = true;
                     }
 
                     @Override

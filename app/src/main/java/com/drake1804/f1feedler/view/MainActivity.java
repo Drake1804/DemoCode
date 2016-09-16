@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,10 +49,14 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
 
-    static {
+    public static boolean loading = true;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private static int page = 0;
+
+    /*static {
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         initListeners();
         showDialog();
 
-        presenter.getNewsFeed(0);
+        presenter.getNewsFeed(page);
     }
 
     @Override
@@ -81,7 +86,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -168,6 +173,21 @@ public class MainActivity extends BaseActivity implements MainFeedView {
                     fabOnTop.setVisibility(View.VISIBLE);
                 } else if(mLayoutManager.findFirstVisibleItemPosition() < 3 && fabOnTop.getVisibility() == View.VISIBLE){
                     fabOnTop.setVisibility(View.GONE);
+                }
+
+                if(dy > 0) {
+                    visibleItemCount = mLayoutManager.getChildCount();
+                    totalItemCount = mLayoutManager.getItemCount();
+                    pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if (loading) {
+                        if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loading = false;
+                            Log.v("...", "Last Item Wow !");
+                            page++;
+                            presenter.getNewsFeed(page);
+                        }
+                    }
                 }
             }
         });
