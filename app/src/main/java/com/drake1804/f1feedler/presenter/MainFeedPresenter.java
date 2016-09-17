@@ -12,6 +12,7 @@ import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.rest.RestClient;
 import com.drake1804.f1feedler.utils.DataSourceController;
+import com.drake1804.f1feedler.utils.RetrofitException;
 import com.drake1804.f1feedler.view.MainActivity;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 import com.google.android.gms.common.ConnectionResult;
@@ -73,6 +74,8 @@ public class MainFeedPresenter extends Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        RetrofitException error = (RetrofitException) e;
+
                         if(BuildConfig.DEBUG){
                             view.showMessage(e.getMessage());
                         }

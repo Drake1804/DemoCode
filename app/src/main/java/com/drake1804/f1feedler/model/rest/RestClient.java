@@ -9,6 +9,7 @@ import com.drake1804.f1feedler.model.NewsFeedWrapper;
 import com.drake1804.f1feedler.model.RefreshTokenResponseModel;
 import com.drake1804.f1feedler.model.SignInResponseModel;
 import com.drake1804.f1feedler.model.SignUpResponseModel;
+import com.drake1804.f1feedler.utils.RxErrorHandlingCallAdapterFactory;
 import com.drake1804.f1feedler.utils.Tweakables;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
@@ -62,7 +63,7 @@ public class RestClient implements TokenManager {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Tweakables.BASE_API_URL)
                 .client(okHttpClient)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         restAPI = retrofit.create(RestAPI.class);
