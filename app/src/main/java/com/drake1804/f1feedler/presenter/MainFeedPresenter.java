@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 import com.drake1804.f1feedler.BuildConfig;
 import com.drake1804.f1feedler.gcm.QuickstartPreferences;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -74,16 +76,20 @@ public class MainFeedPresenter extends Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        view.dismissDialog();
                         RetrofitException error = (RetrofitException) e;
+                        if(error.getKind().equals(RetrofitException.Kind.NETWORK)){
+                            view.showErrorView(true);
+                        }
 
                         if(BuildConfig.DEBUG){
-                            view.showMessage(e.getMessage());
+                            view.showMessage(error.getMessage());
                         }
-                        view.dismissDialog();
                     }
 
                     @Override
                     public void onNext(NewsFeedWrapper newsFeedWrapper) {
+                        view.showErrorView(false);
                         saveNewsLinks(newsFeedWrapper.embedded.items);
                         view.dismissDialog();
                     }

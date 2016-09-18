@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.drake1804.f1feedler.R;
@@ -44,6 +45,9 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
     @BindView(R.id.fab)
     FloatingActionButton fabOnTop;
+
+    @BindView(R.id.error_view)
+    RelativeLayout errorView;
 
     private MainFeedAdapter adapter;
     private MainFeedPresenter presenter;
@@ -125,6 +129,19 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     }
 
     @Override
+    public void showErrorView(boolean state) {
+        if(state){
+            swipeRefreshLayout.setVisibility(View.GONE);
+            errorView.setVisibility(View.VISIBLE);
+            fabOnTop.setVisibility(View.GONE);
+        } else {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            errorView.setVisibility(View.GONE);
+            fabOnTop.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public Realm getRealm() {
         return realm;
     }
@@ -142,6 +159,11 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     @OnClick(R.id.fab)
     public void onTop(){
         mainFeed.smoothScrollToPosition(0);
+    }
+
+    @OnClick(R.id.show_loaded_data)
+    public void onShow(){
+        showErrorView(false);
     }
 
     public void init(){

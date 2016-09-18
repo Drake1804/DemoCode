@@ -18,8 +18,35 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:scrollbarStyle="outsideOverlay"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:visibility="gone"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/server_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_error"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/show_loaded_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_loaded_data"
+            android:layout_below="@id/server_error"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/blue_500"
+            android:padding="16dp"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

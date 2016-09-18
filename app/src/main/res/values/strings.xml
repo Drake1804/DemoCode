@@ -49,6 +49,8 @@
     <string name="empty_password">Empty password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
+    <string name="server_error">Oops server not available now</string>
+    <string name="show_loaded_data">Show loaded news</string>
 
 
 

@@ -10,4 +10,6 @@ import java.util.List;
 public interface MainFeedView extends BaseView {
 
     void setData(List<NewsFeedModel> data);
+
+    void showErrorView(boolean state);
 }

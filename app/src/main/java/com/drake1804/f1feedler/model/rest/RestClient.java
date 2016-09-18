@@ -52,7 +52,7 @@ public class RestClient implements TokenManager {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ?
                         HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
-                .addInterceptor(new TokenInterceptor(RestClient.this))
+//                .addInterceptor(new TokenInterceptor(RestClient.this))
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
 
