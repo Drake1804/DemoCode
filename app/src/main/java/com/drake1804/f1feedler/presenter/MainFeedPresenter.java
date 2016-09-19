@@ -71,16 +71,17 @@ public class MainFeedPresenter extends Presenter {
                 .subscribe(new Observer<NewsFeedWrapper>() {
                     @Override
                     public void onCompleted() {
-                        MainActivity.loading = true;
+//                        MainActivity.loading = true;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.dismissDialog();
                         RetrofitException error = (RetrofitException) e;
-                        if(error.getKind().equals(RetrofitException.Kind.NETWORK)){
+                        view.showErrorView(true);
+                        /*if(error.getKind().equals(RetrofitException.Kind.NETWORK)){
                             view.showErrorView(true);
-                        }
+                        }*/
 
                         if(BuildConfig.DEBUG){
                             view.showMessage(error.getMessage());
@@ -107,6 +108,7 @@ public class MainFeedPresenter extends Presenter {
                     if(hasNewNews){
                         view.setData(view.getRealm().where(NewsFeedModel.class).findAll());
                         hasNewNews = false;
+                        ((MainActivity) context).getEndlessRecyclerOnScrollListener().setLoading(false);
                     }
                 },
                 Throwable::printStackTrace);

@@ -21,6 +21,7 @@ import com.drake1804.f1feedler.adapter.MainFeedAdapter;
 import com.drake1804.f1feedler.gcm.RegistrationIntentService;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.presenter.MainFeedPresenter;
+import com.drake1804.f1feedler.utils.EndlessRecyclerOnScrollListener;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
 import com.drake1804.f1feedler.view.view.MainFeedView;
@@ -53,9 +54,10 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
 
-    public static boolean loading = true;
+    /*public static boolean loading = true;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
-    private static int page = 0;
+    private static int page = 0;*/
+    private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     /*static {
         AppCompatDelegate.setDefaultNightMode(
@@ -74,13 +76,15 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         initListeners();
         showDialog();
 
-        presenter.getNewsFeed(page);
+        presenter.getNewsFeed(0);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.registerReceiver();
+        endlessRecyclerOnScrollListener.reset(0, true);
+
     }
     @Override
     protected void onPause() {
@@ -131,14 +135,19 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     @Override
     public void showErrorView(boolean state) {
         if(state){
-            swipeRefreshLayout.setVisibility(View.GONE);
+            mainFeed.setVisibility(View.GONE);
             errorView.setVisibility(View.VISIBLE);
             fabOnTop.setVisibility(View.GONE);
         } else {
-            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            mainFeed.setVisibility(View.VISIBLE);
             errorView.setVisibility(View.GONE);
             fabOnTop.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public EndlessRecyclerOnScrollListener getEndlessRecyclerOnScrollListener() {
+        return endlessRecyclerOnScrollListener;
     }
 
     @Override
@@ -188,31 +197,17 @@ public class MainActivity extends BaseActivity implements MainFeedView {
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         });
 
-        mainFeed.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if(mLayoutManager.findFirstVisibleItemPosition() > 5 && fabOnTop.getVisibility() == View.GONE){
-                    fabOnTop.setVisibility(View.VISIBLE);
-                } else if(mLayoutManager.findFirstVisibleItemPosition() < 3 && fabOnTop.getVisibility() == View.VISIBLE){
-                    fabOnTop.setVisibility(View.GONE);
-                }
-
-                if(dy > 0) {
-                    visibleItemCount = mLayoutManager.getChildCount();
-                    totalItemCount = mLayoutManager.getItemCount();
-                    pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                    if (loading) {
-                        if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            loading = false;
-                            Log.v("...", "Last Item Wow !");
-                            page++;
-                            presenter.getNewsFeed(page);
-                        }
-                    }
-                }
+            public void onLoadMore(int current_page) {
+                presenter.getNewsFeed(current_page);
             }
-        });
+        };
+
+        endlessRecyclerOnScrollListener.setFloatingActionButton(fabOnTop);
+        endlessRecyclerOnScrollListener.setLayoutManager(mLayoutManager);
+
+        mainFeed.addOnScrollListener(endlessRecyclerOnScrollListener);
 
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed(0));
     }

@@ -112,7 +112,7 @@ public class NewsFeedView extends LinearLayout {
         }*/
         title.setText(model.getTitle());
         date.setText(TimeAgo.toDuration(System.currentTimeMillis() - model.getCreatingDate().getTime()));
-        description.setText(Html.fromHtml(model.getDescription()));
+        description.setText(Html.fromHtml(model.getDescription()),TextView.BufferType.SPANNABLE);
         /*likes.setText(model.getSocial().getLikes()+"");
         comments.setText(model.getSocial().getComments()+"");*/
     }
