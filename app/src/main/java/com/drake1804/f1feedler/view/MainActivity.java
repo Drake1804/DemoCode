@@ -55,15 +55,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     private MainFeedPresenter presenter;
     private LinearLayoutManager mLayoutManager;
 
-    /*public static boolean loading = true;
-    private int pastVisiblesItems, visibleItemCount, totalItemCount;
-    private static int page = 0;*/
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
-
-    /*static {
-        AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_NO);
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +70,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         showDialog();
 
         presenter.getNewsFeed(0);
+        fabOnTop.setVisibility(View.GONE);
     }
 
     @Override
@@ -167,7 +160,7 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
     @OnClick(R.id.fab)
     public void onTop(){
-        mainFeed.smoothScrollToPosition(0);
+        mainFeed.scrollToPosition(0);
     }
 
     @OnClick(R.id.show_loaded_data)
@@ -211,7 +204,9 @@ public class MainActivity extends BaseActivity implements MainFeedView {
 
         mainFeed.addOnScrollListener(endlessRecyclerOnScrollListener);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getNewsFeed(0));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            presenter.getNewsFeed(0);
+        });
     }
 
 }

@@ -71,7 +71,6 @@ public class MainFeedPresenter extends Presenter {
                 .subscribe(new Observer<NewsFeedWrapper>() {
                     @Override
                     public void onCompleted() {
-//                        MainActivity.loading = true;
                     }
 
                     @Override
@@ -79,9 +78,6 @@ public class MainFeedPresenter extends Presenter {
                         view.dismissDialog();
                         RetrofitException error = (RetrofitException) e;
                         view.showErrorView(true);
-                        /*if(error.getKind().equals(RetrofitException.Kind.NETWORK)){
-                            view.showErrorView(true);
-                        }*/
 
                         if(BuildConfig.DEBUG){
                             view.showMessage(error.getMessage());
