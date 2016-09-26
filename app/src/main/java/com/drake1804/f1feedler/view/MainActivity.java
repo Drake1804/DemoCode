@@ -24,6 +24,7 @@ import com.drake1804.f1feedler.presenter.MainFeedPresenter;
 import com.drake1804.f1feedler.utils.EndlessRecyclerOnScrollListener;
 import com.drake1804.f1feedler.utils.ItemClickSupport;
 import com.drake1804.f1feedler.utils.OfflineMode;
+import com.drake1804.f1feedler.utils.Tweakables;
 import com.drake1804.f1feedler.view.view.MainFeedView;
 
 import java.util.List;
@@ -83,7 +84,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
     protected void onResume() {
         super.onResume();
         presenter.registerReceiver();
-        endlessRecyclerOnScrollListener.reset(0, true);
 
     }
     @Override
@@ -200,6 +200,8 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
+                endlessRecyclerOnScrollListener.setCurrentPage(presenter.getOldDataSize() / Tweakables.MAX_FEED_NEWS);
+                Log.d("CURR page", String.valueOf(endlessRecyclerOnScrollListener.getCurrentPage()));
                 presenter.getNewsFeed(current_page);
             }
         };

@@ -102,6 +102,8 @@ public class NewsFeedView extends LinearLayout {
         if(!TextUtils.equals(model.getImageUrl(), "")){
             Picasso.with(getContext())
                     .load(model.getImageUrl())
+//                    .resize(322, 214)
+//                    .centerCrop()
                     .into(image);
         }
         /*if(model.getResource() != null){

@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.orhanobut.hawk.Hawk;
+
 /**
  * Created by Pavel.Shkaran on 9/19/2016.
  */
@@ -14,7 +16,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+    private int visibleThreshold = 8; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
     private LinearLayoutManager layoutManager;
     private FloatingActionButton floatingActionButton;
@@ -41,27 +43,25 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         totalItemCount = mLinearLayoutManager.getItemCount();
         firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
 
-        synchronized (this){
-            if (loading) {
-                if (totalItemCount > previousTotal) {
-                    loading = false;
-                    previousTotal = totalItemCount;
-                }
-            }
-            if (!loading && (totalItemCount - visibleItemCount)
-                    <= (firstVisibleItem + visibleThreshold)) {
+        if (loading && (totalItemCount > previousTotal)) {
+            loading = false;
+            previousTotal = totalItemCount;
+        }
 
-                // Do something
-                current_page++;
-                onLoadMore(current_page);
-                loading = true;
-            }
+        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+            // Do something
+            current_page++;
+            onLoadMore(current_page);
+            loading = true;
         }
     }
 
-    public void reset(int previousTotal, boolean loading) {
-        this.previousTotal = previousTotal;
-        this.loading = loading;
+    public int getCurrentPage() {
+        return current_page;
+    }
+
+    public void setCurrentPage(int current_page) {
+        this.current_page = current_page;
     }
 
     public void setLoading(boolean loading) {

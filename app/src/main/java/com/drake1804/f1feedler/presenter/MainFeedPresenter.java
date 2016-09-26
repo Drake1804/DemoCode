@@ -97,6 +97,10 @@ public class MainFeedPresenter extends Presenter {
                 });
     }
 
+    public int getOldDataSize() {
+        return oldDataSize;
+    }
+
     private void saveNewsLinks(final List<NewsFeedModel> list){
         view.getRealm().executeTransactionAsync(realm -> {
             List<NewsFeedModel> newsFeedModelListNew = realm.copyToRealmOrUpdate(list);
@@ -108,7 +112,6 @@ public class MainFeedPresenter extends Presenter {
                     if(hasNewNews){
                         view.setData(view.getRealm().where(NewsFeedModel.class).findAll());
                         hasNewNews = false;
-                        ((MainActivity) context).getEndlessRecyclerOnScrollListener().setLoading(false);
                     }
                 },
                 Throwable::printStackTrace);

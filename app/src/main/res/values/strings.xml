@@ -1,36 +1,36 @@
 <resources>
     <string name="app_name">F1Feedler</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_web_view">WebViewActivity</string>
-    <string name="title_activity_details">DetailsActivity</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="title_activity_web_view" translatable="false">WebViewActivity</string>
+    <string name="title_activity_details" translatable="false">DetailsActivity</string>
+    <string name="title_activity_login" translatable="false">Sign in</string>
 
 
-    <string name="facebook_app_id">184274191973856</string>
+    <string name="facebook_app_id" translatable="false">184274191973856</string>
 
     <!-- Strings related to signIn -->
-    <string name="prompt_email">Email</string>
-    <string name="login">Login</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="login" translatable="false">Login</string>
+    <string name="prompt_password" translatable="false">Password</string>
+    <string name="action_sign_in" translatable="false">Sign</string>
+    <string name="action_sign_in_short" translatable="false">Sign in</string>
+    <string name="error_invalid_email" translatable="false">This email address is invalid</string>
+    <string name="error_invalid_password" translatable="false">This password is too short</string>
+    <string name="error_incorrect_password" translatable="false">This password is incorrect</string>
+    <string name="error_field_required" translatable="false">This field is required</string>
+    <string name="permission_rationale" translatable="false">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_registration">RegistrationActivity</string>
-    <string name="details_page">Details page</string>
-    <string name="share_credentials_fb">Posted with app F1Feedler link on Google Play</string>
+    <string name="title_activity_registration" translatable="false">RegistrationActivity</string>
+    <string name="details_page" translatable="false">Details page</string>
+    <string name="share_credentials_fb" translatable="false">Posted with app F1Feedler link on Google Play</string>
 
-    <string name="read_on_web">read on the web</string>
-    <string name="data_was_cleared">Data was cleared</string>
-    <string name="show_table">show table</string>
-    <string name="font_size">Font size</string>
+    <string name="read_on_web" translatable="false">read on the web</string>
+    <string name="data_was_cleared" translatable="false">Data was cleared</string>
+    <string name="show_table" translatable="false">show table</string>
+    <string name="font_size" translatable="false">Font size</string>
 
-    <string-array name="font_size_array">
+    <string-array name="font_size_array" translatable="false">
         <item name="tiny">Tiny</item>
         <item name="small">Small</item>
         <item name="tiny">Medium</item>
@@ -38,17 +38,17 @@
         <item name="tiny">Huge</item>
     </string-array>
 
-    <string name="create_new_account">Create new account?</string>
-    <string name="smart_news">Smart news compilation</string>
-    <string name="gamification">Gamification</string>
-    <string name="news_app">Formula 1 news app</string>
-    <string name="get_smart_news">Get smart sorted news</string>
-    <string name="news_reading_fun">News reading can be fun</string>
-    <string name="loading">Loading...</string>
-    <string name="empty_login">Empty login</string>
-    <string name="empty_password">Empty password</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="sign_in">Sign In</string>
+    <string name="create_new_account" translatable="false">Create new account?</string>
+    <string name="smart_news" translatable="false">Smart news compilation</string>
+    <string name="gamification" translatable="false">Gamification</string>
+    <string name="news_app" translatable="false">Formula 1 news app</string>
+    <string name="get_smart_news" translatable="false">Get smart sorted news</string>
+    <string name="news_reading_fun" translatable="false">News reading can be fun</string>
+    <string name="loading" translatable="false">Loading...</string>
+    <string name="empty_login" translatable="false">Empty login</string>
+    <string name="empty_password" translatable="false">Empty password</string>
+    <string name="sign_up" translatable="false">Sign Up</string>
+    <string name="sign_in" translatable="false">Sign In</string>
     <string name="server_error">Oops server not available now</string>
     <string name="show_loaded_data">Show loaded news</string>
 

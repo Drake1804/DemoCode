@@ -49,12 +49,21 @@ public class RestClient implements TokenManager {
 
     public void setupRestClient() {
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ?
-                        HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
+        OkHttpClient okHttpClient;
+
+        if(BuildConfig.DEBUG){
+            okHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ?
+                            HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
 //                .addInterceptor(new TokenInterceptor(RestClient.this))
-                .addNetworkInterceptor(new StethoInterceptor())
-                .build();
+                    .addNetworkInterceptor(new StethoInterceptor())
+                    .build();
+        } else {
+            okHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ?
+                            HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
+                    .build();
+        }
 
         Gson gson = new GsonBuilder()
                 .setDateFormat("EEE, dd MMM yyyy HH:mm:ss Z")

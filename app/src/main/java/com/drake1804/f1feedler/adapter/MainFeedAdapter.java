@@ -74,6 +74,7 @@ public class MainFeedAdapter extends RecyclerView.Adapter<MainFeedAdapter.ViewHo
     public void setData(List<NewsFeedModel> newsFeedModels) {
         this.newsFeedModels.clear();
         this.newsFeedModels.addAll(newsFeedModels);
+        ((MainActivity) context).getEndlessRecyclerOnScrollListener().setLoading(false);
         notifyDataSetChanged();
     }
 
