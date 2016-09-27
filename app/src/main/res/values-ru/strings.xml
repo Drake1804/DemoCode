@@ -3,4 +3,15 @@
     <string name="app_name">Peloton</string>
     <string name="server_error">Ой сервер сейчас не доступен</string>
     <string name="show_loaded_data">Показать загруженные новости</string>
+
+    <string name="font_size">Размер шрифта</string>
+
+    <string-array name="font_size_array">
+        <item name="tiny">Очень маленький</item>
+        <item name="small">Маленький</item>
+        <item name="tiny">Средний</item>
+        <item name="small">Большой</item>
+        <item name="tiny">Огромный</item>
+    </string-array>
+
 </resources>

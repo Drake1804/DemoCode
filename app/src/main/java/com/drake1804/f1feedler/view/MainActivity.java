@@ -134,7 +134,6 @@ public class MainActivity extends BaseActivity implements MainFeedView {
         } else {
             mainFeed.setVisibility(View.VISIBLE);
             errorView.setVisibility(View.GONE);
-            fabOnTop.setVisibility(View.VISIBLE);
         }
     }
 

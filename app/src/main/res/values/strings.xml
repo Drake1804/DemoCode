@@ -28,9 +28,9 @@
     <string name="read_on_web" translatable="false">read on the web</string>
     <string name="data_was_cleared" translatable="false">Data was cleared</string>
     <string name="show_table" translatable="false">show table</string>
-    <string name="font_size" translatable="false">Font size</string>
+    <string name="font_size">Font size</string>
 
-    <string-array name="font_size_array" translatable="false">
+    <string-array name="font_size_array">
         <item name="tiny">Tiny</item>
         <item name="small">Small</item>
         <item name="tiny">Medium</item>

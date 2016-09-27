@@ -163,7 +163,6 @@ public class DetailsPresenter extends Presenter {
 
     public void startFontSizeDialog(){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
-        builderSingle.setIcon(R.mipmap.ic_launcher);
         builderSingle.setTitle(context.getString(R.string.font_size));
         final ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
                 context,
