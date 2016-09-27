@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">F1Feedler</string>
+    <string name="app_name">Peloton</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="title_activity_web_view" translatable="false">WebViewActivity</string>
     <string name="title_activity_details" translatable="false">DetailsActivity</string>

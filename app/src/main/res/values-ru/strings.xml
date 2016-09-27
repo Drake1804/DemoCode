@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">F1Feedler</string>
+    <string name="app_name">Peloton</string>
     <string name="server_error">Ой сервер сейчас не доступен</string>
     <string name="show_loaded_data">Показать загруженные новости</string>
 </resources>

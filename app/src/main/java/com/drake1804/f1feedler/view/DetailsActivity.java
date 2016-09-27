@@ -74,8 +74,8 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
 
-    @BindView(R.id.comments)
-    RecyclerView comments;
+    /*@BindView(R.id.comments)
+    RecyclerView comments;*/
 
     @BindView(R.id.logo)
     ImageView logo;
@@ -86,13 +86,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @BindView(R.id.date)
     TextView date;
 
-    @BindView(R.id.facebook_share)
-    ShareButton shareButtonFb;
+    /*@BindView(R.id.facebook_share)
+    ShareButton shareButtonFb;*/
 
-    private CommentsAdapter adapter;
+//    private CommentsAdapter adapter;
     private DetailsPresenter presenter;
     private LinearLayoutManager mLayoutManager;
-    private static boolean isNight = false;
+//    private static boolean isNight = false;
     private CallbackManager callbackManager;
     private NewsFeedModel currentNews;
 
@@ -145,6 +145,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 Hawk.put(Tweakables.HAWK_KEY_NIGHT_MODE, isNight);
                 recreate();
                 return true;*/
+            case R.id.share:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, currentNews.getLink());
+                startActivity(Intent.createChooser(intent, "Share"));
+                return true;
             case R.id.menu_font:
                 presenter.startFontSizeDialog();
                 return true;
@@ -171,7 +179,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     public void setComments(List<CommentModel> comments) {
-        adapter.setCommentModels(comments);
+//        adapter.setCommentModels(comments);
     }
 
     @Override
@@ -228,7 +236,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         startActivity(new Intent(this, RatePopupActivity.class));
     }*/
 
-    @OnClick(R.id.facebook_share)
+   /* @OnClick(R.id.facebook_share)
     public void onShare(){
         shareButtonFb.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
             @Override
@@ -246,7 +254,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
             }
         });
-    }
+    }*/
 
     private void init(){
         presenter = new DetailsPresenter(this, this);
@@ -261,15 +269,15 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new CommentsAdapter(this);
-        comments.setLayoutManager(mLayoutManager);
-        comments.setAdapter(adapter);
+//        adapter = new CommentsAdapter(this);
+        /*comments.setLayoutManager(mLayoutManager);
+        comments.setAdapter(adapter);*/
 
         callbackManager = CallbackManager.Factory.create();
 
-        if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
+        /*if(Hawk.contains(Tweakables.HAWK_KEY_NIGHT_MODE)){
             isNight = Hawk.get(Tweakables.HAWK_KEY_NIGHT_MODE);
-        }
+        }*/
     }
 
     private void initListeners(){
@@ -284,7 +292,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .setImageUrl(Uri.parse(currentNews.getImageUrl()))
                 .setContentDescription(getString(R.string.share_credentials_fb))
                 .build();
-        shareButtonFb.setShareContent(content);
+//        shareButtonFb.setShareContent(content);
     }
 
     class ClickableTableSpanImpl extends ClickableTableSpan {

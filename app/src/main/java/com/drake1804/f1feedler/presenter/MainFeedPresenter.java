@@ -24,6 +24,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Observer;
@@ -58,7 +59,7 @@ public class MainFeedPresenter extends Presenter {
     }
 
     public void getNewsFeed(int page){
-        List<NewsFeedModel> old = view.getRealm().where(NewsFeedModel.class).findAll();
+        List<NewsFeedModel> old = view.getRealm().where(NewsFeedModel.class).findAll().sort("creatingDate", Sort.DESCENDING);
         oldDataSize = old.size();
         view.setData(old);
         loadFeed(page);
@@ -106,7 +107,8 @@ public class MainFeedPresenter extends Presenter {
         },
                 () -> {
                     if(hasNewNews){
-                        view.setData(view.getRealm().where(NewsFeedModel.class).findAll());
+                        view.setData(view.getRealm().where(NewsFeedModel.class)
+                                .findAll().sort("creatingDate", Sort.DESCENDING));
                         hasNewNews = false;
                     }
                 },
