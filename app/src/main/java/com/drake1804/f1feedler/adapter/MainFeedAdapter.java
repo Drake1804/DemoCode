@@ -5,10 +5,6 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-
-import com.drake1804.f1feedler.R;
 import com.drake1804.f1feedler.model.NewsFeedModel;
 import com.drake1804.f1feedler.view.MainActivity;
 import com.drake1804.f1feedler.view.custom.NewsFeedView;

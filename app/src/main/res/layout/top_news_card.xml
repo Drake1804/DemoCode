@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp">
+        android:layout_marginTop="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,74 +22,83 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.github.silvestrpredko.dotprogressbar.DotProgressBar
                     android:id="@+id/dot_progress_bar"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"
                     custom:amount="5"
                     custom:duration="@android:integer/config_mediumAnimTime"
                     custom:endColor="@color/light_blue_A400"
-                    custom:startColor="@color/light_blue_A700"
-                    android:layout_gravity="center_vertical"
-                    android:visibility="gone"/>
+                    custom:startColor="@color/light_blue_A700" />
+
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <ImageView
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="290dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop" />
+
                 <com.drake1804.f1feedler.view.custom.LabelView
                     android:id="@+id/label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginTop="25dp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="left"
-                    android:layout_marginTop="4dp">
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:id="@+id/icon"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="8dp"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside" />
+
                     <TextView
                         android:id="@+id/resource"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="f1news"
-                        android:textColor="@android:color/white"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="8dp"/>
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@android:color/white"
+                        tools:text="f1news" />
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Date"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    android:layout_marginRight="8dp"
                     android:layout_gravity="right"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    tools:text="Date" />
+
                 <TextView
                     android:id="@+id/title"
+                    fontPath="fonts/Roboto-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Title"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/white"
                     android:layout_gravity="bottom"
                     android:layout_margin="16dp"
-                    fontPath="fonts/Roboto-Bold.ttf"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    tools:text="Title" />
             </FrameLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -12,6 +12,7 @@
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mainFeed"
             android:layout_width="match_parent"
@@ -32,20 +33,20 @@
             android:id="@+id/server_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/server_error"
             android:layout_centerInParent="true"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:text="@string/server_error" />
 
         <TextView
             android:id="@+id/show_loaded_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/show_loaded_data"
             android:layout_below="@id/server_error"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/blue_500"
             android:padding="16dp"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/blue_500"
+            android:text="@string/show_loaded_data" />
 
     </RelativeLayout>
 
